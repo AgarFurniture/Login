@@ -1,0 +1,724 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Agar Furniture</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --gold: #c9a84c;
+    --gold-light: #e8c97a;
+    --gold-dark: #9a7a30;
+    --dark: #1a1208;
+    --dark2: #251c0d;
+    --dark3: #332a18;
+    --cream: #f5ede0;
+    --cream2: #ede0cc;
+    --text: #2d2210;
+    --text-muted: #7a6840;
+    --error: #c0392b;
+    --radius: 14px;
+    --shadow: 0 8px 40px rgba(0,0,0,0.18);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Cairo', sans-serif;
+    background: var(--dark);
+    min-height: 100vh;
+    color: var(--text);
+    overflow-x: hidden;
+  }
+
+  /* ─── Background ─── */
+  .bg-pattern {
+    position: fixed; inset: 0; z-index: 0;
+    background:
+      radial-gradient(ellipse 80% 60% at 20% 10%, rgba(201,168,76,0.12) 0%, transparent 60%),
+      radial-gradient(ellipse 60% 70% at 80% 90%, rgba(201,168,76,0.08) 0%, transparent 60%),
+      linear-gradient(160deg, #1a1208 0%, #251c0d 50%, #1a1208 100%);
+  }
+  .bg-pattern::before {
+    content: '';
+    position: absolute; inset: 0;
+    background-image: repeating-linear-gradient(
+      45deg,
+      transparent,
+      transparent 40px,
+      rgba(201,168,76,0.03) 40px,
+      rgba(201,168,76,0.03) 41px
+    );
+  }
+
+  /* ─── Pages ─── */
+  .page { display: none; position: relative; z-index: 1; }
+  .page.active { display: block; animation: fadeIn .4s ease; }
+  @keyframes fadeIn { from { opacity:0; transform:translateY(12px); } to { opacity:1; transform:none; } }
+
+  /* ─── Auth Layout ─── */
+  .auth-wrap {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem 1rem;
+  }
+
+  .auth-card {
+    background: rgba(245,237,224,0.97);
+    border-radius: 24px;
+    padding: 3rem 2.5rem;
+    width: 100%;
+    max-width: 420px;
+    box-shadow: 0 20px 80px rgba(0,0,0,0.4), 0 0 0 1px rgba(201,168,76,0.2);
+    position: relative;
+    overflow: hidden;
+  }
+  .auth-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, var(--gold-dark), var(--gold-light), var(--gold-dark));
+  }
+
+  /* ─── Logo ─── */
+  .auth-logo {
+    text-align: center;
+    margin-bottom: 1.8rem;
+  }
+  .logo-mark {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: .6rem;
+    font-weight: 900;
+    font-size: 1.6rem;
+    color: var(--dark);
+    letter-spacing: -0.5px;
+  }
+  .logo-icon {
+    width: 42px; height: 42px;
+    background: linear-gradient(135deg, var(--gold), var(--gold-dark));
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.3rem;
+    box-shadow: 0 4px 12px rgba(201,168,76,0.4);
+  }
+  .logo-sub {
+    font-size: .75rem;
+    color: var(--text-muted);
+    text-align: center;
+    margin-top: -.3rem;
+    font-weight: 400;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+  }
+
+  /* ─── Page Title ─── */
+  .page-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--dark);
+    text-align: center;
+    margin-bottom: 2rem;
+  }
+
+  /* ─── Form ─── */
+  .form-group {
+    margin-bottom: 1.2rem;
+  }
+  .form-group label {
+    display: block;
+    font-weight: 600;
+    font-size: .88rem;
+    color: var(--text-muted);
+    margin-bottom: .45rem;
+  }
+  .form-group input {
+    width: 100%;
+    padding: .75rem 1rem;
+    border: 2px solid #ddd0ba;
+    border-radius: var(--radius);
+    font-family: 'Cairo', sans-serif;
+    font-size: .95rem;
+    color: var(--dark);
+    background: #fff;
+    outline: none;
+    transition: border-color .2s, box-shadow .2s;
+    direction: ltr;
+    text-align: right;
+  }
+  .form-group input:focus {
+    border-color: var(--gold);
+    box-shadow: 0 0 0 3px rgba(201,168,76,0.15);
+  }
+  .form-group input::placeholder { color: #bbb; }
+
+  .otp-input {
+    text-align: center !important;
+    letter-spacing: 8px;
+    font-size: 1.4rem !important;
+    font-weight: 700;
+  }
+
+  /* ─── Buttons ─── */
+  .btn-primary {
+    width: 100%;
+    padding: .85rem;
+    background: linear-gradient(135deg, var(--gold), var(--gold-dark));
+    color: #fff;
+    border: none;
+    border-radius: var(--radius);
+    font-family: 'Cairo', sans-serif;
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: transform .15s, box-shadow .15s, opacity .15s;
+    box-shadow: 0 4px 16px rgba(201,168,76,0.35);
+    margin-top: .5rem;
+  }
+  .btn-primary:hover { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(201,168,76,0.45); }
+  .btn-primary:active { transform: translateY(0); }
+  .btn-primary:disabled { opacity: .65; cursor: not-allowed; transform: none; }
+
+  /* ─── Links ─── */
+  .auth-links {
+    text-align: center;
+    margin-top: 1.5rem;
+    font-size: .88rem;
+    color: var(--text-muted);
+    display: flex;
+    gap: .6rem;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+  .auth-links a {
+    color: var(--gold-dark);
+    text-decoration: none;
+    font-weight: 600;
+    cursor: pointer;
+    transition: color .15s;
+  }
+  .auth-links a:hover { color: var(--gold); }
+  .auth-links span { color: #ccc; }
+
+  /* ─── Error ─── */
+  .error-msg {
+    background: #fdecea;
+    border: 1px solid #f5c6c2;
+    color: var(--error);
+    border-radius: 10px;
+    padding: .65rem 1rem;
+    font-size: .88rem;
+    text-align: center;
+    margin-bottom: 1rem;
+    display: none;
+  }
+  .error-msg.show { display: block; }
+
+  /* ─── Step Indicator ─── */
+  .steps {
+    display: flex;
+    gap: .5rem;
+    justify-content: center;
+    margin-bottom: 1.5rem;
+  }
+  .step-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: #ddd;
+    transition: all .3s;
+  }
+  .step-dot.active { background: var(--gold); width: 24px; border-radius: 4px; }
+
+  /* ─── OTP Info ─── */
+  .otp-info {
+    text-align: center;
+    color: var(--text-muted);
+    font-size: .88rem;
+    margin-bottom: 1.5rem;
+    line-height: 1.6;
+  }
+  .otp-info strong { color: var(--dark); }
+
+  /* ─── HOME ─── */
+  .home-nav {
+    background: rgba(26,18,8,0.95);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(201,168,76,0.2);
+    padding: 1rem 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky; top: 0; z-index: 100;
+  }
+  .nav-logo { display: flex; align-items: center; gap: .6rem; color: var(--cream); font-weight: 900; font-size: 1.2rem; }
+  .nav-logo .logo-icon { width: 34px; height: 34px; font-size: 1rem; }
+  .nav-user { display: flex; align-items: center; gap: 1rem; }
+  .user-greeting { color: var(--cream2); font-size: .9rem; }
+  .user-greeting strong { color: var(--gold-light); }
+  .logout-btn {
+    padding: .45rem 1.2rem;
+    border: 1.5px solid rgba(201,168,76,0.4);
+    background: transparent;
+    color: var(--gold-light);
+    border-radius: 8px;
+    font-family: 'Cairo', sans-serif;
+    font-size: .88rem;
+    cursor: pointer;
+    transition: all .2s;
+  }
+  .logout-btn:hover { background: rgba(201,168,76,0.1); border-color: var(--gold); }
+
+  .home-body {
+    padding: 3rem 2rem;
+    max-width: 900px;
+    margin: 0 auto;
+  }
+  .home-greeting {
+    color: var(--cream);
+    font-size: 1.8rem;
+    font-weight: 700;
+    margin-bottom: .4rem;
+  }
+  .home-sub {
+    color: var(--text-muted);
+    font-size: .95rem;
+    margin-bottom: 2.5rem;
+  }
+  .home-sub { color: rgba(201,168,76,0.6); }
+
+  .dashboard-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 1.2rem;
+  }
+  .dashboard-card {
+    background: rgba(245,237,224,0.06);
+    border: 1px solid rgba(201,168,76,0.15);
+    border-radius: 18px;
+    padding: 2rem 1.5rem;
+    text-align: center;
+    cursor: pointer;
+    transition: all .25s;
+    position: relative;
+    overflow: hidden;
+  }
+  .dashboard-card::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: radial-gradient(circle at 50% 0%, rgba(201,168,76,0.08), transparent 70%);
+    opacity: 0;
+    transition: opacity .25s;
+  }
+  .dashboard-card:hover { border-color: rgba(201,168,76,0.4); transform: translateY(-4px); box-shadow: 0 12px 40px rgba(0,0,0,0.3); }
+  .dashboard-card:hover::before { opacity: 1; }
+  .card-icon { font-size: 2.5rem; margin-bottom: 1rem; }
+  .card-title { color: var(--cream); font-size: 1.1rem; font-weight: 700; margin-bottom: .4rem; }
+  .card-desc { color: rgba(201,168,76,0.55); font-size: .82rem; }
+
+  /* Spinner */
+  .spinner {
+    display: inline-block;
+    width: 16px; height: 16px;
+    border: 2px solid rgba(255,255,255,0.3);
+    border-top-color: #fff;
+    border-radius: 50%;
+    animation: spin .7s linear infinite;
+    vertical-align: middle;
+    margin-left: .5rem;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* Success step */
+  .success-badge {
+    text-align: center;
+    padding: 1rem;
+  }
+  .success-icon {
+    font-size: 3rem;
+    margin-bottom: .8rem;
+  }
+
+  @media (max-width: 480px) {
+    .auth-card { padding: 2rem 1.5rem; }
+    .dashboard-grid { grid-template-columns: 1fr 1fr; }
+    .home-body { padding: 2rem 1rem; }
+  }
+</style>
+</head>
+<body>
+
+<div class="bg-pattern"></div>
+
+<!-- ══════════════ LOGIN PAGE ══════════════ -->
+<div class="page active" id="page-login">
+  <div class="auth-wrap">
+    <div class="auth-card">
+      <div class="auth-logo">
+        <div class="logo-mark">
+          <div class="logo-icon">🪑</div>
+          Agar
+        </div>
+        <div class="logo-sub">Furniture</div>
+      </div>
+      <h2 class="page-title">تسجيل الدخول</h2>
+
+      <div class="error-msg" id="login-error"></div>
+
+      <div class="form-group">
+        <label>الإيميل</label>
+        <input type="email" id="login-email" placeholder="example@gmail.com" />
+      </div>
+      <div class="form-group">
+        <label>كلمة المرور</label>
+        <input type="password" id="login-password" placeholder="••••••••" />
+      </div>
+
+      <button class="btn-primary" id="login-btn" onclick="handleLogin()">دخول</button>
+
+      <div class="auth-links">
+        <a onclick="goTo('page-forgot')">نسيت كلمة المرور؟</a>
+        <span>|</span>
+        <a onclick="goTo('page-register')">إنشاء حساب جديد</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════ REGISTER PAGE ══════════════ -->
+<div class="page" id="page-register">
+  <div class="auth-wrap">
+    <div class="auth-card">
+      <div class="auth-logo">
+        <div class="logo-mark">
+          <div class="logo-icon">🪑</div>
+          Agar
+        </div>
+        <div class="logo-sub">Furniture</div>
+      </div>
+      <h2 class="page-title">إنشاء حساب جديد</h2>
+
+      <div class="error-msg" id="reg-error"></div>
+
+      <div class="form-group">
+        <label>الاسم</label>
+        <input type="text" id="reg-name" placeholder="محمد أحمد" />
+      </div>
+      <div class="form-group">
+        <label>الإيميل</label>
+        <input type="email" id="reg-email" placeholder="example@gmail.com" />
+      </div>
+      <div class="form-group">
+        <label>رقم الهاتف</label>
+        <input type="tel" id="reg-phone" placeholder="01xxxxxxxxx" />
+      </div>
+      <div class="form-group">
+        <label>كلمة المرور</label>
+        <input type="password" id="reg-password" placeholder="••••••••" />
+      </div>
+
+      <button class="btn-primary" id="reg-btn" onclick="handleRegister()">تسجيل</button>
+
+      <div class="auth-links">
+        <a onclick="goTo('page-login')">عندك حساب؟ سجل دخول</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════ VERIFY OTP PAGE ══════════════ -->
+<div class="page" id="page-verify">
+  <div class="auth-wrap">
+    <div class="auth-card">
+      <div class="auth-logo">
+        <div class="logo-mark">
+          <div class="logo-icon">🪑</div>
+          Agar
+        </div>
+        <div class="logo-sub">Furniture</div>
+      </div>
+      <h2 class="page-title">✉️ تحقق من إيميلك</h2>
+      <p class="otp-info" id="verify-info">بعتنالك كود على <strong id="verify-email"></strong></p>
+
+      <div class="error-msg" id="verify-error"></div>
+
+      <div class="form-group">
+        <label>كود التحقق</label>
+        <input class="otp-input" type="text" id="verify-otp" placeholder="000000" maxlength="6" />
+      </div>
+
+      <button class="btn-primary" id="verify-btn" onclick="handleVerifyOTP()">تأكيد</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════ FORGOT PASSWORD PAGE ══════════════ -->
+<div class="page" id="page-forgot">
+  <div class="auth-wrap">
+    <div class="auth-card">
+      <div class="auth-logo">
+        <div class="logo-mark">
+          <div class="logo-icon">🪑</div>
+          Agar
+        </div>
+        <div class="logo-sub">Furniture</div>
+      </div>
+      <h2 class="page-title">🔑 استعادة كلمة المرور</h2>
+
+      <div class="steps">
+        <div class="step-dot active" id="fp-dot-1"></div>
+        <div class="step-dot" id="fp-dot-2"></div>
+      </div>
+
+      <div class="error-msg" id="fp-error"></div>
+
+      <!-- Step 1: Email -->
+      <div id="fp-step-1">
+        <div class="form-group">
+          <label>الإيميل</label>
+          <input type="email" id="fp-email" placeholder="example@gmail.com" />
+        </div>
+        <button class="btn-primary" id="fp-btn-1" onclick="handleForgotSend()">إرسال الكود</button>
+      </div>
+
+      <!-- Step 2: OTP + New Password -->
+      <div id="fp-step-2" style="display:none">
+        <div class="form-group">
+          <label>كود التحقق</label>
+          <input class="otp-input" type="text" id="fp-otp" placeholder="000000" maxlength="6" />
+        </div>
+        <div class="form-group">
+          <label>كلمة المرور الجديدة</label>
+          <input type="password" id="fp-newpass" placeholder="••••••••" />
+        </div>
+        <button class="btn-primary" id="fp-btn-2" onclick="handleForgotReset()">تغيير كلمة المرور</button>
+      </div>
+
+      <div class="auth-links">
+        <a onclick="goTo('page-login')">رجوع لتسجيل الدخول</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════ HOME PAGE ══════════════ -->
+<div class="page" id="page-home">
+  <nav class="home-nav">
+    <div class="nav-logo">
+      <div class="logo-icon">🪑</div>
+      Agar Furniture
+    </div>
+    <div class="nav-user">
+      <span class="user-greeting">أهلاً، <strong id="home-username">المستخدم</strong></span>
+      <button class="logout-btn" onclick="handleLogout()">خروج</button>
+    </div>
+  </nav>
+
+  <div class="home-body">
+    <div class="home-greeting">لوحة التحكم</div>
+    <div class="home-sub">اختر القسم اللي عاوز تشتغل فيه</div>
+
+    <div class="dashboard-grid">
+      <div class="dashboard-card">
+        <div class="card-icon">👥</div>
+        <div class="card-title">العملاء</div>
+        <div class="card-desc">إدارة بيانات العملاء</div>
+      </div>
+      <div class="dashboard-card">
+        <div class="card-icon">🏠</div>
+        <div class="card-title">المعاينات</div>
+        <div class="card-desc">جدولة ومتابعة المعاينات</div>
+      </div>
+      <div class="dashboard-card">
+        <div class="card-icon">📋</div>
+        <div class="card-title">النواقص</div>
+        <div class="card-desc">متابعة النواقص</div>
+      </div>
+      <div class="dashboard-card">
+        <div class="card-icon">📄</div>
+        <div class="card-title">التعاقدات</div>
+        <div class="card-desc">عقود ومستندات</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  // ─── State ───
+  let currentUser = null;
+  let verifyData = { userId: null, email: null };
+  let forgotEmail = '';
+
+  // ─── Navigation ───
+  function goTo(pageId) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.getElementById(pageId).classList.add('active');
+    window.scrollTo(0, 0);
+  }
+
+  function showError(id, msg) {
+    const el = document.getElementById(id);
+    el.textContent = msg;
+    el.classList.add('show');
+  }
+  function hideError(id) {
+    document.getElementById(id).classList.remove('show');
+  }
+
+  function setLoading(btnId, loading, defaultText) {
+    const btn = document.getElementById(btnId);
+    btn.disabled = loading;
+    btn.innerHTML = loading
+      ? defaultText + ' <span class="spinner"></span>'
+      : defaultText;
+  }
+
+  // ─── API Base ───
+  const API = '/api'; // Change this to your actual API base URL
+
+  async function apiPost(path, body) {
+    const res = await fetch(API + path, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body)
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.message || 'حدث خطأ');
+    return data;
+  }
+
+  // ─── LOGIN ───
+  async function handleLogin() {
+    hideError('login-error');
+    const email = document.getElementById('login-email').value.trim();
+    const password = document.getElementById('login-password').value;
+    if (!email || !password) return showError('login-error', 'من فضلك ادخل الإيميل وكلمة المرور');
+
+    setLoading('login-btn', true, 'دخول');
+    try {
+      const data = await apiPost('/auth/login', { email, password });
+      currentUser = data.user;
+      document.getElementById('home-username').textContent = data.user?.name || 'المستخدم';
+      goTo('page-home');
+    } catch (err) {
+      showError('login-error', err.message);
+    } finally {
+      setLoading('login-btn', false, 'دخول');
+    }
+  }
+
+  // ─── REGISTER ───
+  async function handleRegister() {
+    hideError('reg-error');
+    const name = document.getElementById('reg-name').value.trim();
+    const email = document.getElementById('reg-email').value.trim();
+    const phone = document.getElementById('reg-phone').value.trim();
+    const password = document.getElementById('reg-password').value;
+
+    if (!name) return showError('reg-error', 'الاسم مطلوب');
+    if (!email) return showError('reg-error', 'الإيميل مطلوب');
+    if (password.length < 6) return showError('reg-error', 'كلمة المرور 6 أحرف على الأقل');
+
+    setLoading('reg-btn', true, 'تسجيل');
+    try {
+      const data = await apiPost('/auth/register', { name, email, phone, password });
+      verifyData = { userId: data.userId, email };
+      document.getElementById('verify-email').textContent = email;
+      goTo('page-verify');
+    } catch (err) {
+      showError('reg-error', err.message);
+    } finally {
+      setLoading('reg-btn', false, 'تسجيل');
+    }
+  }
+
+  // ─── VERIFY OTP ───
+  async function handleVerifyOTP() {
+    hideError('verify-error');
+    const otp = document.getElementById('verify-otp').value.trim();
+    if (otp.length < 4) return showError('verify-error', 'ادخل الكود كامل');
+
+    setLoading('verify-btn', true, 'تأكيد');
+    try {
+      const data = await apiPost('/auth/verify-otp', { userId: verifyData.userId, otp });
+      currentUser = data.user;
+      document.getElementById('home-username').textContent = data.user?.name || 'المستخدم';
+      goTo('page-home');
+    } catch (err) {
+      showError('verify-error', err.message || 'الكود غلط');
+    } finally {
+      setLoading('verify-btn', false, 'تأكيد');
+    }
+  }
+
+  // ─── FORGOT PASSWORD: Step 1 ───
+  async function handleForgotSend() {
+    hideError('fp-error');
+    const email = document.getElementById('fp-email').value.trim();
+    if (!email) return showError('fp-error', 'ادخل الإيميل');
+
+    setLoading('fp-btn-1', true, 'إرسال الكود');
+    try {
+      await apiPost('/auth/forgot-password', { email });
+      forgotEmail = email;
+      // Switch to step 2
+      document.getElementById('fp-step-1').style.display = 'none';
+      document.getElementById('fp-step-2').style.display = 'block';
+      document.getElementById('fp-dot-1').classList.remove('active');
+      document.getElementById('fp-dot-2').classList.add('active');
+    } catch (err) {
+      showError('fp-error', err.message);
+    } finally {
+      setLoading('fp-btn-1', false, 'إرسال الكود');
+    }
+  }
+
+  // ─── FORGOT PASSWORD: Step 2 ───
+  async function handleForgotReset() {
+    hideError('fp-error');
+    const otp = document.getElementById('fp-otp').value.trim();
+    const newPassword = document.getElementById('fp-newpass').value;
+    if (!otp) return showError('fp-error', 'ادخل كود التحقق');
+    if (newPassword.length < 6) return showError('fp-error', 'كلمة المرور 6 أحرف على الأقل');
+
+    setLoading('fp-btn-2', true, 'تغيير كلمة المرور');
+    try {
+      await apiPost('/auth/reset-password', { email: forgotEmail, otp, newPassword });
+      goTo('page-login');
+    } catch (err) {
+      showError('fp-error', err.message);
+    } finally {
+      setLoading('fp-btn-2', false, 'تغيير كلمة المرور');
+    }
+  }
+
+  // ─── LOGOUT ───
+  function handleLogout() {
+    currentUser = null;
+    document.getElementById('login-email').value = '';
+    document.getElementById('login-password').value = '';
+    goTo('page-login');
+  }
+
+  // ─── Enter key support ───
+  document.addEventListener('keydown', (e) => {
+    if (e.key !== 'Enter') return;
+    const active = document.querySelector('.page.active')?.id;
+    if (active === 'page-login') handleLogin();
+    else if (active === 'page-register') handleRegister();
+    else if (active === 'page-verify') handleVerifyOTP();
+    else if (active === 'page-forgot') {
+      const s2 = document.getElementById('fp-step-2');
+      if (s2.style.display === 'block') handleForgotReset();
+      else handleForgotSend();
+    }
+  });
+</script>
+</body>
+</html>
