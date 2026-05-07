@@ -679,7 +679,7 @@ async function handleLogin(){
   try{
     const data=await apiPost('/auth/login',{email,password});
     currentUser=data.user;isAdmin=data.user?.role==='admin';
-    enterApp(data.user?.name||'المستخدم');
+    enterApp(data.user?.name||'المستخدم', data.token);
   }catch(err){showError('login-error',err.message);}
   finally{setLoading('login-btn',false,'دخول');}
 }
@@ -708,7 +708,7 @@ async function handleVerifyOTP(){
   try{
     const data=await apiPost('/auth/verify-otp',{userId:verifyData.userId,otp});
     currentUser=data.user;isAdmin=data.user?.role==='admin';
-    enterApp(data.user?.name||'المستخدم');
+    enterApp(data.user?.name||'المستخدم', data.token);
   }catch(err){showError('verify-error',err.message||'الكود غلط');}
   finally{setLoading('verify-btn',false,'تأكيد');}
 }
@@ -740,7 +740,10 @@ async function handleForgotReset(){
 }
 
 // ─── APP ───
-function enterApp(name){
+let authToken = null;
+
+function enterApp(name, token){
+  authToken = token;
   document.getElementById('home-username').textContent=name;
   goTo('page-home');
   if(isAdmin){
@@ -751,7 +754,70 @@ function enterApp(name){
     document.getElementById('btn-add-file').style.display='flex';
     document.getElementById('drawer-edit-btn').style.display='flex';
   }
-  renderPosts();renderClients();renderProspects();
+  loadClients();
+  renderPosts();
+  renderProspects();
+}
+
+async function apiGet(path){
+  const res = await fetch(API + path, {
+    headers: { 'Authorization': 'Bearer ' + authToken }
+  });
+  const data = await res.json();
+  if(!res.ok) throw new Error(data.message || 'حدث خطأ');
+  return data;
+}
+
+async function apiPostAuth(path, body){
+  const res = await fetch(API + path, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + authToken },
+    body: JSON.stringify(body)
+  });
+  const data = await res.json();
+  if(!res.ok) throw new Error(data.message || 'حدث خطأ');
+  return data;
+}
+
+async function apiPut(path, body){
+  const res = await fetch(API + path, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + authToken },
+    body: JSON.stringify(body)
+  });
+  const data = await res.json();
+  if(!res.ok) throw new Error(data.message || 'حدث خطأ');
+  return data;
+}
+
+async function apiDelete(path){
+  const res = await fetch(API + path, {
+    method: 'DELETE',
+    headers: { 'Authorization': 'Bearer ' + authToken }
+  });
+  const data = await res.json();
+  if(!res.ok) throw new Error(data.message || 'حدث خطأ');
+  return data;
+}
+
+async function loadClients(){
+  try {
+    const data = await apiGet('/clients');
+    clients = data.clients.map(c => ({
+      ...c,
+      id: c._id,
+      stages: c.stages || {
+        contract:{done:false,files:[]},
+        inspection:{done:false,files:[]},
+        design:{done:false,files:[]},
+        manufacturing:{done:false,files:[]},
+        delivery:{done:false,files:[]},
+      }
+    }));
+    renderClients();
+  } catch(err) {
+    console.error('loadClients error:', err);
+  }
 }
 function handleLogout(){
   currentUser=null;isAdmin=false;
