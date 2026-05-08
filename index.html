@@ -8,44 +8,30 @@
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&display=swap" rel="stylesheet"/>
 <style>
 :root {
-  --gold: 
-#c9a84c;
-  --gold-light: 
-#e8c97a;
-  --gold-dark: 
-#9a7a30;
-  --dark: 
-#1a1208;
-  --dark2: 
-#251c0d;
-  --dark3: 
-#332a18;
-  --cream: 
-#f5ede0;
-  --cream2: 
-#ede0cc;
-  --text: 
-#2d2210;
-  --text-muted: 
-#7a6840;
-  --error: 
-#c0392b;
-  --success: 
-#1abc9c;
+  --gold: #c9a84c;
+  --gold-light: #e8c97a;
+  --gold-dark: #9a7a30;
+  --dark: #1a1208;
+  --dark2: #251c0d;
+  --dark3: #332a18;
+  --cream: #f5ede0;
+  --cream2: #ede0cc;
+  --text: #2d2210;
+  --text-muted: #7a6840;
+  --error: #c0392b;
+  --success: #1abc9c;
   --radius: 14px;
   --sidebar-w: 240px;
 }
 *{box-sizing:border-box;margin:0;padding:0;}
 body{font-family:'Cairo',sans-serif;background:var(--dark);min-height:100vh;color:var(--text);overflow-x:hidden;}
-.bg-pattern{position:fixed;inset:0;z-index:0;background:radial-gradient(ellipse 80% 60% at 20% 10%,rgba(201,168,76,.12) 0%,transparent 60%),radial-gradient(ellipse 60% 70% at 80% 90%,rgba(201,168,76,.08) 0%,transparent 60%),linear-gradient(160deg,
-#1a1208 0%,
-#251c0d 50%,
-#1a1208 100%);}
+.bg-pattern{position:fixed;inset:0;z-index:0;background:radial-gradient(ellipse 80% 60% at 20% 10%,rgba(201,168,76,.12) 0%,transparent 60%),radial-gradient(ellipse 60% 70% at 80% 90%,rgba(201,168,76,.08) 0%,transparent 60%),linear-gradient(160deg,#1a1208 0%,#251c0d 50%,#1a1208 100%);}
 .bg-pattern::before{content:'';position:absolute;inset:0;background-image:repeating-linear-gradient(45deg,transparent,transparent 40px,rgba(201,168,76,.03) 40px,rgba(201,168,76,.03) 41px);}
 .page{display:none;position:relative;z-index:1;}
 .page.active{display:block;animation:fadeIn .4s ease;}
 @keyframes fadeIn{from{opacity:0;transform:translateY(12px);}to{opacity:1;transform:none;}}
-/* AUTH */
+
+/* ─── AUTH ─── */
 .auth-wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:2rem 1rem;}
 .auth-card{background:rgba(245,237,224,.97);border-radius:24px;padding:3rem 2.5rem;width:100%;max-width:420px;box-shadow:0 20px 80px rgba(0,0,0,.4),0 0 0 1px rgba(201,168,76,.2);position:relative;overflow:hidden;}
 .auth-card::before{content:'';position:absolute;top:0;left:0;right:0;height:4px;background:linear-gradient(90deg,var(--gold-dark),var(--gold-light),var(--gold-dark));}
@@ -56,8 +42,7 @@ body{font-family:'Cairo',sans-serif;background:var(--dark);min-height:100vh;colo
 .page-title{font-size:1.5rem;font-weight:700;color:var(--dark);text-align:center;margin-bottom:2rem;}
 .form-group{margin-bottom:1.2rem;}
 .form-group label{display:block;font-weight:600;font-size:.88rem;color:var(--text-muted);margin-bottom:.45rem;}
-.form-group input{width:100%;padding:.75rem 1rem;border:2px solid 
-#ddd0ba;border-radius:var(--radius);font-family:'Cairo',sans-serif;font-size:.95rem;color:var(--dark);background:#fff;outline:none;transition:border-color .2s,box-shadow .2s;direction:ltr;text-align:right;}
+.form-group input{width:100%;padding:.75rem 1rem;border:2px solid #ddd0ba;border-radius:var(--radius);font-family:'Cairo',sans-serif;font-size:.95rem;color:var(--dark);background:#fff;outline:none;transition:border-color .2s,box-shadow .2s;direction:ltr;text-align:right;}
 .form-group input:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(201,168,76,.15);}
 .otp-input{text-align:center!important;letter-spacing:8px;font-size:1.4rem!important;font-weight:700;}
 .btn-primary{width:100%;padding:.85rem;background:linear-gradient(135deg,var(--gold),var(--gold-dark));color:#fff;border:none;border-radius:var(--radius);font-family:'Cairo',sans-serif;font-size:1rem;font-weight:700;cursor:pointer;transition:transform .15s,box-shadow .15s;box-shadow:0 4px 16px rgba(201,168,76,.35);margin-top:.5rem;}
@@ -66,13 +51,12 @@ body{font-family:'Cairo',sans-serif;background:var(--dark);min-height:100vh;colo
 .auth-links{text-align:center;margin-top:1.5rem;font-size:.88rem;color:var(--text-muted);display:flex;gap:.6rem;justify-content:center;align-items:center;flex-wrap:wrap;}
 .auth-links a{color:var(--gold-dark);text-decoration:none;font-weight:600;cursor:pointer;}
 .auth-links span{color:#ccc;}
-.error-msg{background:
-#fdecea;border:1px solid 
-#f5c6c2;color:var(--error);border-radius:10px;padding:.65rem 1rem;font-size:.88rem;text-align:center;margin-bottom:1rem;display:none;}
+.error-msg{background:#fdecea;border:1px solid #f5c6c2;color:var(--error);border-radius:10px;padding:.65rem 1rem;font-size:.88rem;text-align:center;margin-bottom:1rem;display:none;}
 .error-msg.show{display:block;}
 .spinner{display:inline-block;width:16px;height:16px;border:2px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite;vertical-align:middle;margin-left:.5rem;}
 @keyframes spin{to{transform:rotate(360deg);}}
-/* APP */
+
+/* ─── APP LAYOUT ─── */
 #page-home{display:none;}
 #page-home.active{display:flex;flex-direction:column;height:100vh;}
 .app-topbar{background:rgba(26,18,8,.95);backdrop-filter:blur(12px);border-bottom:1px solid rgba(201,168,76,.2);padding:.8rem 1.5rem;display:flex;align-items:center;justify-content:space-between;z-index:200;flex-shrink:0;}
@@ -96,7 +80,8 @@ body{font-family:'Cairo',sans-serif;background:var(--dark);min-height:100vh;colo
 .main-content{flex:1;overflow-y:auto;background:rgba(26,18,8,.3);}
 .section-panel{display:none;padding:1.5rem;}
 .section-panel.active{display:block;}
-/* FEED */
+
+/* ─── FEED ─── */
 .feed-wrap{max-width:640px;margin:0 auto;}
 .filter-bar{background:rgba(37,28,13,.85);border:1px solid rgba(201,168,76,.18);border-radius:16px;padding:1rem 1.2rem;margin-bottom:1.5rem;}
 .filter-title{color:rgba(201,168,76,.7);font-size:.75rem;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:.8rem;font-weight:600;}
@@ -109,23 +94,23 @@ body{font-family:'Cairo',sans-serif;background:var(--dark);min-height:100vh;colo
 .admin-upload-btn:hover{transform:translateY(-1px);}
 .post-card{background:rgba(37,28,13,.8);border:1px solid rgba(201,168,76,.15);border-radius:18px;overflow:hidden;margin-bottom:1.2rem;transition:border-color .25s;backdrop-filter:blur(6px);}
 .post-card:hover{border-color:rgba(201,168,76,.3);}
-.post-img{width:100%;display:block;object-fit:cover;max-height:420px;background:
-#1a1208;}
+.post-img{width:100%;display:block;object-fit:cover;max-height:420px;background:#1a1208;cursor:pointer;}
 .post-img-placeholder{width:100%;height:280px;background:linear-gradient(135deg,rgba(201,168,76,.08),rgba(201,168,76,.03));display:flex;align-items:center;justify-content:center;font-size:3rem;}
 .post-body{padding:1rem 1.2rem;}
 .post-tags{display:flex;flex-wrap:wrap;gap:.4rem;margin-bottom:.6rem;}
 .post-tag{padding:.2rem .65rem;border-radius:20px;background:rgba(201,168,76,.15);color:var(--gold-light);font-size:.75rem;font-weight:700;}
 .post-desc{color:rgba(245,237,224,.7);font-size:.9rem;line-height:1.7;}
 .post-date{color:rgba(201,168,76,.4);font-size:.78rem;margin-top:.6rem;}
-.post-del-btn{display:none;margin:.5rem 1.2rem 1rem;padding:.35rem .9rem;border:1.5px solid rgba(192,57,43,.4);background:transparent;color:
-#e74c3c;border-radius:8px;font-family:'Cairo',sans-serif;font-size:.8rem;cursor:pointer;}
+.post-del-btn{margin:.5rem 1.2rem 1rem;padding:.35rem .9rem;border:1.5px solid rgba(192,57,43,.4);background:transparent;color:#e74c3c;border-radius:8px;font-family:'Cairo',sans-serif;font-size:.8rem;cursor:pointer;}
 .post-del-btn:hover{background:rgba(192,57,43,.1);}
-/* PANEL HEADER */
+
+/* ─── PANEL HEADER ─── */
 .panel-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.5rem;flex-wrap:wrap;gap:1rem;}
 .panel-header h2{color:var(--cream);font-size:1.3rem;font-weight:700;}
 .btn-add{display:flex;align-items:center;gap:.5rem;padding:.6rem 1.2rem;background:linear-gradient(135deg,var(--gold),var(--gold-dark));color:#fff;border:none;border-radius:10px;font-family:'Cairo',sans-serif;font-size:.9rem;font-weight:700;cursor:pointer;transition:transform .15s;box-shadow:0 3px 12px rgba(201,168,76,.3);}
 .btn-add:hover{transform:translateY(-1px);}
-/* CLIENTS GRID */
+
+/* ─── CLIENTS GRID ─── */
 .clients-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1rem;}
 .client-card{background:rgba(37,28,13,.8);border:1px solid rgba(201,168,76,.15);border-radius:16px;padding:1.2rem;cursor:pointer;transition:all .25s;backdrop-filter:blur(6px);}
 .client-card:hover{border-color:rgba(201,168,76,.4);transform:translateY(-2px);}
@@ -134,13 +119,11 @@ body{font-family:'Cairo',sans-serif;background:var(--dark);min-height:100vh;colo
 .client-info span{display:flex;align-items:center;gap:.4rem;}
 .client-tags{display:flex;gap:.4rem;margin-top:.7rem;flex-wrap:wrap;}
 .client-tag{padding:.15rem .6rem;border-radius:20px;font-size:.72rem;font-weight:600;}
-.tag-contract{background:rgba(26,188,156,.15);color:
-#1abc9c;}
+.tag-contract{background:rgba(26,188,156,.15);color:#1abc9c;}
 .tag-done{background:rgba(201,168,76,.15);color:var(--gold-light);}
-/* CLIENT DETAIL DRAWER */
-.client-drawer{position:fixed;top:0;left:0;bottom:0;width:min(780px,100vw);background:linear-gradient(160deg,
-#1e1509 0%,
-#251c0d 100%);border-right:1px solid rgba(201,168,76,.2);z-index:600;transform:translateX(-100%);transition:transform .35s cubic-bezier(.4,0,.2,1);display:flex;flex-direction:column;overflow:hidden;}
+
+/* ─── CLIENT DRAWER ─── */
+.client-drawer{position:fixed;top:0;left:0;bottom:0;width:min(780px,100vw);background:linear-gradient(160deg,#1e1509 0%,#251c0d 100%);border-right:1px solid rgba(201,168,76,.2);z-index:600;transform:translateX(-100%);transition:transform .35s cubic-bezier(.4,0,.2,1);display:flex;flex-direction:column;overflow:hidden;}
 .client-drawer.open{transform:translateX(0);}
 .drawer-overlay{position:fixed;inset:0;z-index:599;background:rgba(0,0,0,.6);display:none;backdrop-filter:blur(3px);}
 .drawer-overlay.show{display:block;}
@@ -156,7 +139,8 @@ body{font-family:'Cairo',sans-serif;background:var(--dark);min-height:100vh;colo
 .drawer-tab.active{color:var(--gold-light);border-bottom-color:var(--gold);}
 .drawer-tab .tab-badge{background:rgba(201,168,76,.2);color:var(--gold-light);border-radius:10px;padding:.1rem .5rem;font-size:.72rem;min-width:20px;text-align:center;}
 .drawer-body{flex:1;overflow-y:auto;padding:1.5rem;}
-/* INFO TAB */
+
+/* ─── INFO TAB ─── */
 .info-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1.5rem;}
 .info-box{background:rgba(37,28,13,.7);border:1px solid rgba(201,168,76,.12);border-radius:12px;padding:1rem;}
 .info-box-label{color:rgba(201,168,76,.5);font-size:.72rem;letter-spacing:1px;text-transform:uppercase;margin-bottom:.4rem;font-weight:600;}
@@ -169,7 +153,8 @@ body{font-family:'Cairo',sans-serif;background:var(--dark);min-height:100vh;colo
 .contract-pill.agreed{background:rgba(201,168,76,.15);border-color:var(--gold);color:var(--gold-light);}
 .contract-pill .pill-check{width:16px;height:16px;border-radius:50%;border:1.5px solid currentColor;display:flex;align-items:center;justify-content:center;font-size:.65rem;flex-shrink:0;}
 .contract-pill.agreed .pill-check{background:var(--gold);border-color:var(--gold);color:#fff;}
-/* FILES */
+
+/* ─── FILES ─── */
 .tab-section-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem;}
 .tab-section-title{color:var(--cream);font-size:1rem;font-weight:700;}
 .btn-sm{padding:.4rem .9rem;background:linear-gradient(135deg,var(--gold),var(--gold-dark));color:#fff;border:none;border-radius:8px;font-family:'Cairo',sans-serif;font-size:.82rem;font-weight:700;cursor:pointer;transition:transform .15s;display:flex;align-items:center;gap:.4rem;}
@@ -177,13 +162,13 @@ body{font-family:'Cairo',sans-serif;background:var(--dark);min-height:100vh;colo
 .files-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:.8rem;margin-bottom:1.5rem;}
 .file-item{background:rgba(37,28,13,.7);border:1px solid rgba(201,168,76,.12);border-radius:12px;overflow:hidden;position:relative;cursor:pointer;transition:border-color .2s;}
 .file-item:hover{border-color:rgba(201,168,76,.35);}
-.file-thumb{width:100%;height:100px;object-fit:cover;display:block;background:
-#1a1208;}
+.file-thumb{width:100%;height:100px;object-fit:cover;display:block;background:#1a1208;}
 .file-thumb-placeholder{width:100%;height:100px;background:rgba(201,168,76,.06);display:flex;align-items:center;justify-content:center;font-size:2rem;}
 .file-name{padding:.5rem .6rem;font-size:.75rem;color:rgba(245,237,224,.6);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 .file-del{position:absolute;top:.4rem;left:.4rem;background:rgba(192,57,43,.85);border:none;color:#fff;width:22px;height:22px;border-radius:50%;cursor:pointer;font-size:.75rem;display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity .2s;}
 .file-item:hover .file-del{opacity:1;}
-/* PAYMENTS */
+
+/* ─── PAYMENTS ─── */
 .payments-list{display:flex;flex-direction:column;gap:.8rem;margin-bottom:1.5rem;}
 .payment-card{background:rgba(37,28,13,.7);border:1px solid rgba(201,168,76,.12);border-radius:12px;padding:1rem;}
 .payment-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:.6rem;}
@@ -191,12 +176,12 @@ body{font-family:'Cairo',sans-serif;background:var(--dark);min-height:100vh;colo
 .payment-date{color:rgba(201,168,76,.5);font-size:.78rem;}
 .payment-note{color:rgba(245,237,224,.6);font-size:.82rem;margin-bottom:.6rem;}
 .payment-actions{display:flex;gap:.4rem;margin-top:.6rem;flex-direction:row-reverse;}
-.payment-del{padding:.25rem .7rem;border:1.5px solid rgba(192,57,43,.4);background:transparent;color:
-#e74c3c;border-radius:6px;font-family:'Cairo',sans-serif;font-size:.78rem;cursor:pointer;}
+.payment-del{padding:.25rem .7rem;border:1.5px solid rgba(192,57,43,.4);background:transparent;color:#e74c3c;border-radius:6px;font-family:'Cairo',sans-serif;font-size:.78rem;cursor:pointer;}
 .payment-del:hover{background:rgba(192,57,43,.1);}
 .payment-edit{padding:.25rem .7rem;border:1.5px solid rgba(201,168,76,.3);background:transparent;color:var(--gold-light);border-radius:6px;font-family:'Cairo',sans-serif;font-size:.78rem;cursor:pointer;}
 .payment-edit:hover{background:rgba(201,168,76,.08);}
-/* STAGES */
+
+/* ─── STAGES ─── */
 .stages-list{display:flex;flex-direction:column;gap:.8rem;}
 .stage-card{background:rgba(37,28,13,.7);border:1px solid rgba(201,168,76,.12);border-radius:14px;padding:1rem;}
 .stage-header{display:flex;align-items:center;gap:.8rem;margin-bottom:.8rem;}
@@ -211,43 +196,41 @@ body{font-family:'Cairo',sans-serif;background:var(--dark);min-height:100vh;colo
 .toggle-track{width:40px;height:22px;border-radius:11px;background:rgba(201,168,76,.15);border:1.5px solid rgba(201,168,76,.2);transition:all .3s;position:relative;flex-shrink:0;}
 .toggle-track.on{background:rgba(26,188,156,.25);border-color:rgba(26,188,156,.5);}
 .toggle-thumb{position:absolute;top:2px;right:2px;width:16px;height:16px;border-radius:50%;background:rgba(201,168,76,.5);transition:all .3s;}
-.toggle-track.on .toggle-thumb{right:auto;left:2px;background:
-#1abc9c;}
+.toggle-track.on .toggle-thumb{right:auto;left:2px;background:#1abc9c;}
 .stage-label{font-size:.78rem;color:rgba(245,237,224,.5);font-weight:600;}
 .stage-files-mini{display:flex;flex-wrap:wrap;gap:.4rem;margin-bottom:.6rem;}
 .mini-file{width:50px;height:50px;border-radius:8px;object-fit:cover;border:1px solid rgba(201,168,76,.15);cursor:pointer;}
 .mini-file-placeholder{width:50px;height:50px;border-radius:8px;background:rgba(201,168,76,.06);display:flex;align-items:center;justify-content:center;font-size:1rem;border:1px solid rgba(201,168,76,.1);}
 .add-stage-file{display:inline-flex;align-items:center;gap:.3rem;padding:.3rem .7rem;border:1.5px dashed rgba(201,168,76,.3);background:transparent;color:rgba(201,168,76,.5);border-radius:8px;font-family:'Cairo',sans-serif;font-size:.78rem;cursor:pointer;transition:all .2s;}
 .add-stage-file:hover{border-color:var(--gold);color:var(--gold-light);}
-/* MODALS */
-.modal-overlay{position:fixed;inset:0;z-index:700;background:rgba(0,0,0,.7);display:flex;align-items:center;justify-content:center;padding:1rem;backdrop-filter:blur(4px);animation:fadeIn .25s;}
+
+/* ─── MODALS ─── */
+.modal-overlay{position:fixed;inset:0;z-index:700;background:rgba(0,0,0,.7);display:none;align-items:center;justify-content:center;padding:1rem;backdrop-filter:blur(4px);animation:fadeIn .25s;}
+.modal-overlay.open{display:flex;}
 .modal-box{background:var(--cream);border-radius:20px;padding:2rem;width:100%;max-width:480px;max-height:90vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,.5);position:relative;}
 .modal-box::before{content:'';position:absolute;top:0;left:0;right:0;height:4px;background:linear-gradient(90deg,var(--gold-dark),var(--gold-light),var(--gold-dark));border-radius:20px 20px 0 0;}
 .modal-title{font-size:1.3rem;font-weight:700;color:var(--dark);margin-bottom:1.5rem;display:flex;align-items:center;gap:.5rem;}
 .modal-close{position:absolute;top:1rem;left:1rem;background:none;border:none;font-size:1.3rem;cursor:pointer;color:var(--text-muted);}
 .mat-checkboxes{display:flex;flex-wrap:wrap;gap:.5rem;margin-bottom:1.2rem;}
-.mat-cb{display:flex;align-items:center;gap:.4rem;padding:.4rem .9rem;border:2px solid 
-#ddd0ba;border-radius:20px;cursor:pointer;font-size:.85rem;font-weight:600;color:var(--text-muted);transition:all .2s;user-select:none;}
+.mat-cb{display:flex;align-items:center;gap:.4rem;padding:.4rem .9rem;border:2px solid #ddd0ba;border-radius:20px;cursor:pointer;font-size:.85rem;font-weight:600;color:var(--text-muted);transition:all .2s;user-select:none;}
 .mat-cb input{display:none;}
 .mat-cb.checked{border-color:var(--gold);background:rgba(201,168,76,.1);color:var(--gold-dark);}
 .mat-cb .dot{width:8px;height:8px;border-radius:50%;background:var(--gold);display:none;}
 .mat-cb.checked .dot{display:block;}
-.upload-area{border:2px dashed 
-#ddd0ba;border-radius:14px;padding:2rem;text-align:center;cursor:pointer;transition:all .2s;margin-bottom:1.2rem;background:#fff;}
+.upload-area{border:2px dashed #ddd0ba;border-radius:14px;padding:2rem;text-align:center;cursor:pointer;transition:all .2s;margin-bottom:1.2rem;background:#fff;}
 .upload-area:hover{border-color:var(--gold);}
 .upload-area input{display:none;}
 .upload-area .u-icon{font-size:2rem;margin-bottom:.5rem;}
 .upload-area p{color:var(--text-muted);font-size:.88rem;}
 .upload-area .u-hint{font-size:.78rem;color:#bbb;margin-top:.3rem;}
 .img-preview{width:100%;border-radius:10px;margin-bottom:1rem;display:none;}
-.modal-textarea{width:100%;padding:.75rem 1rem;border:2px solid 
-#ddd0ba;border-radius:var(--radius);font-family:'Cairo',sans-serif;font-size:.92rem;color:var(--dark);background:#fff;resize:vertical;min-height:80px;outline:none;transition:border-color .2s;}
+.modal-textarea{width:100%;padding:.75rem 1rem;border:2px solid #ddd0ba;border-radius:var(--radius);font-family:'Cairo',sans-serif;font-size:.92rem;color:var(--dark);background:#fff;resize:vertical;min-height:80px;outline:none;transition:border-color .2s;}
 .modal-textarea:focus{border-color:var(--gold);}
 .form-label{font-size:.85rem;font-weight:600;color:var(--text-muted);margin-bottom:.4rem;display:block;}
-.modal-input{width:100%;padding:.75rem 1rem;border:2px solid 
-#ddd0ba;border-radius:var(--radius);font-family:'Cairo',sans-serif;font-size:.95rem;color:var(--dark);background:#fff;outline:none;transition:border-color .2s;}
+.modal-input{width:100%;padding:.75rem 1rem;border:2px solid #ddd0ba;border-radius:var(--radius);font-family:'Cairo',sans-serif;font-size:.95rem;color:var(--dark);background:#fff;outline:none;transition:border-color .2s;}
 .modal-input:focus{border-color:var(--gold);}
-/* PROSPECTS */
+
+/* ─── PROSPECTS ─── */
 .prospects-list{display:flex;flex-direction:column;gap:.8rem;max-width:600px;}
 .prospect-card{background:rgba(37,28,13,.8);border:1px solid rgba(201,168,76,.15);border-radius:14px;padding:1rem 1.2rem;display:flex;align-items:center;gap:1rem;transition:all .2s;}
 .prospect-card:hover{border-color:rgba(201,168,76,.35);}
@@ -256,24 +239,36 @@ body{font-family:'Cairo',sans-serif;background:var(--dark);min-height:100vh;colo
 .prospect-phone{color:rgba(201,168,76,.6);font-size:.82rem;margin-top:.15rem;}
 .prospect-actions{display:flex;gap:.4rem;}
 .status-badge{padding:.3rem .85rem;border-radius:20px;font-size:.78rem;font-weight:700;flex-shrink:0;cursor:pointer;}
-.s-meeting{background:rgba(52,152,219,.2);color:
-#5dade2;}
-.s-followup{background:rgba(243,156,18,.2);color:
-#f39c12;}
-.s-inspection{background:rgba(26,188,156,.2);color:
-#1abc9c;}
-.s-rejected{background:rgba(192,57,43,.2);color:
-#e74c3c;}
+.s-meeting{background:rgba(52,152,219,.2);color:#5dade2;}
+.s-followup{background:rgba(243,156,18,.2);color:#f39c12;}
+.s-inspection-status{background:rgba(26,188,156,.2);color:#1abc9c;}
+.s-rejected{background:rgba(192,57,43,.2);color:#e74c3c;}
 .empty-state{text-align:center;padding:4rem 2rem;color:rgba(201,168,76,.4);}
 .empty-state span{display:block;font-size:3rem;margin-bottom:.8rem;}
-/* LOADING */
+
+/* ─── STATUS DROPDOWN ─── */
+.status-dropdown{position:relative;}
+.status-menu{position:absolute;top:110%;right:0;background:rgba(37,28,13,.98);border:1px solid rgba(201,168,76,.25);border-radius:10px;min-width:130px;z-index:50;overflow:hidden;display:none;box-shadow:0 8px 24px rgba(0,0,0,.4);}
+.status-menu.open{display:block;}
+.status-menu-item{padding:.55rem 1rem;font-size:.85rem;cursor:pointer;color:rgba(245,237,224,.7);transition:background .15s;font-family:'Cairo',sans-serif;}
+.status-menu-item:hover{background:rgba(201,168,76,.1);color:var(--gold-light);}
+
+/* ─── LOADING ─── */
 .loading-state{text-align:center;padding:3rem;color:rgba(201,168,76,.5);}
 .loading-state .spin{display:inline-block;width:32px;height:32px;border:3px solid rgba(201,168,76,.2);border-top-color:var(--gold);border-radius:50%;animation:spin .7s linear infinite;margin-bottom:1rem;}
-/* LIGHTBOX */
+
+/* ─── LIGHTBOX ─── */
 .lightbox{position:fixed;inset:0;z-index:900;background:rgba(0,0,0,.92);display:none;align-items:center;justify-content:center;}
 .lightbox.open{display:flex;}
 .lightbox img{max-width:90vw;max-height:90vh;border-radius:12px;object-fit:contain;}
 .lightbox-close{position:absolute;top:1.5rem;left:1.5rem;background:rgba(255,255,255,.1);border:none;color:#fff;width:40px;height:40px;border-radius:50%;font-size:1.2rem;cursor:pointer;}
+
+/* ─── TOAST ─── */
+.toast{position:fixed;bottom:2rem;left:50%;transform:translateX(-50%) translateY(20px);background:rgba(37,28,13,.97);border:1px solid rgba(201,168,76,.3);color:var(--cream);padding:.75rem 1.5rem;border-radius:12px;font-size:.9rem;z-index:1000;opacity:0;transition:all .3s;pointer-events:none;}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+.toast.success{border-color:rgba(26,188,156,.5);color:#1abc9c;}
+.toast.error{border-color:rgba(192,57,43,.5);color:#e74c3c;}
+
 @media(max-width:680px){
   .sidebar{position:fixed;top:0;right:0;bottom:0;z-index:300;transform:translateX(100%);width:220px;padding-top:60px;}
   .sidebar.open{transform:translateX(0);}
@@ -291,7 +286,8 @@ body{font-family:'Cairo',sans-serif;background:var(--dark);min-height:100vh;colo
 </head>
 <body>
 <div class="bg-pattern"></div>
-<!-- LOGIN -->
+
+<!-- ═══ LOGIN ═══ -->
 <div class="page active" id="page-login">
   <div class="auth-wrap">
     <div class="auth-card">
@@ -312,7 +308,8 @@ body{font-family:'Cairo',sans-serif;background:var(--dark);min-height:100vh;colo
     </div>
   </div>
 </div>
-<!-- REGISTER -->
+
+<!-- ═══ REGISTER ═══ -->
 <div class="page" id="page-register">
   <div class="auth-wrap">
     <div class="auth-card">
@@ -328,7 +325,8 @@ body{font-family:'Cairo',sans-serif;background:var(--dark);min-height:100vh;colo
     </div>
   </div>
 </div>
-<!-- VERIFY -->
+
+<!-- ═══ VERIFY ═══ -->
 <div class="page" id="page-verify">
   <div class="auth-wrap">
     <div class="auth-card">
@@ -340,7 +338,8 @@ body{font-family:'Cairo',sans-serif;background:var(--dark);min-height:100vh;colo
     </div>
   </div>
 </div>
-<!-- FORGOT -->
+
+<!-- ═══ FORGOT ═══ -->
 <div class="page" id="page-forgot">
   <div class="auth-wrap">
     <div class="auth-card">
@@ -360,7 +359,8 @@ body{font-family:'Cairo',sans-serif;background:var(--dark);min-height:100vh;colo
     </div>
   </div>
 </div>
-<!-- HOME APP -->
+
+<!-- ═══ HOME APP ═══ -->
 <div class="page" id="page-home">
   <div class="app-topbar">
     <div class="topbar-left">
@@ -384,6 +384,7 @@ body{font-family:'Cairo',sans-serif;background:var(--dark);min-height:100vh;colo
       <div class="sidebar-item" onclick="switchSection('custom',this)"><span class="s-icon">⚙️</span><span>التخصيص</span></div>
     </div>
     <div class="main-content">
+
       <!-- WORKS -->
       <div class="section-panel active" id="section-works">
         <div class="feed-wrap">
@@ -399,11 +400,12 @@ body{font-family:'Cairo',sans-serif;background:var(--dark);min-height:100vh;colo
             </div>
           </div>
           <div id="admin-upload-wrap" style="display:none">
-            <button class="admin-upload-btn" onclick="openUploadModal()">➕ رفع صورة جديدة</button>
+            <button class="admin-upload-btn" onclick="openModal('upload-modal')">➕ رفع صورة جديدة</button>
           </div>
           <div id="posts-feed"></div>
         </div>
       </div>
+
       <!-- CLIENTS -->
       <div class="section-panel" id="section-clients">
         <div class="panel-header">
@@ -412,6 +414,7 @@ body{font-family:'Cairo',sans-serif;background:var(--dark);min-height:100vh;colo
         </div>
         <div class="clients-grid" id="clients-grid"></div>
       </div>
+
       <!-- PROSPECTS -->
       <div class="section-panel" id="section-prospects">
         <div class="panel-header">
@@ -420,6 +423,7 @@ body{font-family:'Cairo',sans-serif;background:var(--dark);min-height:100vh;colo
         </div>
         <div class="prospects-list" id="prospects-list"></div>
       </div>
+
       <!-- CUSTOM -->
       <div class="section-panel" id="section-custom">
         <div class="empty-state"><span>⚙️</span><div style="color:rgba(201,168,76,.5)">قريباً...</div></div>
@@ -427,7 +431,8 @@ body{font-family:'Cairo',sans-serif;background:var(--dark);min-height:100vh;colo
     </div>
   </div>
 </div>
-<!-- CLIENT DRAWER -->
+
+<!-- ═══ CLIENT DRAWER ═══ -->
 <div class="drawer-overlay" id="drawer-overlay" onclick="closeDrawer()"></div>
 <div class="client-drawer" id="client-drawer">
   <div class="drawer-header">
@@ -456,23 +461,26 @@ body{font-family:'Cairo',sans-serif;background:var(--dark);min-height:100vh;colo
     <div id="drawer-tab-payments" style="display:none">
       <div class="tab-section-header">
         <div class="tab-section-title">💰 الدفعات</div>
-        <button class="btn-sm" onclick="openPaymentModal()" id="btn-add-payment" style="display:none">+ دفعة</button>
+        <button class="btn-sm" id="btn-add-payment" onclick="openPaymentModal()" style="display:none">+ دفعة</button>
       </div>
       <div class="payments-list" id="drawer-payments-list"></div>
     </div>
     <div id="drawer-tab-files" style="display:none">
       <div class="tab-section-header">
         <div class="tab-section-title">📁 ملفات العقد</div>
-        <button class="btn-sm" onclick="openFileUploadModal('contract')" id="btn-add-file" style="display:none">+ رفع</button>
+        <button class="btn-sm" id="btn-add-file" onclick="openFileUploadModal('contract')" style="display:none">+ رفع</button>
       </div>
       <div class="files-grid" id="drawer-files-grid"></div>
     </div>
   </div>
 </div>
-<!-- UPLOAD MODAL (works) -->
-<div class="modal-overlay" id="upload-modal" style="display:none">
+
+<!-- ═══ MODALS ═══ -->
+
+<!-- Upload Post -->
+<div class="modal-overlay" id="upload-modal">
   <div class="modal-box">
-    <button class="modal-close" onclick="closeUploadModal()">✕</button>
+    <button class="modal-close" onclick="closeModal('upload-modal')">✕</button>
     <div class="modal-title">📸 رفع صورة جديدة</div>
     <label class="form-label">المواد المستخدمة</label>
     <div class="mat-checkboxes" id="upload-mats">
@@ -494,10 +502,11 @@ body{font-family:'Cairo',sans-serif;background:var(--dark);min-height:100vh;colo
     <button class="btn-primary" id="post-submit-btn" onclick="submitPost()">نشر</button>
   </div>
 </div>
-<!-- CLIENT MODAL -->
-<div class="modal-overlay" id="client-modal" style="display:none">
+
+<!-- Client Modal -->
+<div class="modal-overlay" id="client-modal">
   <div class="modal-box">
-    <button class="modal-close" onclick="closeClientModal()">✕</button>
+    <button class="modal-close" onclick="closeModal('client-modal')">✕</button>
     <div class="modal-title" id="client-modal-title">👤 إضافة عميل جديد</div>
     <div class="form-group"><label>الاسم</label><input type="text" id="c-name" placeholder="اسم العميل" class="modal-input"/></div>
     <div class="form-group"><label>العنوان</label><input type="text" id="c-addr" placeholder="العنوان" class="modal-input"/></div>
@@ -517,10 +526,11 @@ body{font-family:'Cairo',sans-serif;background:var(--dark);min-height:100vh;colo
     <button class="btn-primary" id="client-submit-btn" onclick="submitClient()">حفظ العميل</button>
   </div>
 </div>
-<!-- PAYMENT MODAL -->
-<div class="modal-overlay" id="payment-modal" style="display:none">
+
+<!-- Payment Modal -->
+<div class="modal-overlay" id="payment-modal">
   <div class="modal-box">
-    <button class="modal-close" onclick="closePaymentModal()">✕</button>
+    <button class="modal-close" onclick="closeModal('payment-modal')">✕</button>
     <div class="modal-title" id="payment-modal-title">💰 إضافة دفعة جديدة</div>
     <div class="form-group"><label>المبلغ (جنيه)</label><input type="number" id="pay-amount" placeholder="0" class="modal-input" style="direction:ltr;text-align:right"/></div>
     <div class="form-group"><label>التاريخ</label><input type="date" id="pay-date" class="modal-input" style="direction:ltr;text-align:right"/></div>
@@ -528,10 +538,11 @@ body{font-family:'Cairo',sans-serif;background:var(--dark);min-height:100vh;colo
     <button class="btn-primary" id="payment-submit-btn" onclick="submitPayment()">حفظ الدفعة</button>
   </div>
 </div>
-<!-- FILE UPLOAD MODAL -->
-<div class="modal-overlay" id="file-upload-modal" style="display:none">
+
+<!-- File Upload Modal -->
+<div class="modal-overlay" id="file-upload-modal">
   <div class="modal-box">
-    <button class="modal-close" onclick="closeFileUploadModal()">✕</button>
+    <button class="modal-close" onclick="closeModal('file-upload-modal')">✕</button>
     <div class="modal-title" id="file-modal-title">📁 رفع ملف</div>
     <div class="upload-area" onclick="document.getElementById('contract-file-input').click()">
       <input type="file" id="contract-file-input" accept="image/*,application/pdf,.scn,.SCN" multiple onchange="previewContractFiles(this)"/>
@@ -539,13 +550,14 @@ body{font-family:'Cairo',sans-serif;background:var(--dark);min-height:100vh;colo
     </div>
     <div id="contract-files-preview" style="display:flex;flex-wrap:wrap;gap:.5rem;margin-bottom:1rem"></div>
     <div class="form-group"><label>وصف (اختياري)</label><input type="text" id="file-desc" placeholder="وصف الملف..." class="modal-input"/></div>
-    <button class="btn-primary" onclick="submitContractFile()">رفع</button>
+    <button class="btn-primary" id="file-submit-btn" onclick="submitContractFile()">رفع</button>
   </div>
 </div>
-<!-- PROSPECT MODAL -->
-<div class="modal-overlay" id="prospect-modal" style="display:none">
+
+<!-- Prospect Modal -->
+<div class="modal-overlay" id="prospect-modal">
   <div class="modal-box">
-    <button class="modal-close" onclick="closeProspectModal()">✕</button>
+    <button class="modal-close" onclick="closeModal('prospect-modal')">✕</button>
     <div class="modal-title" id="prospect-modal-title">🎯 إضافة عميل محتمل</div>
     <div class="form-group"><label>الاسم</label><input type="text" id="p-name" placeholder="اسم العميل" class="modal-input"/></div>
     <div class="form-group"><label>رقم الهاتف</label><input type="tel" id="p-phone" placeholder="01xxxxxxxxx" class="modal-input"/></div>
@@ -559,69 +571,95 @@ body{font-family:'Cairo',sans-serif;background:var(--dark);min-height:100vh;colo
     <button class="btn-primary" id="prospect-submit-btn" onclick="submitProspect()">حفظ</button>
   </div>
 </div>
-<!-- LIGHTBOX -->
+
+<!-- ═══ LIGHTBOX ═══ -->
 <div class="lightbox" id="lightbox" onclick="closeLightbox()">
   <button class="lightbox-close" onclick="closeLightbox()">✕</button>
   <img id="lightbox-img" src="" alt=""/>
 </div>
+
+<!-- ═══ TOAST ═══ -->
+<div class="toast" id="toast"></div>
+
 <script>
+// ═══════════════════════════════════════════════════════════════
+// CONFIG
+// ═══════════════════════════════════════════════════════════════
+const API = 'https://agar-backend.vercel.app/api';
+
 // ═══════════════════════════════════════════════════════════════
 // STATE
 // ═══════════════════════════════════════════════════════════════
-const API = 'https://agar-backend.vercel.app/api';
-let authToken    = null;
-let currentUser  = null;
-let isAdmin      = false;
-let posts        = [];
-let clients      = [];
-let prospects    = [];
+let authToken         = localStorage.getItem('agar_token') || null;
+let currentUser       = JSON.parse(localStorage.getItem('agar_user') || 'null');
+let isAdmin           = currentUser?.role === 'admin';
+let posts             = [];
+let clients           = [];
+let prospects         = [];
 let activeClientId    = null;
 let editingClientId   = null;
 let editingPaymentId  = null;
+let editingProspectId = null;
 let currentFileTarget = 'contract';
 let currentStageTarget= null;
 let selectedStatus    = 'ميتنج';
 let activeFilters     = new Set(['polyback','polylac','uvlac','hpl','mattplus','mdf']);
-let verifyData  = { userId: null };
-let forgotEmail = '';
-let postImageFile = null;
-let contractFilesData = [];
+let verifyData        = { userId: null };
+let forgotEmail       = '';
+let postImageFile     = null;
+let contractFilesArr  = []; // [{file, type, name}]
+
 const MATS_AR = { polyback:'Polyback', polylac:'Polylac', uvlac:'UV Lac', hpl:'HPL', mattplus:'Matt Plus', mdf:'MDF' };
-const STATUS_CLASS = { ميتنج:'s-meeting', متابعة:'s-followup', معاينة:'s-inspection', مرفوض:'s-rejected' };
-const STAGES_TEMPLATE = [
+const STATUS_CLS = { ميتنج:'s-meeting', متابعة:'s-followup', معاينة:'s-inspection-status', مرفوض:'s-rejected' };
+const STAGES = [
   {id:'contract',      name:'العقد',     icon:'📜', cls:'s-contract'},
   {id:'inspection',    name:'المعاينة',  icon:'🔍', cls:'s-inspection'},
   {id:'design',        name:'التصميم',   icon:'✏️', cls:'s-design'},
   {id:'manufacturing', name:'التصنيع',   icon:'🏭', cls:'s-manufacturing'},
   {id:'delivery',      name:'التسليم',   icon:'🚚', cls:'s-delivery'},
 ];
+
 // ═══════════════════════════════════════════════════════════════
-// API HELPERS
+// TOAST
 // ═══════════════════════════════════════════════════════════════
-const authHeaders = () => ({
-  'Content-Type': 'application/json',
-  'Authorization': 'Bearer ' + authToken,
-});
+let toastTimer;
+function showToast(msg, type = '') {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className   = 'toast ' + type + ' show';
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.classList.remove('show'), 3000);
+}
+
+// ═══════════════════════════════════════════════════════════════
+// MODAL HELPERS
+// ═══════════════════════════════════════════════════════════════
+function openModal(id)  { document.getElementById(id).classList.add('open'); }
+function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+
+// ═══════════════════════════════════════════════════════════════
+// API
+// ═══════════════════════════════════════════════════════════════
 async function apiFetch(method, path, body = null, isForm = false) {
-  const opts = { method, headers: { 'Authorization': 'Bearer ' + authToken } };
+  const opts = { method, headers: { Authorization: 'Bearer ' + authToken } };
   if (body && !isForm) {
     opts.headers['Content-Type'] = 'application/json';
     opts.body = JSON.stringify(body);
   } else if (body && isForm) {
-    opts.body = body; // FormData
+    opts.body = body;
   }
   const res  = await fetch(API + path, opts);
   const data = await res.json();
   if (!res.ok) throw new Error(data.message || 'حدث خطأ');
   return data;
 }
-const apiGet    = (path)        => apiFetch('GET',    path);
-const apiPost   = (path, body)  => apiFetch('POST',   path, body);
-const apiPut    = (path, body)  => apiFetch('PUT',    path, body);
-const apiPatch  = (path, body)  => apiFetch('PATCH',  path, body);
-const apiDelete = (path)        => apiFetch('DELETE', path);
-const apiForm   = (method, path, fd) => apiFetch(method, path, fd, true);
-// no-auth post (login/register)
+const apiGet    = p       => apiFetch('GET',    p);
+const apiPost   = (p, b)  => apiFetch('POST',   p, b);
+const apiPut    = (p, b)  => apiFetch('PUT',    p, b);
+const apiPatch  = (p, b)  => apiFetch('PATCH',  p, b);
+const apiDelete = p       => apiFetch('DELETE', p);
+const apiForm   = (m,p,fd)=> apiFetch(m,        p, fd, true);
+
 async function apiPublic(path, body) {
   const res  = await fetch(API + path, {
     method: 'POST',
@@ -632,25 +670,31 @@ async function apiPublic(path, body) {
   if (!res.ok) throw new Error(data.message || 'حدث خطأ');
   return data;
 }
+
 // ═══════════════════════════════════════════════════════════════
-// NAV HELPERS
+// NAV
 // ═══════════════════════════════════════════════════════════════
 function goTo(id) {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-  document.getElementById(id).classList.add('active');
+  const el = document.getElementById(id);
+  el.classList.add('active');
+  // Fix: page-home uses flex layout, but .page.active sets display:block
+  if (id === 'page-home') el.style.display = 'flex';
+  else el.style.display = '';
   window.scrollTo(0, 0);
 }
 function showError(id, msg) { const el = document.getElementById(id); el.textContent = msg; el.classList.add('show'); }
 function hideError(id)      { document.getElementById(id).classList.remove('show'); }
-function setLoading(btnId, on, txt) {
+function setLoading(btnId, on, label) {
   const b = document.getElementById(btnId);
-  b.disabled = on;
-  b.innerHTML = on ? txt + ' <span class="spinner"></span>' : txt;
+  b.disabled  = on;
+  b.innerHTML = on ? label + ' <span class="spinner"></span>' : label;
 }
-function loading(container) {
+function loadingHtml(container) {
   document.getElementById(container).innerHTML =
     '<div class="loading-state"><div class="spin"></div><div>جاري التحميل...</div></div>';
 }
+
 // ═══════════════════════════════════════════════════════════════
 // AUTH
 // ═══════════════════════════════════════════════════════════════
@@ -662,21 +706,20 @@ async function handleLogin() {
   setLoading('login-btn', true, 'دخول');
   try {
     const data = await apiPublic('/auth/login', { email, password });
-    authToken   = data.token;
-    currentUser = data.user;
-    isAdmin     = data.user?.role === 'admin';
+    saveSession(data);
     enterApp(data.user?.name || 'المستخدم');
   } catch (err) { showError('login-error', err.message); }
   finally { setLoading('login-btn', false, 'دخول'); }
 }
+
 async function handleRegister() {
   hideError('reg-error');
   const name     = document.getElementById('reg-name').value.trim();
   const email    = document.getElementById('reg-email').value.trim();
   const phone    = document.getElementById('reg-phone').value.trim();
   const password = document.getElementById('reg-password').value;
-  if (!name)            return showError('reg-error', 'الاسم مطلوب');
-  if (!email)           return showError('reg-error', 'الإيميل مطلوب');
+  if (!name)              return showError('reg-error', 'الاسم مطلوب');
+  if (!email)             return showError('reg-error', 'الإيميل مطلوب');
   if (password.length < 6) return showError('reg-error', 'كلمة المرور 6 أحرف على الأقل');
   setLoading('reg-btn', true, 'تسجيل');
   try {
@@ -686,6 +729,7 @@ async function handleRegister() {
   } catch (err) { showError('reg-error', err.message); }
   finally { setLoading('reg-btn', false, 'تسجيل'); }
 }
+
 async function handleVerifyOTP() {
   hideError('verify-error');
   const otp = document.getElementById('verify-otp').value.trim();
@@ -693,13 +737,12 @@ async function handleVerifyOTP() {
   setLoading('verify-btn', true, 'تأكيد');
   try {
     const data = await apiPublic('/auth/verify-otp', { userId: verifyData.userId, otp });
-    authToken   = data.token;
-    currentUser = data.user;
-    isAdmin     = data.user?.role === 'admin';
+    saveSession(data);
     enterApp(data.user?.name || 'المستخدم');
   } catch (err) { showError('verify-error', err.message); }
   finally { setLoading('verify-btn', false, 'تأكيد'); }
 }
+
 async function handleForgotSend() {
   hideError('fp-error');
   const email = document.getElementById('fp-email').value.trim();
@@ -713,24 +756,38 @@ async function handleForgotSend() {
   } catch (err) { showError('fp-error', err.message); }
   finally { setLoading('fp-btn-1', false, 'إرسال الكود'); }
 }
+
 async function handleForgotReset() {
   hideError('fp-error');
   const otp         = document.getElementById('fp-otp').value.trim();
   const newPassword = document.getElementById('fp-newpass').value;
-  if (!otp)                 return showError('fp-error', 'ادخل الكود');
+  if (!otp)                   return showError('fp-error', 'ادخل الكود');
   if (newPassword.length < 6) return showError('fp-error', 'كلمة المرور 6 أحرف على الأقل');
   setLoading('fp-btn-2', true, 'تغيير كلمة المرور');
   try {
     await apiPublic('/auth/reset-password', { email: forgotEmail, otp, newPassword });
+    showToast('تم تغيير كلمة المرور بنجاح ✓', 'success');
     goTo('page-login');
   } catch (err) { showError('fp-error', err.message); }
   finally { setLoading('fp-btn-2', false, 'تغيير كلمة المرور'); }
 }
+
+function saveSession(data) {
+  authToken   = data.token;
+  currentUser = data.user;
+  isAdmin     = data.user?.role === 'admin';
+  localStorage.setItem('agar_token', authToken);
+  localStorage.setItem('agar_user',  JSON.stringify(currentUser));
+}
+
 function handleLogout() {
   authToken = null; currentUser = null; isAdmin = false;
+  localStorage.removeItem('agar_token');
+  localStorage.removeItem('agar_user');
   posts = []; clients = []; prospects = [];
   goTo('page-login');
 }
+
 // ═══════════════════════════════════════════════════════════════
 // ENTER APP
 // ═══════════════════════════════════════════════════════════════
@@ -738,17 +795,25 @@ function enterApp(name) {
   document.getElementById('home-username').textContent = name;
   goTo('page-home');
   if (isAdmin) {
-    document.getElementById('admin-upload-wrap').style.display  = 'block';
-    document.getElementById('btn-add-client').style.display     = 'flex';
-    document.getElementById('btn-add-prospect').style.display   = 'flex';
-    document.getElementById('btn-add-payment').style.display    = 'flex';
-    document.getElementById('btn-add-file').style.display       = 'flex';
-    document.getElementById('drawer-edit-btn').style.display    = 'flex';
+    document.getElementById('admin-upload-wrap').style.display = 'block';
+    document.getElementById('btn-add-client').style.display    = 'flex';
+    document.getElementById('btn-add-prospect').style.display  = 'flex';
+    document.getElementById('btn-add-payment').style.display   = 'flex';
+    document.getElementById('btn-add-file').style.display      = 'flex';
+    document.getElementById('drawer-edit-btn').style.display   = 'flex';
   }
   loadPosts();
   loadClients();
   loadProspects();
 }
+
+// ─── auto-login if token saved ────────────────────────────────
+window.addEventListener('DOMContentLoaded', () => {
+  if (authToken && currentUser) {
+    enterApp(currentUser.name || 'المستخدم');
+  }
+});
+
 // ═══════════════════════════════════════════════════════════════
 // SIDEBAR
 // ═══════════════════════════════════════════════════════════════
@@ -767,26 +832,29 @@ function closeSidebar() {
   document.getElementById('sidebar').classList.remove('open');
   document.getElementById('sidebar-overlay').classList.remove('show');
 }
+
 // ═══════════════════════════════════════════════════════════════
 // POSTS
 // ═══════════════════════════════════════════════════════════════
 async function loadPosts() {
-  loading('posts-feed');
+  loadingHtml('posts-feed');
   try {
     const data = await apiGet('/posts');
-    posts = data.posts;
+    posts = data.posts || [];
     renderPosts();
   } catch (err) {
     document.getElementById('posts-feed').innerHTML =
-      '<div class="empty-state"><span>⚠️</span>' + err.message + '</div>';
+      `<div class="empty-state"><span>⚠️</span>${err.message}</div>`;
   }
 }
+
 function toggleFilter(chip) {
   const mat = chip.dataset.mat;
   if (activeFilters.has(mat)) { activeFilters.delete(mat); chip.classList.remove('on'); }
   else                         { activeFilters.add(mat);    chip.classList.add('on'); }
   renderPosts();
 }
+
 function renderPosts() {
   const feed     = document.getElementById('posts-feed');
   const filtered = posts.filter(p => p.mats.some(m => activeFilters.has(m)));
@@ -794,20 +862,21 @@ function renderPosts() {
     feed.innerHTML = '<div class="empty-state"><span>🔍</span>مفيش أعمال بالفلتر ده</div>';
     return;
   }
-  feed.innerHTML = filtered.map(p => 
+  feed.innerHTML = filtered.map(p => `
     <div class="post-card">
       ${p.img
-        ? <img class="post-img" src="${p.img}" alt="work" onclick="openLightbox('${p.img}')">
-        : <div class="post-img-placeholder">🪑</div>}
+        ? `<img class="post-img" src="${p.img}" alt="work" onclick="openLightbox('${p.img}')">`
+        : `<div class="post-img-placeholder">🪑</div>`}
       <div class="post-body">
-        <div class="post-tags">${p.mats.map(m => <span class="post-tag">${MATS_AR[m] || m}</span>).join('')}</div>
-        ${p.desc ? <div class="post-desc">${p.desc}</div> : ''}
+        <div class="post-tags">${p.mats.map(m => `<span class="post-tag">${MATS_AR[m]||m}</span>`).join('')}</div>
+        ${p.desc ? `<div class="post-desc">${escHtml(p.desc)}</div>` : ''}
         <div class="post-date">${new Date(p.createdAt).toLocaleDateString('ar-EG')}</div>
       </div>
-      ${isAdmin ? <button class="post-del-btn" style="display:block" onclick="deletePost('${p._id}')">🗑 حذف</button> : ''}
+      ${isAdmin ? `<button class="post-del-btn" onclick="deletePost('${p._id}')">🗑 حذف</button>` : ''}
     </div>
-  ).join('');
+  `).join('');
 }
+
 function previewPostImage(input) {
   const file = input.files[0]; if (!file) return;
   postImageFile = file;
@@ -818,21 +887,11 @@ function previewPostImage(input) {
   };
   reader.readAsDataURL(file);
 }
-function openUploadModal()  { document.getElementById('upload-modal').style.display = 'flex'; }
-function closeUploadModal() {
-  document.getElementById('upload-modal').style.display = 'none';
-  document.getElementById('img-preview').style.display  = 'none';
-  document.getElementById('post-file-input').value      = '';
-  document.getElementById('upload-desc').value          = '';
-  postImageFile = null;
-  document.querySelectorAll('#upload-mats .mat-cb').forEach(l => {
-    l.classList.remove('checked'); l.querySelector('input').checked = false;
-  });
-}
+
 async function submitPost() {
   const mats = [...document.querySelectorAll('#upload-mats .mat-cb.checked')]
     .map(l => l.querySelector('input').value);
-  if (!mats.length) return alert('اختار مادة واحدة على الأقل');
+  if (!mats.length) return showToast('اختار مادة واحدة على الأقل', 'error');
   const fd = new FormData();
   fd.append('mats', JSON.stringify(mats));
   fd.append('desc', document.getElementById('upload-desc').value.trim());
@@ -841,33 +900,49 @@ async function submitPost() {
   try {
     const data = await apiForm('POST', '/posts', fd);
     posts.unshift(data.post);
-    closeUploadModal();
+    closeModal('upload-modal');
+    resetUploadModal();
     renderPosts();
-  } catch (err) { alert(err.message); }
+    showToast('تم نشر الصورة ✓', 'success');
+  } catch (err) { showToast(err.message, 'error'); }
   finally { setLoading('post-submit-btn', false, 'نشر'); }
 }
+
+function resetUploadModal() {
+  document.getElementById('img-preview').style.display = 'none';
+  document.getElementById('post-file-input').value     = '';
+  document.getElementById('upload-desc').value         = '';
+  postImageFile = null;
+  document.querySelectorAll('#upload-mats .mat-cb').forEach(l => {
+    l.classList.remove('checked'); l.querySelector('input').checked = false;
+  });
+}
+
 async function deletePost(id) {
   if (!confirm('هتحذف المنشور ده؟')) return;
   try {
     await apiDelete('/posts/' + id);
     posts = posts.filter(p => p._id !== id);
     renderPosts();
-  } catch (err) { alert(err.message); }
+    showToast('تم حذف المنشور', 'success');
+  } catch (err) { showToast(err.message, 'error'); }
 }
+
 // ═══════════════════════════════════════════════════════════════
 // CLIENTS
 // ═══════════════════════════════════════════════════════════════
 async function loadClients() {
-  loading('clients-grid');
+  loadingHtml('clients-grid');
   try {
     const data = await apiGet('/clients');
-    clients = data.clients;
+    clients = data.clients || [];
     renderClients();
   } catch (err) {
     document.getElementById('clients-grid').innerHTML =
-      '<div class="empty-state" style="grid-column:1/-1"><span>⚠️</span>' + err.message + '</div>';
+      `<div class="empty-state" style="grid-column:1/-1"><span>⚠️</span>${err.message}</div>`;
   }
 }
+
 function renderClients() {
   const grid = document.getElementById('clients-grid');
   if (!clients.length) {
@@ -875,39 +950,39 @@ function renderClients() {
     return;
   }
   grid.innerHTML = clients.map(c => {
-    const stages    = c.stages || {};
-    const doneCount = Object.values(stages).filter(s => s.done).length;
-    const total     = STAGES_TEMPLATE.length;
-    const prog      = Math.round((doneCount / total) * 100);
-    return 
+    const doneCount = Object.values(c.stages || {}).filter(s => s.done).length;
+    const prog      = Math.round((doneCount / STAGES.length) * 100);
+    return `
     <div class="client-card" onclick="openClientDrawer('${c._id}')">
-      <div class="client-name">${c.name}</div>
+      <div class="client-name">${escHtml(c.name)}</div>
       <div class="client-info">
-        <span>📍 ${c.addr || '—'}</span>
-        <span>📞 ${c.phone || '—'}</span>
+        <span>📍 ${escHtml(c.addr || '—')}</span>
+        <span>📞 ${escHtml(c.phone || '—')}</span>
       </div>
       <div class="client-tags" style="margin-top:.6rem">
-        ${(c.agreedTypes || []).map(t => <span class="client-tag tag-done">✓ ${t}</span>).join('')}
-        ${(c.types || []).filter(t => !(c.agreedTypes || []).includes(t))
-          .map(t => <span class="client-tag tag-contract">${t}</span>).join('')}
+        ${(c.agreedTypes||[]).map(t=>`<span class="client-tag tag-done">✓ ${escHtml(t)}</span>`).join('')}
+        ${(c.types||[]).filter(t=>!(c.agreedTypes||[]).includes(t))
+          .map(t=>`<span class="client-tag tag-contract">${escHtml(t)}</span>`).join('')}
       </div>
       <div style="margin-top:.8rem">
         <div style="display:flex;justify-content:space-between;font-size:.75rem;color:rgba(201,168,76,.5);margin-bottom:.3rem">
-          <span>تقدم المشروع</span><span>${doneCount}/${total}</span>
+          <span>تقدم المشروع</span><span>${doneCount}/${STAGES.length}</span>
         </div>
         <div style="background:rgba(201,168,76,.1);border-radius:4px;height:4px;overflow:hidden">
           <div style="background:linear-gradient(90deg,var(--gold),var(--gold-light));width:${prog}%;height:100%;border-radius:4px"></div>
         </div>
       </div>
-    </div>;
+    </div>`;
   }).join('');
 }
-// ── CLIENT DRAWER ────────────────────────────────────────────
+
+// ─── DRAWER ────────────────────────────────────────────────────
 function openClientDrawer(id) {
   const c = clients.find(x => x._id === id);
   if (!c) return;
   activeClientId = id;
   document.getElementById('drawer-client-name').textContent = c.name;
+  // reset to first tab
   switchDrawerTab('info', document.querySelector('.drawer-tab'));
   renderDrawerInfo(c);
   renderDrawerStages(c);
@@ -916,11 +991,13 @@ function openClientDrawer(id) {
   document.getElementById('client-drawer').classList.add('open');
   document.getElementById('drawer-overlay').classList.add('show');
 }
+
 function closeDrawer() {
   document.getElementById('client-drawer').classList.remove('open');
   document.getElementById('drawer-overlay').classList.remove('show');
   activeClientId = null;
 }
+
 function switchDrawerTab(tab, el) {
   document.querySelectorAll('.drawer-tab').forEach(t => t.classList.remove('active'));
   if (el) el.classList.add('active');
@@ -929,25 +1006,27 @@ function switchDrawerTab(tab, el) {
     if (d) d.style.display = t === tab ? 'block' : 'none';
   });
 }
+
 function renderDrawerInfo(c) {
-  document.getElementById('drawer-info-grid').innerHTML = 
-    <div class="info-box"><div class="info-box-label">الاسم</div><div class="info-box-val">${c.name}</div></div>
-    <div class="info-box"><div class="info-box-label">الهاتف</div><div class="info-box-val">${c.phone || '—'}</div></div>
-    <div class="info-box" style="grid-column:1/-1"><div class="info-box-label">العنوان</div><div class="info-box-val">${c.addr || '—'}</div></div>
-    ${c.loc ? <div class="info-box" style="grid-column:1/-1"><div class="info-box-label">الموقع</div><div class="info-box-val"><a href="${c.loc}" target="_blank" style="color:var(--gold)">عرض على الخريطة ↗</a></div></div> : ''}
-  ;
-  document.getElementById('drawer-contract-pills').innerHTML = (c.types || []).map(t => {
-    const agreed = (c.agreedTypes || []).includes(t);
-    return <div class="contract-pill ${agreed ? 'agreed' : ''}" onclick="toggleAgreedType('${c._id}','${t}',this)">
-      <span class="pill-check">${agreed ? '✓' : ''}</span>${t}
-    </div>;
+  document.getElementById('drawer-info-grid').innerHTML = `
+    <div class="info-box"><div class="info-box-label">الاسم</div><div class="info-box-val">${escHtml(c.name)}</div></div>
+    <div class="info-box"><div class="info-box-label">الهاتف</div><div class="info-box-val">${escHtml(c.phone||'—')}</div></div>
+    <div class="info-box" style="grid-column:1/-1"><div class="info-box-label">العنوان</div><div class="info-box-val">${escHtml(c.addr||'—')}</div></div>
+    ${c.loc ? `<div class="info-box" style="grid-column:1/-1"><div class="info-box-label">الموقع</div><div class="info-box-val"><a href="${c.loc}" target="_blank" style="color:var(--gold)">عرض على الخريطة ↗</a></div></div>` : ''}
+  `;
+  document.getElementById('drawer-contract-pills').innerHTML = (c.types||[]).map(t => {
+    const agreed = (c.agreedTypes||[]).includes(t);
+    return `<div class="contract-pill ${agreed?'agreed':''}" onclick="toggleAgreedType('${c._id}','${escHtml(t)}',this)">
+      <span class="pill-check">${agreed?'✓':''}</span>${escHtml(t)}
+    </div>`;
   }).join('');
-  document.getElementById('drawer-notes-section').innerHTML = c.notes ? 
+  document.getElementById('drawer-notes-section').innerHTML = c.notes ? `
     <div style="background:rgba(37,28,13,.7);border:1px solid rgba(201,168,76,.12);border-radius:12px;padding:1rem;margin-top:1rem">
       <div class="section-title-sm">📝 ملاحظات</div>
-      <div style="color:rgba(245,237,224,.7);font-size:.88rem;line-height:1.7">${c.notes}</div>
-    </div> : '';
+      <div style="color:rgba(245,237,224,.7);font-size:.88rem;line-height:1.7">${escHtml(c.notes)}</div>
+    </div>` : '';
 }
+
 async function toggleAgreedType(clientId, type, pillEl) {
   try {
     const data = await apiPatch('/clients/' + clientId + '/agreed-type', { type });
@@ -957,99 +1036,112 @@ async function toggleAgreedType(clientId, type, pillEl) {
     pillEl.classList.toggle('agreed', agreed);
     pillEl.querySelector('.pill-check').textContent = agreed ? '✓' : '';
     renderClients();
-  } catch (err) { alert(err.message); }
+  } catch (err) { showToast(err.message, 'error'); }
 }
+
 function renderDrawerStages(c) {
   const container = document.getElementById('drawer-stages-list');
-  container.innerHTML = STAGES_TEMPLATE.map(stage => {
-    const s        = (c.stages || {})[stage.id] || { done: false, files: [] };
-    const filesHtml = (s.files || []).map(f =>
-      f.url && (f.type || '').startsWith('image/')
-        ? <img class="mini-file" src="${f.url}" onclick="openLightbox('${f.url}')">
-        : <div class="mini-file-placeholder">${(f.name||'').endsWith('.scn') ? '🏗️' : '📎'}</div>
+  container.innerHTML = STAGES.map(stage => {
+    const s         = (c.stages||{})[stage.id] || { done:false, files:[] };
+    const filesHtml = (s.files||[]).map(f =>
+      f.url && (f.type||'').startsWith('image/')
+        ? `<img class="mini-file" src="${f.url}" onclick="openLightbox('${f.url}')">`
+        : `<div class="mini-file-placeholder">${(f.name||'').toLowerCase().endsWith('.scn')?'🏗️':'📎'}</div>`
     ).join('');
-    return 
+    const addFileBtn = isAdmin
+      ? `<button class="add-stage-file" onclick="openFileUploadModal('stage','${stage.id}')">+ إضافة ملف</button>`
+      : '';
+    return `
     <div class="stage-card">
       <div class="stage-header">
         <div class="stage-icon ${stage.cls}">${stage.icon}</div>
         <div class="stage-name">${stage.name}</div>
         <div class="stage-status-toggle" onclick="toggleStage('${c._id}','${stage.id}',this)">
-          <div class="toggle-track ${s.done ? 'on' : ''}" id="toggle-${stage.id}"><div class="toggle-thumb"></div></div>
-          <span class="stage-label" id="stage-label-${stage.id}">${s.done ? 'مكتمل' : 'جاري'}</span>
+          <div class="toggle-track ${s.done?'on':''}"><div class="toggle-thumb"></div></div>
+          <span class="stage-label">${s.done?'مكتمل':'جاري'}</span>
         </div>
       </div>
       <div>
         <div class="stage-files-mini">${filesHtml}</div>
-        <button class="add-stage-file" onclick="openFileUploadModal('stage','${stage.id}')">+ إضافة ملف</button>
+        ${addFileBtn}
       </div>
-    </div>;
+    </div>`;
   }).join('');
 }
+
 async function toggleStage(clientId, stageId, toggleEl) {
   try {
     const data  = await apiPatch('/clients/' + clientId + '/stages/' + stageId + '/toggle', {});
     const c     = clients.find(x => x._id === clientId);
-    if (c && c.stages && c.stages[stageId]) c.stages[stageId].done = data.done;
+    if (c?.stages?.[stageId]) c.stages[stageId].done = data.done;
     const track = toggleEl.querySelector('.toggle-track');
     const label = toggleEl.querySelector('.stage-label');
-    if (track) track.classList.toggle('on', data.done);
+    track?.classList.toggle('on', data.done);
     if (label) label.textContent = data.done ? 'مكتمل' : 'جاري';
     renderClients();
-  } catch (err) { alert(err.message); }
+  } catch (err) { showToast(err.message, 'error'); }
 }
+
 function renderDrawerPayments(c) {
   const list = document.getElementById('drawer-payments-list');
-  document.getElementById('pay-badge').textContent = (c.payments || []).length;
-  if (!(c.payments || []).length) {
+  document.getElementById('pay-badge').textContent = (c.payments||[]).length;
+  if (!(c.payments||[]).length) {
     list.innerHTML = '<div style="color:rgba(201,168,76,.4);text-align:center;padding:2rem">لا توجد دفعات</div>';
     return;
   }
   const total = c.payments.reduce((s, p) => s + Number(p.amount), 0);
-  list.innerHTML = 
+  list.innerHTML = `
     <div style="background:rgba(201,168,76,.1);border:1px solid rgba(201,168,76,.2);border-radius:12px;padding:.8rem 1rem;display:flex;justify-content:space-between;align-items:center;margin-bottom:.5rem">
       <span style="color:rgba(201,168,76,.7);font-size:.85rem">إجمالي المدفوع</span>
       <span style="color:var(--gold-light);font-size:1.1rem;font-weight:700">${total.toLocaleString()} ج</span>
     </div>
-    ${c.payments.map(p => 
+    ${c.payments.map(p => `
     <div class="payment-card">
       <div class="payment-top">
         <div class="payment-amount">${Number(p.amount).toLocaleString()} ج</div>
-        <div class="payment-date">${p.date || ''}</div>
+        <div class="payment-date">${p.date||''}</div>
       </div>
-      ${p.note ? <div class="payment-note">${p.note}</div> : ''}
+      ${p.note ? `<div class="payment-note">${escHtml(p.note)}</div>` : ''}
+      ${isAdmin ? `
       <div class="payment-actions">
         <button class="payment-del" onclick="deletePayment('${c._id}','${p._id}')">حذف</button>
         <button class="payment-edit" onclick="openEditPaymentModal('${c._id}','${p._id}')">تعديل</button>
-      </div>
-    </div>).join('')};
+      </div>` : ''}
+    </div>`).join('')}`;
 }
+
 function renderDrawerFiles(c) {
   const grid = document.getElementById('drawer-files-grid');
-  document.getElementById('files-badge').textContent = (c.contractFiles || []).length;
-  if (!(c.contractFiles || []).length) {
+  document.getElementById('files-badge').textContent = (c.contractFiles||[]).length;
+  if (!(c.contractFiles||[]).length) {
     grid.innerHTML = '<div style="color:rgba(201,168,76,.4);text-align:center;padding:2rem;grid-column:1/-1">لا توجد ملفات</div>';
     return;
   }
   grid.innerHTML = c.contractFiles.map(f => {
-    const isImg = f.url && (f.type || '').startsWith('image/');
-    const isPdf = (f.name || '').toLowerCase().endsWith('.pdf');
-    return <div class="file-item">
-      <button class="file-del" onclick="deleteContractFile('${c._id}','${f._id}')">✕</button>
-      ${isImg ? <img class="file-thumb" src="${f.url}" onclick="openLightbox('${f.url}')"> :
-        <div class="file-thumb-placeholder">${isPdf ? '📄' : '📎'}</div>}
-      <div class="file-name">${f.name || 'ملف'}</div>
-    </div>;
+    const isImg = f.url && (f.type||'').startsWith('image/');
+    const isPdf = (f.name||'').toLowerCase().endsWith('.pdf');
+    return `<div class="file-item">
+      ${isAdmin ? `<button class="file-del" onclick="deleteContractFile('${c._id}','${f._id}')">✕</button>` : ''}
+      ${isImg
+        ? `<img class="file-thumb" src="${f.url}" onclick="openLightbox('${f.url}')">`
+        : `<div class="file-thumb-placeholder">${isPdf?'📄':'📎'}</div>`}
+      <div class="file-name">${escHtml(f.name||'ملف')}</div>
+    </div>`;
   }).join('');
 }
-// ── CLIENT MODAL ─────────────────────────────────────────────
+
+// ─── CLIENT MODAL ─────────────────────────────────────────────
 function openClientModal() {
   editingClientId = null;
   document.getElementById('client-modal-title').textContent = '👤 إضافة عميل جديد';
   document.getElementById('client-submit-btn').textContent  = 'حفظ العميل';
   ['c-name','c-addr','c-phone','c-loc','c-notes'].forEach(id => document.getElementById(id).value = '');
-  document.querySelectorAll('#contract-types .mat-cb').forEach(l => { l.classList.remove('checked'); l.querySelector('input').checked = false; });
-  document.getElementById('client-modal').style.display = 'flex';
+  document.querySelectorAll('#contract-types .mat-cb').forEach(l => {
+    l.classList.remove('checked'); l.querySelector('input').checked = false;
+  });
+  openModal('client-modal');
 }
+
 function openEditClientModal() {
   const c = clients.find(x => x._id === activeClientId);
   if (!c) return;
@@ -1062,17 +1154,17 @@ function openEditClientModal() {
   document.getElementById('c-loc').value   = c.loc   || '';
   document.getElementById('c-notes').value = c.notes || '';
   document.querySelectorAll('#contract-types .mat-cb').forEach(l => {
-    const val     = l.querySelector('input').value;
-    const checked = (c.types || []).includes(val);
-    l.classList.toggle('checked', checked);
-    l.querySelector('input').checked = checked;
+    const v = l.querySelector('input').value;
+    const ok = (c.types||[]).includes(v);
+    l.classList.toggle('checked', ok);
+    l.querySelector('input').checked = ok;
   });
-  document.getElementById('client-modal').style.display = 'flex';
+  openModal('client-modal');
 }
-function closeClientModal() { document.getElementById('client-modal').style.display = 'none'; editingClientId = null; }
+
 async function submitClient() {
-  const name  = document.getElementById('c-name').value.trim();
-  if (!name)  return alert('الاسم مطلوب');
+  const name = document.getElementById('c-name').value.trim();
+  if (!name) return showToast('الاسم مطلوب', 'error');
   const types = [...document.querySelectorAll('#contract-types .mat-cb.checked')].map(l => l.querySelector('input').value);
   const body  = {
     name, types,
@@ -1081,7 +1173,8 @@ async function submitClient() {
     loc:   document.getElementById('c-loc').value.trim(),
     notes: document.getElementById('c-notes').value.trim(),
   };
-  setLoading('client-submit-btn', true, 'حفظ...');
+  const lbl = editingClientId ? 'حفظ التعديلات' : 'حفظ العميل';
+  setLoading('client-submit-btn', true, lbl);
   try {
     if (editingClientId) {
       const data = await apiPut('/clients/' + editingClientId, body);
@@ -1091,62 +1184,82 @@ async function submitClient() {
         document.getElementById('drawer-client-name').textContent = data.client.name;
         renderDrawerInfo(data.client);
       }
+      showToast('تم تعديل العميل ✓', 'success');
     } else {
       const data = await apiPost('/clients', body);
       clients.unshift(data.client);
+      showToast('تم إضافة العميل ✓', 'success');
     }
-    closeClientModal();
+    closeModal('client-modal');
     renderClients();
-  } catch (err) { alert(err.message); }
-  finally { setLoading('client-submit-btn', false, editingClientId ? 'حفظ التعديلات' : 'حفظ العميل'); }
+  } catch (err) { showToast(err.message, 'error'); }
+  finally { setLoading('client-submit-btn', false, lbl); }
 }
-// ── PAYMENT MODAL ─────────────────────────────────────────────
+
+// ─── PAYMENT MODAL ─────────────────────────────────────────────
 function openPaymentModal() {
   editingPaymentId = null;
   document.getElementById('payment-modal-title').textContent = '💰 إضافة دفعة جديدة';
+  document.getElementById('payment-submit-btn').textContent  = 'حفظ الدفعة';
   document.getElementById('pay-amount').value = '';
   document.getElementById('pay-date').value   = new Date().toISOString().split('T')[0];
   document.getElementById('pay-note').value   = '';
-  document.getElementById('payment-modal').style.display = 'flex';
+  openModal('payment-modal');
 }
+
 function openEditPaymentModal(clientId, payId) {
   const c = clients.find(x => x._id === clientId);
   if (!c) return;
-  const p = (c.payments || []).find(x => x._id === payId);
+  const p = (c.payments||[]).find(x => x._id === payId);
   if (!p) return;
   activeClientId   = clientId;
   editingPaymentId = payId;
   document.getElementById('payment-modal-title').textContent = '✏️ تعديل الدفعة';
+  document.getElementById('payment-submit-btn').textContent  = 'حفظ التعديل';
   document.getElementById('pay-amount').value = p.amount;
   document.getElementById('pay-date').value   = p.date || '';
   document.getElementById('pay-note').value   = p.note || '';
-  document.getElementById('payment-modal').style.display = 'flex';
+  openModal('payment-modal');
 }
-function closePaymentModal() { document.getElementById('payment-modal').style.display = 'none'; editingPaymentId = null; }
+
 async function submitPayment() {
   const amount = document.getElementById('pay-amount').value;
   const date   = document.getElementById('pay-date').value;
   const note   = document.getElementById('pay-note').value.trim();
-  if (!amount || isNaN(amount)) return alert('ادخل مبلغ صحيح');
-  const body = { amount: Number(amount), date, note };
-  setLoading('payment-submit-btn', true, 'حفظ...');
+  if (!amount || isNaN(amount)) return showToast('ادخل مبلغ صحيح', 'error');
+
+  const lbl = editingPaymentId ? 'حفظ التعديل' : 'حفظ الدفعة';
+  setLoading('payment-submit-btn', true, lbl);
   try {
     if (editingPaymentId) {
-      const data = await apiPut('/clients/' + activeClientId + '/payments/' + editingPaymentId, body);
-      const c    = clients.find(x => x._id === activeClientId);
-      if (c) { const idx = c.payments.findIndex(p => p._id === editingPaymentId); if (idx > -1) c.payments[idx] = data.payment; }
+      // PUT /api/clients/:id/payments/:payId  — JSON body (no files)
+      const data = await apiPut('/clients/' + activeClientId + '/payments/' + editingPaymentId,
+        { amount: Number(amount), date, note });
+      const c = clients.find(x => x._id === activeClientId);
+      if (c) {
+        const idx = c.payments.findIndex(p => p._id === editingPaymentId);
+        if (idx > -1) c.payments[idx] = data.payment;
+      }
+      showToast('تم تعديل الدفعة ✓', 'success');
     } else {
-      const data = await apiPost('/clients/' + activeClientId + '/payments', body);
+      // POST /api/clients/:id/payments — FormData (backend uses multer)
+      const fd = new FormData();
+      fd.append('amount', Number(amount));
+      fd.append('date',   date);
+      fd.append('note',   note);
+      const data = await apiForm('POST', '/clients/' + activeClientId + '/payments', fd);
       const c    = clients.find(x => x._id === activeClientId);
       if (c) c.payments.push(data.payment);
+      showToast('تم إضافة الدفعة ✓', 'success');
     }
-    closePaymentModal();
+    closeModal('payment-modal');
     const c = clients.find(x => x._id === activeClientId);
     if (c) renderDrawerPayments(c);
     renderClients();
-  } catch (err) { alert(err.message); }
-  finally { setLoading('payment-submit-btn', false, 'حفظ الدفعة'); }
+  } catch (err) { showToast(err.message, 'error'); }
+  finally { setLoading('payment-submit-btn', false, lbl); }
 }
+
 async function deletePayment(clientId, payId) {
   if (!confirm('هتحذف الدفعة دي؟')) return;
   try {
@@ -1154,45 +1267,54 @@ async function deletePayment(clientId, payId) {
     const c = clients.find(x => x._id === clientId);
     if (c) { c.payments = c.payments.filter(p => p._id !== payId); renderDrawerPayments(c); }
     renderClients();
-  } catch (err) { alert(err.message); }
+    showToast('تم حذف الدفعة', 'success');
+  } catch (err) { showToast(err.message, 'error'); }
 }
-// ── FILE UPLOAD MODAL ─────────────────────────────────────────
+
+// ─── FILE UPLOAD MODAL ─────────────────────────────────────────
 function openFileUploadModal(target, stageId) {
   currentFileTarget  = target;
   currentStageTarget = stageId || null;
-  contractFilesData  = [];
+  contractFilesArr   = [];
   document.getElementById('contract-file-input').value       = '';
   document.getElementById('contract-files-preview').innerHTML = '';
   document.getElementById('file-desc').value                  = '';
-  document.getElementById('file-modal-title').textContent     = target === 'stage' ? '📁 رفع ملف للمرحلة' : '📁 ملفات العقد';
-  document.getElementById('file-upload-modal').style.display  = 'flex';
+  document.getElementById('file-modal-title').textContent     =
+    target === 'stage' ? '📁 رفع ملف للمرحلة' : '📁 ملفات العقد';
+  openModal('file-upload-modal');
 }
-function closeFileUploadModal() { document.getElementById('file-upload-modal').style.display = 'none'; contractFilesData = []; }
+
 function previewContractFiles(input) {
+  const prev = document.getElementById('contract-files-preview');
   [...input.files].forEach(file => {
+    contractFilesArr.push(file);
     const reader  = new FileReader();
     reader.onload = e => {
-      contractFilesData.push({ file, name: file.name, dataUrl: e.target.result, type: file.type });
-      const prev = document.getElementById('contract-files-preview');
-      if (file.type.startsWith('image/')) prev.innerHTML += <img src="${e.target.result}" style="width:56px;height:56px;border-radius:8px;object-fit:cover">;
-      else if (file.name.endsWith('.scn'))  prev.innerHTML += <span style="font-size:1.8rem">🏗️</span>;
-      else                                  prev.innerHTML += <span style="font-size:1.8rem">📄</span>;
+      if (file.type.startsWith('image/'))
+        prev.innerHTML += `<img src="${e.target.result}" style="width:56px;height:56px;border-radius:8px;object-fit:cover">`;
+      else if (file.name.toLowerCase().endsWith('.scn'))
+        prev.innerHTML += `<span style="font-size:1.8rem">🏗️</span>`;
+      else
+        prev.innerHTML += `<span style="font-size:1.8rem">📄</span>`;
     };
     reader.readAsDataURL(file);
   });
 }
+
 async function submitContractFile() {
-  if (!contractFilesData.length) return alert('اختار ملف واحد على الأقل');
+  if (!contractFilesArr.length) return showToast('اختار ملف واحد على الأقل', 'error');
   const desc = document.getElementById('file-desc').value.trim();
   const fd   = new FormData();
-  contractFilesData.forEach(f => fd.append('files', f.file));
+  contractFilesArr.forEach(f => fd.append('files', f));
   if (desc) fd.append('desc', desc);
+  setLoading('file-submit-btn', true, 'جاري الرفع...');
   try {
     let data;
     if (currentFileTarget === 'stage' && currentStageTarget) {
-      data = await apiForm('POST', '/clients/' + activeClientId + '/stages/' + currentStageTarget + '/files', fd);
+      data = await apiForm('POST',
+        '/clients/' + activeClientId + '/stages/' + currentStageTarget + '/files', fd);
       const c = clients.find(x => x._id === activeClientId);
-      if (c && c.stages && c.stages[currentStageTarget]) c.stages[currentStageTarget].files = data.files;
+      if (c?.stages?.[currentStageTarget]) c.stages[currentStageTarget].files = data.files;
       renderDrawerStages(c);
     } else {
       data = await apiForm('POST', '/clients/' + activeClientId + '/files', fd);
@@ -1200,85 +1322,156 @@ async function submitContractFile() {
       if (c) c.contractFiles = data.files;
       renderDrawerFiles(c);
     }
-    closeFileUploadModal();
-  } catch (err) { alert(err.message); }
+    closeModal('file-upload-modal');
+    showToast('تم رفع الملفات ✓', 'success');
+  } catch (err) { showToast(err.message, 'error'); }
+  finally { setLoading('file-submit-btn', false, 'رفع'); }
 }
+
 async function deleteContractFile(clientId, fileId) {
   if (!confirm('هتحذف الملف ده؟')) return;
   try {
     await apiDelete('/clients/' + clientId + '/files/' + fileId);
     const c = clients.find(x => x._id === clientId);
     if (c) { c.contractFiles = c.contractFiles.filter(f => f._id !== fileId); renderDrawerFiles(c); }
-  } catch (err) { alert(err.message); }
+    showToast('تم حذف الملف', 'success');
+  } catch (err) { showToast(err.message, 'error'); }
 }
+
 // ═══════════════════════════════════════════════════════════════
 // PROSPECTS
 // ═══════════════════════════════════════════════════════════════
 async function loadProspects() {
-  loading('prospects-list');
+  loadingHtml('prospects-list');
   try {
     const data = await apiGet('/prospects');
-    prospects  = data.prospects;
+    prospects  = data.prospects || [];
     renderProspects();
   } catch (err) {
     document.getElementById('prospects-list').innerHTML =
-      '<div class="empty-state"><span>⚠️</span>' + err.message + '</div>';
+      `<div class="empty-state"><span>⚠️</span>${err.message}</div>`;
   }
 }
+
 function renderProspects() {
   const list = document.getElementById('prospects-list');
   if (!prospects.length) {
     list.innerHTML = '<div class="empty-state"><span>🎯</span>لا يوجد عملاء محتملين</div>';
     return;
   }
-  list.innerHTML = prospects.map(p => 
+  list.innerHTML = prospects.map(p => `
     <div class="prospect-card">
       <div class="prospect-info">
-        <div class="prospect-name">${p.name}</div>
-        <div class="prospect-phone">📞 ${p.phone || '—'}</div>
+        <div class="prospect-name">${escHtml(p.name)}</div>
+        <div class="prospect-phone">📞 ${escHtml(p.phone||'—')}</div>
       </div>
-      <span class="status-badge ${STATUS_CLASS[p.status] || ''}">${p.status}</span>
-      ${isAdmin ? <div class="prospect-actions">
+      <div class="status-dropdown">
+        <span class="status-badge ${STATUS_CLS[p.status]||''}"
+              onclick="toggleStatusMenu('${p._id}',this)">${p.status}</span>
+        <div class="status-menu" id="smenu-${p._id}">
+          ${['ميتنج','متابعة','معاينة','مرفوض'].map(s =>
+            `<div class="status-menu-item" onclick="changeProspectStatus('${p._id}','${s}')">${s}</div>`
+          ).join('')}
+        </div>
+      </div>
+      ${isAdmin ? `<div class="prospect-actions">
+        <button class="payment-edit" onclick="openEditProspectModal('${p._id}')">تعديل</button>
         <button class="payment-del" onclick="deleteProspect('${p._id}')">حذف</button>
-      </div> : ''}
+      </div>` : ''}
     </div>
-  ).join('');
+  `).join('');
 }
+
+function toggleStatusMenu(id, badgeEl) {
+  if (!isAdmin) return;
+  const menu = document.getElementById('smenu-' + id);
+  // close all other menus
+  document.querySelectorAll('.status-menu.open').forEach(m => {
+    if (m !== menu) m.classList.remove('open');
+  });
+  menu.classList.toggle('open');
+  // close on outside click
+  setTimeout(() => {
+    const close = e => { menu.classList.remove('open'); document.removeEventListener('click', close); };
+    document.addEventListener('click', close);
+  }, 0);
+}
+
+async function changeProspectStatus(id, status) {
+  try {
+    const data = await apiPatch('/prospects/' + id + '/status', { status });
+    const p    = prospects.find(x => x._id === id);
+    if (p) p.status = data.status;
+    renderProspects();
+    showToast('تم تغيير الحالة ✓', 'success');
+  } catch (err) { showToast(err.message, 'error'); }
+}
+
 function openProspectModal() {
-  selectedStatus = 'ميتنج';
-  document.querySelectorAll('#status-options .chip').forEach(c => c.classList.toggle('on', c.dataset.status === selectedStatus));
+  editingProspectId = null;
+  selectedStatus    = 'ميتنج';
+  document.querySelectorAll('#status-options .chip').forEach(c =>
+    c.classList.toggle('on', c.dataset.status === 'ميتنج'));
   document.getElementById('p-name').value  = '';
   document.getElementById('p-phone').value = '';
   document.getElementById('prospect-modal-title').textContent = '🎯 إضافة عميل محتمل';
-  document.getElementById('prospect-modal').style.display = 'flex';
+  document.getElementById('prospect-submit-btn').textContent  = 'حفظ';
+  openModal('prospect-modal');
 }
-function closeProspectModal() { document.getElementById('prospect-modal').style.display = 'none'; }
+
+function openEditProspectModal(id) {
+  const p = prospects.find(x => x._id === id);
+  if (!p) return;
+  editingProspectId = id;
+  selectedStatus    = p.status;
+  document.querySelectorAll('#status-options .chip').forEach(c =>
+    c.classList.toggle('on', c.dataset.status === p.status));
+  document.getElementById('p-name').value  = p.name;
+  document.getElementById('p-phone').value = p.phone || '';
+  document.getElementById('prospect-modal-title').textContent = '✏️ تعديل العميل المحتمل';
+  document.getElementById('prospect-submit-btn').textContent  = 'حفظ التعديل';
+  openModal('prospect-modal');
+}
+
 function selectStatus(el) {
   selectedStatus = el.dataset.status;
   document.querySelectorAll('#status-options .chip').forEach(c => c.classList.remove('on'));
   el.classList.add('on');
 }
+
 async function submitProspect() {
   const name  = document.getElementById('p-name').value.trim();
   const phone = document.getElementById('p-phone').value.trim();
-  if (!name) return alert('الاسم مطلوب');
-  setLoading('prospect-submit-btn', true, 'حفظ...');
+  if (!name) return showToast('الاسم مطلوب', 'error');
+  const lbl = editingProspectId ? 'حفظ التعديل' : 'حفظ';
+  setLoading('prospect-submit-btn', true, lbl);
   try {
-    const data = await apiPost('/prospects', { name, phone, status: selectedStatus });
-    prospects.unshift(data.prospect);
-    closeProspectModal();
+    if (editingProspectId) {
+      const data = await apiPut('/prospects/' + editingProspectId, { name, phone, status: selectedStatus });
+      const idx  = prospects.findIndex(x => x._id === editingProspectId);
+      if (idx > -1) prospects[idx] = data.prospect;
+      showToast('تم التعديل ✓', 'success');
+    } else {
+      const data = await apiPost('/prospects', { name, phone, status: selectedStatus });
+      prospects.unshift(data.prospect);
+      showToast('تم الإضافة ✓', 'success');
+    }
+    closeModal('prospect-modal');
     renderProspects();
-  } catch (err) { alert(err.message); }
-  finally { setLoading('prospect-submit-btn', false, 'حفظ'); }
+  } catch (err) { showToast(err.message, 'error'); }
+  finally { setLoading('prospect-submit-btn', false, lbl); }
 }
+
 async function deleteProspect(id) {
   if (!confirm('هتحذف العميل المحتمل ده؟')) return;
   try {
     await apiDelete('/prospects/' + id);
     prospects = prospects.filter(p => p._id !== id);
     renderProspects();
-  } catch (err) { alert(err.message); }
+    showToast('تم الحذف', 'success');
+  } catch (err) { showToast(err.message, 'error'); }
 }
+
 // ═══════════════════════════════════════════════════════════════
 // HELPERS
 // ═══════════════════════════════════════════════════════════════
@@ -1286,20 +1479,29 @@ function toggleMatCb(label) {
   label.classList.toggle('checked');
   label.querySelector('input').checked = label.classList.contains('checked');
 }
-function openLightbox(src)  { document.getElementById('lightbox-img').src = src; document.getElementById('lightbox').classList.add('open'); }
+function openLightbox(src)  {
+  document.getElementById('lightbox-img').src = src;
+  document.getElementById('lightbox').classList.add('open');
+}
 function closeLightbox()    { document.getElementById('lightbox').classList.remove('open'); }
+function escHtml(str) {
+  return String(str||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+// ─── Keyboard shortcuts ────────────────────────────────────────
 document.addEventListener('keydown', e => {
   if (e.key === 'Escape') {
     closeDrawer();
-    document.querySelectorAll('.modal-overlay').forEach(m => m.style.display = 'none');
+    document.querySelectorAll('.modal-overlay.open').forEach(m => m.classList.remove('open'));
     closeLightbox();
+    document.querySelectorAll('.status-menu.open').forEach(m => m.classList.remove('open'));
   }
   if (e.key !== 'Enter') return;
   const active = document.querySelector('.page.active')?.id;
-  if (active === 'page-login')    handleLogin();
+  if      (active === 'page-login')    handleLogin();
   else if (active === 'page-register') handleRegister();
   else if (active === 'page-verify')   handleVerifyOTP();
 });
 </script>
 </body>
-</html> 
+</html>
