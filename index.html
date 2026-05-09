@@ -995,6 +995,9 @@ function resetUploadModal() {
   document.getElementById('post-file-input').value     = '';
   document.getElementById('upload-desc').value         = '';
   postImageFile = null;
+  document.querySelectorAll('#upload-mats .mat-cb').forEach(l => {
+    l.classList.remove('checked'); l.querySelector('input').checked = false;
+  });
   document.querySelectorAll('#upload-types .mat-cb').forEach(l => {
   l.classList.remove('checked'); l.querySelector('input').checked = false;
 });
