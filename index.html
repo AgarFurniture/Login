@@ -374,52 +374,52 @@ body{font-family:'Cairo',sans-serif;background:var(--dark);min-height:100vh;colo
   </div>
   <div class="sidebar-overlay" id="sidebar-overlay" onclick="closeSidebar()"></div>
   <div class="app-body">
-    <div class="sidebar" id="sidebar">
-      <div class="sidebar-section-title">القائمة الرئيسية</div>
-      <div class="sidebar-item active" onclick="switchSection('works',this)"><span class="s-icon">🖼️</span><span>الأعمال</span></div>
-      <div class="sidebar-item" onclick="switchSection('clients',this)"><span class="s-icon">👥</span><span>العملاء</span></div>
-      <div class="sidebar-item" onclick="switchSection('prospects',this)"><span class="s-icon">🎯</span><span>العملاء المحتملين</span></div>
-      <div class="sidebar-divider"></div>
-      <div class="sidebar-section-title">أخرى</div>
-      <div class="sidebar-item" onclick="switchSection('custom',this)"><span class="s-icon">⚙️</span><span>التخصيص</span></div>
-    </div>
+   <div class="sidebar" id="sidebar">
+  <div class="sidebar-section-title">القائمة الرئيسية</div>
+  <div class="sidebar-item active" onclick="switchSection('works',this)"><span class="s-icon">🖼️</span><span>الأعمال</span></div>
+  <div class="sidebar-item" onclick="switchSection('clients',this)"><span class="s-icon">👥</span><span>العملاء</span></div>
+  <div class="sidebar-item" onclick="switchSection('prospects',this)"><span class="s-icon">🎯</span><span>العملاء المحتملين</span></div>
+  <div class="sidebar-divider"></div>
+  <div class="sidebar-section-title">أخرى</div>
+  <div class="sidebar-item" onclick="switchSection('custom',this)"><span class="s-icon">⚙️</span><span>التخصيص</span></div>
+
+  <div class="sidebar-divider"></div>
+  <div class="sidebar-section-title">حسب المادة</div>
+  <div style="padding:0 .8rem .5rem;display:flex;flex-direction:column;gap:.4rem;" id="filter-chips">
+    <div class="sidebar-item chip on" id="chip-all-mat" data-mat="all" onclick="toggleFilter(this)">الكل</div>
+    <div class="sidebar-item chip" data-mat="pvc" onclick="toggleFilter(this)">PVC</div>
+    <div class="sidebar-item chip" data-mat="hpl" onclick="toggleFilter(this)">HPL</div>
+    <div class="sidebar-item chip" data-mat="uvlac" onclick="toggleFilter(this)">UV Lac</div>
+    <div class="sidebar-item chip" data-mat="glossmax" onclick="toggleFilter(this)">GlossMax</div>
+    <div class="sidebar-item chip" data-mat="mattplus" onclick="toggleFilter(this)">Matt Plus</div>
+    <div class="sidebar-item chip" data-mat="polylac" onclick="toggleFilter(this)">Polylac (Gizir)</div>
+    <div class="sidebar-item chip" data-mat="polyback" onclick="toggleFilter(this)">Polyback</div>
+    <div class="sidebar-item chip" data-mat="alvic" onclick="toggleFilter(this)">German Alvic</div>
+  </div>
+
+  <div class="sidebar-divider"></div>
+  <div class="sidebar-section-title">حسب النوع</div>
+  <div style="padding:0 .8rem .5rem;display:flex;flex-direction:column;gap:.4rem;" id="filter-types">
+    <div class="sidebar-item chip on" id="chip-all-type" data-type="all" onclick="toggleTypeFilter(this)">الكل</div>
+    <div class="sidebar-item chip" data-type="مطابخ" onclick="toggleTypeFilter(this)">مطابخ</div>
+    <div class="sidebar-item chip" data-type="غرف نوم" onclick="toggleTypeFilter(this)">غرف نوم</div>
+    <div class="sidebar-item chip" data-type="دريسينج" onclick="toggleTypeFilter(this)">دريسينج</div>
+    <div class="sidebar-item chip" data-type="وحدات TV" onclick="toggleTypeFilter(this)">وحدات TV</div>
+    <div class="sidebar-item chip" data-type="وحدات حمام" onclick="toggleTypeFilter(this)">وحدات حمام</div>
+    <div class="sidebar-item chip" data-type="ديكور" onclick="toggleTypeFilter(this)">ديكور</div>
+    <div class="sidebar-item chip" data-type="ريسبشن" onclick="toggleTypeFilter(this)">ريسبشن</div>
+    <div class="sidebar-item chip" data-type="ركن قهوه" onclick="toggleTypeFilter(this)">ركن قهوه</div>
+  </div>
+</div>  
     <div class="main-content">
 
       <!-- WORKS -->
       <div class="section-panel active" id="section-works">
-        <div class="feed-wrap">
-          <div class="filter-bar">
-  <div class="filter-title">فلتر حسب المادة</div>
-  <div class="filter-chips" id="filter-chips">
-    <div class="chip on" id="chip-all-mat" data-mat="all" onclick="toggleFilter(this)"><span class="chip-dot"></span>الكل</div>
-    <div class="chip" data-mat="pvc" onclick="toggleFilter(this)"><span class="chip-dot"></span>PVC</div>
-    <div class="chip" data-mat="hpl" onclick="toggleFilter(this)"><span class="chip-dot"></span>HPL</div>
-    <div class="chip" data-mat="uvlac" onclick="toggleFilter(this)"><span class="chip-dot"></span>UV Lac</div>
-    <div class="chip" data-mat="glossmax" onclick="toggleFilter(this)"><span class="chip-dot"></span>GlossMax</div>
-    <div class="chip" data-mat="mattplus" onclick="toggleFilter(this)"><span class="chip-dot"></span>Matt Plus</div>
-    <div class="chip" data-mat="polylac" onclick="toggleFilter(this)"><span class="chip-dot"></span>Polylac (Gizir)</div>
-    <div class="chip" data-mat="polyback" onclick="toggleFilter(this)"><span class="chip-dot"></span>Polyback</div>
-    <div class="chip" data-mat="alvic" onclick="toggleFilter(this)"><span class="chip-dot"></span>German Alvic</div>
+  <div id="admin-upload-wrap" style="display:none">
+    <button class="admin-upload-btn" onclick="openModal('upload-modal')">➕ رفع صورة جديدة</button>
   </div>
-  <div class="filter-title" style="margin-top:.8rem">فلتر حسب النوع</div>
-  <div class="filter-chips" id="filter-types">
-    <div class="chip on" id="chip-all-type" data-type="all" onclick="toggleTypeFilter(this)"><span class="chip-dot"></span>الكل</div>
-    <div class="chip" data-type="مطابخ" onclick="toggleTypeFilter(this)"><span class="chip-dot"></span>مطابخ</div>
-    <div class="chip" data-type="غرف نوم" onclick="toggleTypeFilter(this)"><span class="chip-dot"></span>غرف نوم</div>
-    <div class="chip" data-type="دريسينج" onclick="toggleTypeFilter(this)"><span class="chip-dot"></span>دريسينج</div>
-    <div class="chip" data-type="وحدات TV" onclick="toggleTypeFilter(this)"><span class="chip-dot"></span>وحدات TV</div>
-    <div class="chip" data-type="وحدات حمام" onclick="toggleTypeFilter(this)"><span class="chip-dot"></span>وحدات حمام</div>
-    <div class="chip" data-type="ديكور" onclick="toggleTypeFilter(this)"><span class="chip-dot"></span>ديكور</div>
-    <div class="chip" data-type="ريسبشن" onclick="toggleTypeFilter(this)"><span class="chip-dot"></span>ريسبشن</div>
-    <div class="chip" data-type="ركن قهوه" onclick="toggleTypeFilter(this)"><span class="chip-dot"></span>ركن قهوه</div>
-  </div>
+  <div id="posts-feed"></div>
 </div>
-          <div id="admin-upload-wrap" style="display:none">
-            <button class="admin-upload-btn" onclick="openModal('upload-modal')">➕ رفع صورة جديدة</button>
-          </div>
-          <div id="posts-feed"></div>
-        </div>
-      </div>
 
       <!-- CLIENTS -->
       <div class="section-panel" id="section-clients">
