@@ -389,16 +389,31 @@ body{font-family:'Cairo',sans-serif;background:var(--dark);min-height:100vh;colo
       <div class="section-panel active" id="section-works">
         <div class="feed-wrap">
           <div class="filter-bar">
-            <div class="filter-title">فلتر حسب المادة</div>
-            <div class="filter-chips" id="filter-chips">
-              <div class="chip on" data-mat="polyback" onclick="toggleFilter(this)"><span class="chip-dot"></span>Polyback</div>
-              <div class="chip on" data-mat="polylac" onclick="toggleFilter(this)"><span class="chip-dot"></span>Polylac</div>
-              <div class="chip on" data-mat="uvlac" onclick="toggleFilter(this)"><span class="chip-dot"></span>UV Lac</div>
-              <div class="chip on" data-mat="hpl" onclick="toggleFilter(this)"><span class="chip-dot"></span>HPL</div>
-              <div class="chip on" data-mat="mattplus" onclick="toggleFilter(this)"><span class="chip-dot"></span>Matt Plus</div>
-              <div class="chip on" data-mat="mdf" onclick="toggleFilter(this)"><span class="chip-dot"></span>MDF</div>
-            </div>
-          </div>
+  <div class="filter-title">فلتر حسب المادة</div>
+  <div class="filter-chips" id="filter-chips">
+    <div class="chip on" id="chip-all-mat" data-mat="all" onclick="toggleFilter(this)"><span class="chip-dot"></span>الكل</div>
+    <div class="chip" data-mat="pvc" onclick="toggleFilter(this)"><span class="chip-dot"></span>PVC</div>
+    <div class="chip" data-mat="hpl" onclick="toggleFilter(this)"><span class="chip-dot"></span>HPL</div>
+    <div class="chip" data-mat="uvlac" onclick="toggleFilter(this)"><span class="chip-dot"></span>UV Lac</div>
+    <div class="chip" data-mat="glossmax" onclick="toggleFilter(this)"><span class="chip-dot"></span>GlossMax</div>
+    <div class="chip" data-mat="mattplus" onclick="toggleFilter(this)"><span class="chip-dot"></span>Matt Plus</div>
+    <div class="chip" data-mat="polylac" onclick="toggleFilter(this)"><span class="chip-dot"></span>Polylac (Gizir)</div>
+    <div class="chip" data-mat="polyback" onclick="toggleFilter(this)"><span class="chip-dot"></span>Polyback</div>
+    <div class="chip" data-mat="alvic" onclick="toggleFilter(this)"><span class="chip-dot"></span>German Alvic</div>
+  </div>
+  <div class="filter-title" style="margin-top:.8rem">فلتر حسب النوع</div>
+  <div class="filter-chips" id="filter-types">
+    <div class="chip on" id="chip-all-type" data-type="all" onclick="toggleTypeFilter(this)"><span class="chip-dot"></span>الكل</div>
+    <div class="chip" data-type="مطابخ" onclick="toggleTypeFilter(this)"><span class="chip-dot"></span>مطابخ</div>
+    <div class="chip" data-type="غرف نوم" onclick="toggleTypeFilter(this)"><span class="chip-dot"></span>غرف نوم</div>
+    <div class="chip" data-type="دريسينج" onclick="toggleTypeFilter(this)"><span class="chip-dot"></span>دريسينج</div>
+    <div class="chip" data-type="وحدات TV" onclick="toggleTypeFilter(this)"><span class="chip-dot"></span>وحدات TV</div>
+    <div class="chip" data-type="وحدات حمام" onclick="toggleTypeFilter(this)"><span class="chip-dot"></span>وحدات حمام</div>
+    <div class="chip" data-type="ديكور" onclick="toggleTypeFilter(this)"><span class="chip-dot"></span>ديكور</div>
+    <div class="chip" data-type="ريسبشن" onclick="toggleTypeFilter(this)"><span class="chip-dot"></span>ريسبشن</div>
+    <div class="chip" data-type="ركن قهوه" onclick="toggleTypeFilter(this)"><span class="chip-dot"></span>ركن قهوه</div>
+  </div>
+</div>
           <div id="admin-upload-wrap" style="display:none">
             <button class="admin-upload-btn" onclick="openModal('upload-modal')">➕ رفع صورة جديدة</button>
           </div>
@@ -483,14 +498,27 @@ body{font-family:'Cairo',sans-serif;background:var(--dark);min-height:100vh;colo
     <button class="modal-close" onclick="closeModal('upload-modal')">✕</button>
     <div class="modal-title">📸 رفع صورة جديدة</div>
     <label class="form-label">المواد المستخدمة</label>
-    <div class="mat-checkboxes" id="upload-mats">
-      <label class="mat-cb"><input type="checkbox" value="polyback"/><span class="dot"></span>Polyback</label>
-      <label class="mat-cb"><input type="checkbox" value="polylac"/><span class="dot"></span>Polylac</label>
-      <label class="mat-cb"><input type="checkbox" value="uvlac"/><span class="dot"></span>UV Lac</label>
-      <label class="mat-cb"><input type="checkbox" value="hpl"/><span class="dot"></span>HPL</label>
-      <label class="mat-cb"><input type="checkbox" value="mattplus"/><span class="dot"></span>Matt Plus</label>
-      <label class="mat-cb"><input type="checkbox" value="mdf"/><span class="dot"></span>MDF</label>
-    </div>
+<div class="mat-checkboxes" id="upload-mats">
+  <label class="mat-cb"><input type="checkbox" value="pvc"/><span class="dot"></span>PVC</label>
+  <label class="mat-cb"><input type="checkbox" value="hpl"/><span class="dot"></span>HPL</label>
+  <label class="mat-cb"><input type="checkbox" value="uvlac"/><span class="dot"></span>UV Lac</label>
+  <label class="mat-cb"><input type="checkbox" value="glossmax"/><span class="dot"></span>GlossMax</label>
+  <label class="mat-cb"><input type="checkbox" value="mattplus"/><span class="dot"></span>Matt Plus</label>
+  <label class="mat-cb"><input type="checkbox" value="polylac"/><span class="dot"></span>Polylac (Gizir)</label>
+  <label class="mat-cb"><input type="checkbox" value="polyback"/><span class="dot"></span>Polyback</label>
+  <label class="mat-cb"><input type="checkbox" value="alvic"/><span class="dot"></span>German Alvic</label>
+</div>
+<label class="form-label" style="margin-top:.8rem">نوع المنتج</label>
+<div class="mat-checkboxes" id="upload-types">
+  <label class="mat-cb"><input type="checkbox" value="مطابخ"/><span class="dot"></span>مطابخ</label>
+  <label class="mat-cb"><input type="checkbox" value="غرف نوم"/><span class="dot"></span>غرف نوم</label>
+  <label class="mat-cb"><input type="checkbox" value="دريسينج"/><span class="dot"></span>دريسينج</label>
+  <label class="mat-cb"><input type="checkbox" value="وحدات TV"/><span class="dot"></span>وحدات TV</label>
+  <label class="mat-cb"><input type="checkbox" value="وحدات حمام"/><span class="dot"></span>وحدات حمام</label>
+  <label class="mat-cb"><input type="checkbox" value="ديكور"/><span class="dot"></span>ديكور</label>
+  <label class="mat-cb"><input type="checkbox" value="ريسبشن"/><span class="dot"></span>ريسبشن</label>
+  <label class="mat-cb"><input type="checkbox" value="ركن قهوه"/><span class="dot"></span>ركن قهوه</label>
+</div>
     <label class="form-label">الصورة</label>
     <div class="upload-area" onclick="document.getElementById('post-file-input').click()">
       <input type="file" id="post-file-input" accept="image/*" onchange="previewPostImage(this)"/>
@@ -603,13 +631,20 @@ let editingProspectId = null;
 let currentFileTarget = 'contract';
 let currentStageTarget= null;
 let selectedStatus    = 'ميتنج';
-let activeFilters     = new Set(['polyback','polylac','uvlac','hpl','mattplus','mdf']);
+let activeFilters = new Set(['all']);
+let allMats = ['pvc','hpl','uvlac','glossmax','mattplus','polylac','polyback','alvic'];
+let activeTypes = new Set(['all']);
+let allTypes = ['مطابخ','غرف نوم','دريسينج','وحدات TV','وحدات حمام','ديكور','ريسبشن','ركن قهوه'];
 let verifyData        = { userId: null };
 let forgotEmail       = '';
 let postImageFile     = null;
 let contractFilesArr  = []; // [{file, type, name}]
 
-const MATS_AR = { polyback:'Polyback', polylac:'Polylac', uvlac:'UV Lac', hpl:'HPL', mattplus:'Matt Plus', mdf:'MDF' };
+const MATS_AR = {
+  pvc:'PVC', hpl:'HPL', uvlac:'UV Lac', glossmax:'GlossMax',
+  mattplus:'Matt Plus', polylac:'Polylac (Gizir)', polyback:'Polyback', alvic:'German Alvic'
+};
+const TYPES_AR = ['مطابخ','غرف نوم','دريسينج','وحدات TV','وحدات حمام','ديكور','ريسبشن','ركن قهوه'];
 const STATUS_CLS = { ميتنج:'s-meeting', متابعة:'s-followup', معاينة:'s-inspection-status', مرفوض:'s-rejected' };
 const STAGES = [
   {id:'contract',      name:'العقد',     icon:'📜', cls:'s-contract'},
@@ -859,14 +894,49 @@ async function loadPosts() {
 
 function toggleFilter(chip) {
   const mat = chip.dataset.mat;
-  if (activeFilters.has(mat)) { activeFilters.delete(mat); chip.classList.remove('on'); }
-  else                         { activeFilters.add(mat);    chip.classList.add('on'); }
+  if (mat === 'all') {
+    activeFilters = new Set(['all']);
+    document.querySelectorAll('#filter-chips .chip').forEach(c => c.classList.remove('on'));
+    chip.classList.add('on');
+  } else {
+    activeFilters.delete('all');
+    document.getElementById('chip-all-mat').classList.remove('on');
+    if (activeFilters.has(mat)) { activeFilters.delete(mat); chip.classList.remove('on'); }
+    else { activeFilters.add(mat); chip.classList.add('on'); }
+    if (activeFilters.size === 0) {
+      activeFilters.add('all');
+      document.getElementById('chip-all-mat').classList.add('on');
+    }
+  }
+  renderPosts();
+}
+
+function toggleTypeFilter(chip) {
+  const type = chip.dataset.type;
+  if (type === 'all') {
+    activeTypes = new Set(['all']);
+    document.querySelectorAll('#filter-types .chip').forEach(c => c.classList.remove('on'));
+    chip.classList.add('on');
+  } else {
+    activeTypes.delete('all');
+    document.getElementById('chip-all-type').classList.remove('on');
+    if (activeTypes.has(type)) { activeTypes.delete(type); chip.classList.remove('on'); }
+    else { activeTypes.add(type); chip.classList.add('on'); }
+    if (activeTypes.size === 0) {
+      activeTypes.add('all');
+      document.getElementById('chip-all-type').classList.add('on');
+    }
+  }
   renderPosts();
 }
 
 function renderPosts() {
   const feed     = document.getElementById('posts-feed');
-  const filtered = posts.filter(p => p.mats.some(m => activeFilters.has(m)));
+  const filtered = posts.filter(p => {
+  const matOk  = activeFilters.has('all') || p.mats.some(m => activeFilters.has(m));
+  const typeOk = activeTypes.has('all')   || (p.types||[]).some(t => activeTypes.has(t));
+  return matOk && typeOk;
+});
   if (!filtered.length) {
     feed.innerHTML = '<div class="empty-state"><span>🔍</span>مفيش أعمال بالفلتر ده</div>';
     return;
@@ -899,10 +969,13 @@ function previewPostImage(input) {
 
 async function submitPost() {
   const mats = [...document.querySelectorAll('#upload-mats .mat-cb.checked')]
-    .map(l => l.querySelector('input').value);
-  if (!mats.length) return showToast('اختار مادة واحدة على الأقل', 'error');
-  const fd = new FormData();
-  fd.append('mats', JSON.stringify(mats));
+  .map(l => l.querySelector('input').value);
+if (!mats.length) return showToast('اختار مادة واحدة على الأقل', 'error');
+const types = [...document.querySelectorAll('#upload-types .mat-cb.checked')]
+  .map(l => l.querySelector('input').value);
+const fd = new FormData();
+fd.append('mats', JSON.stringify(mats));
+fd.append('types', JSON.stringify(types));
   fd.append('desc', document.getElementById('upload-desc').value.trim());
   if (postImageFile) fd.append('image', postImageFile);
   setLoading('post-submit-btn', true, 'نشر');
@@ -922,9 +995,9 @@ function resetUploadModal() {
   document.getElementById('post-file-input').value     = '';
   document.getElementById('upload-desc').value         = '';
   postImageFile = null;
-  document.querySelectorAll('#upload-mats .mat-cb').forEach(l => {
-    l.classList.remove('checked'); l.querySelector('input').checked = false;
-  });
+  document.querySelectorAll('#upload-types .mat-cb').forEach(l => {
+  l.classList.remove('checked'); l.querySelector('input').checked = false;
+});
 }
 
 async function deletePost(id) {
