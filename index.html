@@ -810,12 +810,13 @@ function enterApp(name) {
 // ─── auto-login if token saved ────────────────────────────────
 window.addEventListener('DOMContentLoaded', () => {
   // ─── mat-cb checkboxes ───
-  document.querySelectorAll('.mat-cb input[type=checkbox]').forEach(cb => {
-    cb.addEventListener('change', () => {
-      const label = cb.closest('.mat-cb');
-      label.classList.toggle('checked', cb.checked);
-    });
+  document.querySelectorAll('.mat-cb').forEach(label => {
+  label.addEventListener('click', () => {
+    const cb = label.querySelector('input');
+    cb.checked = !cb.checked;
+    label.classList.toggle('checked', cb.checked);
   });
+});
 
   if (authToken && currentUser) {
     enterApp(currentUser.name || 'المستخدم');
