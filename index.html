@@ -484,12 +484,12 @@ body{font-family:'Cairo',sans-serif;background:var(--dark);min-height:100vh;colo
     <div class="modal-title">📸 رفع صورة جديدة</div>
     <label class="form-label">المواد المستخدمة</label>
     <div class="mat-checkboxes" id="upload-mats">
-      <label class="mat-cb" onclick="toggleMatCb(this)"><input type="checkbox" value="polyback"/><span class="dot"></span>Polyback</label>
-      <label class="mat-cb" onclick="toggleMatCb(this)"><input type="checkbox" value="polylac"/><span class="dot"></span>Polylac</label>
-      <label class="mat-cb" onclick="toggleMatCb(this)"><input type="checkbox" value="uvlac"/><span class="dot"></span>UV Lac</label>
-      <label class="mat-cb" onclick="toggleMatCb(this)"><input type="checkbox" value="hpl"/><span class="dot"></span>HPL</label>
-      <label class="mat-cb" onclick="toggleMatCb(this)"><input type="checkbox" value="mattplus"/><span class="dot"></span>Matt Plus</label>
-      <label class="mat-cb" onclick="toggleMatCb(this)"><input type="checkbox" value="mdf"/><span class="dot"></span>MDF</label>
+      <label class="mat-cb"><input type="checkbox" value="polyback"/><span class="dot"></span>Polyback</label>
+      <label class="mat-cb"><input type="checkbox" value="polylac"/><span class="dot"></span>Polylac</label>
+      <label class="mat-cb"><input type="checkbox" value="uvlac"/><span class="dot"></span>UV Lac</label>
+      <label class="mat-cb"><input type="checkbox" value="hpl"/><span class="dot"></span>HPL</label>
+      <label class="mat-cb"><input type="checkbox" value="mattplus"/><span class="dot"></span>Matt Plus</label>
+      <label class="mat-cb"><input type="checkbox" value="mdf"/><span class="dot"></span>MDF</label>
     </div>
     <label class="form-label">الصورة</label>
     <div class="upload-area" onclick="document.getElementById('post-file-input').click()">
@@ -515,12 +515,12 @@ body{font-family:'Cairo',sans-serif;background:var(--dark);min-height:100vh;colo
     <div class="sidebar-divider" style="margin:1rem 0"></div>
     <label class="form-label" style="font-weight:700;color:var(--text-muted)">📋 نوع التعاقد</label>
     <div class="mat-checkboxes" id="contract-types" style="margin-top:.6rem">
-      <label class="mat-cb" onclick="toggleMatCb(this)"><input type="checkbox" value="مطبخ"/><span class="dot"></span>مطبخ</label>
-      <label class="mat-cb" onclick="toggleMatCb(this)"><input type="checkbox" value="دريسنج"/><span class="dot"></span>دريسنج</label>
-      <label class="mat-cb" onclick="toggleMatCb(this)"><input type="checkbox" value="غرفة نوم"/><span class="dot"></span>غرفة نوم</label>
-      <label class="mat-cb" onclick="toggleMatCb(this)"><input type="checkbox" value="ريسبشن"/><span class="dot"></span>ريسبشن</label>
-      <label class="mat-cb" onclick="toggleMatCb(this)"><input type="checkbox" value="حمام"/><span class="dot"></span>حمام</label>
-      <label class="mat-cb" onclick="toggleMatCb(this)"><input type="checkbox" value="أخرى"/><span class="dot"></span>أخرى</label>
+      <label class="mat-cb"><input type="checkbox" value="مطبخ"/><span class="dot"></span>مطبخ</label>
+      <label class="mat-cb"><input type="checkbox" value="دريسنج"/><span class="dot"></span>دريسنج</label>
+      <label class="mat-cb"><input type="checkbox" value="غرفة نوم"/><span class="dot"></span>غرفة نوم</label>
+      <label class="mat-cb"><input type="checkbox" value="ريسبشن"/><span class="dot"></span>ريسبشن</label>
+      <label class="mat-cb"><input type="checkbox" value="حمام"/><span class="dot"></span>حمام</label>
+      <label class="mat-cb"><input type="checkbox" value="أخرى"/><span class="dot"></span>أخرى</label>
     </div>
     <div class="form-group" style="margin-top:1rem"><label>ملاحظات</label><textarea class="modal-textarea" id="c-notes" placeholder="أي ملاحظات..."></textarea></div>
     <button class="btn-primary" id="client-submit-btn" onclick="submitClient()">حفظ العميل</button>
@@ -809,6 +809,14 @@ function enterApp(name) {
 
 // ─── auto-login if token saved ────────────────────────────────
 window.addEventListener('DOMContentLoaded', () => {
+  // ─── mat-cb checkboxes ───
+  document.querySelectorAll('.mat-cb input[type=checkbox]').forEach(cb => {
+    cb.addEventListener('change', () => {
+      const label = cb.closest('.mat-cb');
+      label.classList.toggle('checked', cb.checked);
+    });
+  });
+
   if (authToken && currentUser) {
     enterApp(currentUser.name || 'المستخدم');
   }
