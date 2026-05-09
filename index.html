@@ -946,16 +946,12 @@ function renderPosts() {
       ${p.img
         ? `<img class="post-img" src="${p.img}" alt="work" onclick="openLightbox('${p.img}')">`
         : `<div class="post-img-placeholder">🪑</div>`}
-      <div class="post-body" style="display:flex; justify-content:space-between; align-items:flex-start; gap:.8rem;">
-  <div style="display:flex; flex-direction:column; gap:.4rem;">
-    <div class="post-tags">...</div>
-    ${isAdmin ? `<button class="post-del-btn" ...>🗑 حذف</button>` : ''}
-  </div>
-  <div style="text-align:right;">
-    ${p.desc ? `<div class="post-desc">...</div>` : ''}
-    <div class="post-date">...</div>
-  </div>
-</div>
+      <div class="post-body">
+        <div class="post-tags">${p.mats.map(m => `<span class="post-tag">${MATS_AR[m]||m}</span>`).join('')}</div>
+        ${p.desc ? `<div class="post-desc">${escHtml(p.desc)}</div>` : ''}
+        <div class="post-date">${new Date(p.createdAt).toLocaleDateString('ar-EG')}</div>
+      </div>
+      ${isAdmin ? `<button class="post-del-btn" onclick="deletePost('${p._id}')">🗑 حذف</button>` : ''}
     </div>
   `).join('');
 }
