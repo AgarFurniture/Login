@@ -947,7 +947,7 @@ function renderPosts() {
   }
   feed.innerHTML = filtered.map(p => `
     <div class="post-card">
-      <div class="post-body">
+      <div class="post-body" style="text-align:right">
         <div style="display:flex;justify-content:space-between;align-items:flex-start;">
           <div class="post-tags">${p.mats.map(m => `<span class="post-tag">${MATS_AR[m]||m}</span>`).join('')}</div>
           <div class="post-date">${new Date(p.createdAt).toLocaleDateString('ar-EG')}</div>
