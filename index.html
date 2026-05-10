@@ -1622,6 +1622,7 @@ body {
       <div class="chip" data-status="معاينة" onclick="selectStatus(this)">معاينة</div>
       <div class="chip" data-status="مرفوض" onclick="selectStatus(this)">مرفوض</div>
     </div>
+         <div class="form-group"><label>ملاحظة</label><textarea class="modal-textarea" id="p-note" placeholder="أي ملاحظات..."></textarea></div>
     <button class="btn-primary" id="prospect-submit-btn" onclick="submitProspect()">حفظ</button>
   </div>
 </div>
@@ -2477,6 +2478,7 @@ function renderProspects() {
       <div class="prospect-info">
         <div class="prospect-name">${escHtml(p.name)}</div>
         <div class="prospect-phone">📞 ${escHtml(p.phone||'—')}</div>
+${p.note ? `<div style="color:rgba(255,255,255,.4);font-size:.78rem;margin-top:.3rem">📝 ${escHtml(p.note)}</div>` : ''}
       </div>
       <div class="status-dropdown">
         <span class="status-badge ${STATUS_CLS[p.status]||''}"
@@ -2527,6 +2529,7 @@ function openProspectModal() {
     c.classList.toggle('on', c.dataset.status === 'ميتنج'));
   document.getElementById('p-name').value  = '';
   document.getElementById('p-phone').value = '';
+   document.getElementById('p-note').value = '';
   document.getElementById('prospect-modal-title').textContent = '🎯 إضافة عميل محتمل';
   document.getElementById('prospect-submit-btn').textContent  = 'حفظ';
   openModal('prospect-modal');
@@ -2541,6 +2544,7 @@ function openEditProspectModal(id) {
     c.classList.toggle('on', c.dataset.status === p.status));
   document.getElementById('p-name').value  = p.name;
   document.getElementById('p-phone').value = p.phone || '';
+   document.getElementById('p-note').value = p.note || '';
   document.getElementById('prospect-modal-title').textContent = '✏️ تعديل العميل المحتمل';
   document.getElementById('prospect-submit-btn').textContent  = 'حفظ التعديل';
   openModal('prospect-modal');
@@ -2555,17 +2559,18 @@ function selectStatus(el) {
 async function submitProspect() {
   const name  = document.getElementById('p-name').value.trim();
   const phone = document.getElementById('p-phone').value.trim();
+   const note  = document.getElementById('p-note').value.trim();
   if (!name) return showToast('الاسم مطلوب', 'error');
   const lbl = editingProspectId ? 'حفظ التعديل' : 'حفظ';
   setLoading('prospect-submit-btn', true, lbl);
   try {
     if (editingProspectId) {
-      const data = await apiPut('/prospects/' + editingProspectId, { name, phone, status: selectedStatus });
+      const data = await apiPut('/prospects/' + editingProspectId, { name, phone, status: selectedStatus, note });
       const idx  = prospects.findIndex(x => x._id === editingProspectId);
       if (idx > -1) prospects[idx] = data.prospect;
       showToast('تم التعديل ✓', 'success');
     } else {
-      const data = await apiPost('/prospects', { name, phone, status: selectedStatus });
+      const data = await apiPost('/prospects', { name, phone, status: selectedStatus, note });
       prospects.unshift(data.prospect);
       showToast('تم الإضافة ✓', 'success');
     }
