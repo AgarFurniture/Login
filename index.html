@@ -2872,46 +2872,18 @@ function closeLightbox() {
 }
 
 // ─── Lightbox touch swipe (موبايل) ───
-document.addEventListener('DOMContentLoaded', () => {
-  const lb = document.getElementById('lightbox');
-  const lbImg = document.getElementById('lightbox-img');
-
-  // transition على الصورة
-  lbImg.style.transition = 'opacity .15s ease, transform .15s ease';
-
-  lb.addEventListener('touchstart', e => {
-    lbTouchStartX = e.touches[0].clientX;
-    lbTouchStartY = e.touches[0].clientY;
-  }, { passive: true });
-
-  lb.addEventListener('touchend', e => {
-    const dx = e.changedTouches[0].clientX - lbTouchStartX;
-    const dy = e.changedTouches[0].clientY - lbTouchStartY;
-    // لو الحركة أفقية أكتر من عمودية وأكبر من 50px
-    if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 50) {
-      // swipe يمين = صورة قبل، swipe شمال = صورة بعد
-      lightboxNav(dx > 0 ? -1 : 1, null);
-    } else if (Math.abs(dx) < 10 && Math.abs(dy) < 10) {
-      // tap من غير حركة = اقفل
-      closeLightbox();
-    }
-  }, { passive: true });
-
-  // keyboard arrows (كمبيوتر)
-  document.addEventListener('keydown', e => {
-    if (!document.getElementById('lightbox').classList.contains('open')) return;
-    if (e.key === 'ArrowRight') lightboxNav(-1, null);
-    if (e.key === 'ArrowLeft')  lightboxNav(1, null);
-  });
-});
-
-// ─── Keyboard shortcuts ────────────────────────────────────────
 document.addEventListener('keydown', e => {
   if (e.key === 'Escape') {
     closeDrawer();
     document.querySelectorAll('.modal-overlay.open').forEach(m => m.classList.remove('open'));
     closeLightbox();
     document.querySelectorAll('.status-menu.open').forEach(m => m.classList.remove('open'));
+    return;
+  }
+  if (document.getElementById('lightbox').classList.contains('open')) {
+    if (e.key === 'ArrowRight') lightboxNav(-1, null);
+    if (e.key === 'ArrowLeft')  lightboxNav(1, null);
+    return;
   }
   if (e.key !== 'Enter') return;
   const active = document.querySelector('.page.active')?.id;
