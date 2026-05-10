@@ -2331,7 +2331,7 @@ function renderDrawerFiles(c) {
     return `<div class="file-item">
       ${isAdmin ? `<button class="file-del" onclick="deleteContractFile('${c._id}','${f._id}')">✕</button>` : ''}
       ${isImg
-        ? `<img class="file-thumb" src="${f.url}" onclick="openLightbox('${f.url}')">`
+        ? `<img class="file-thumb" src="${f.url}" onclick="openLightbox(['${f.url}'], 0)">`
         : `<div class="file-thumb-placeholder">${isPdf?'📄':'📎'}</div>`}
       <div class="file-name">${escHtml(f.name||'ملف')}</div>
     </div>`;
