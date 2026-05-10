@@ -1701,12 +1701,12 @@ body {
   </div>
 </div>
 <!-- ═══ LIGHTBOX ═══ -->
-<div class="lightbox" id="lightbox" onclick="closeLightbox()">
+<div class="lightbox" id="lightbox">
   <button class="lightbox-close" onclick="closeLightbox()">✕</button>
   <button id="lb-prev" onclick="lightboxNav(-1,event)" style="position:absolute;right:1.5rem;top:50%;transform:translateY(-50%);background:rgba(201,168,76,.15);border:1px solid rgba(201,168,76,.3);color:var(--gold-light);width:44px;height:44px;border-radius:50%;font-size:1.3rem;cursor:pointer;display:flex;align-items:center;justify-content:center">›</button>
   <button id="lb-next" onclick="lightboxNav(1,event)" style="position:absolute;left:1.5rem;top:50%;transform:translateY(-50%);background:rgba(201,168,76,.15);border:1px solid rgba(201,168,76,.3);color:var(--gold-light);width:44px;height:44px;border-radius:50%;font-size:1.3rem;cursor:pointer;display:flex;align-items:center;justify-content:center">‹</button>
   <div id="lb-counter" style="position:absolute;bottom:1.5rem;left:50%;transform:translateX(-50%);color:rgba(255,255,255,.6);font-size:.9rem;font-family:'Cairo',sans-serif"></div>
-  <img id="lightbox-img" src="" alt="" onclick="event.stopPropagation()"/>
+  <img id="lightbox-img" src="" alt=""/>
 </div>
 
 <!-- ═══ TOAST ═══ -->
@@ -2043,17 +2043,16 @@ function buildImgGrid(imgs, placeholder) {
   const cls   = count === 1 ? 'count-1' : count === 2 ? 'count-2' : count === 3 ? 'count-3' : count === 4 ? 'count-4' : 'count-5plus';
   const show  = count <= 5 ? count : 5;
   const extra = count > 5 ? count - 5 : 0;
-  
-  // خزّن الـ URLs في متغير global عشان الـ onclick يوصلها
+
   const gridId = 'grid_' + Date.now() + '_' + Math.random().toString(36).slice(2);
   window._imgGrids = window._imgGrids || {};
   window._imgGrids[gridId] = imgs.map(x => x.url);
-  
-  let html = `<div class="post-imgs ${cls}">`;
+
+  let html = `<div class="post-imgs ${cls}" data-grid-id="${gridId}">`;
   for (let i = 0; i < show; i++) {
     const isLast = i === show - 1 && extra > 0;
-    html += `<div class="img-item${isLast ? ' has-more' : ''}" ${isLast ? `data-more="+${extra}"` : ''} onclick="openLightbox(window._imgGrids['${gridId}'],${i})">
-      <img src="${imgs[i].url}" alt="img" loading="lazy">
+    html += `<div class="img-item${isLast ? ' has-more' : ''}" ${isLast ? `data-more="+${extra}"` : ''} data-index="${i}" onclick="openLightbox(window._imgGrids['${gridId}'],${i})">
+      <img src="${imgs[i].url}" alt="img" loading="lazy" draggable="false">
     </div>`;
   }
   html += `</div>`;
@@ -2818,30 +2817,75 @@ function toggleMatCb(label) {
 }
 let lightboxImgs = [];
 let lightboxIdx  = 0;
+let lbTouchStartX = 0;
+let lbTouchStartY = 0;
 
 function openLightbox(imgs, idx = 0) {
-  lightboxImgs = typeof imgs === 'string' ? [imgs] : imgs;
+  lightboxImgs = typeof imgs === 'string' ? [imgs] : [...imgs];
   lightboxIdx  = idx;
   document.getElementById('lightbox-img').src = lightboxImgs[lightboxIdx];
   updateLightboxNav();
   document.getElementById('lightbox').classList.add('open');
 }
+
 function lightboxNav(dir, e) {
-  e.stopPropagation();
+  if (e) e.stopPropagation();
   lightboxIdx = (lightboxIdx + dir + lightboxImgs.length) % lightboxImgs.length;
-  document.getElementById('lightbox-img').src = lightboxImgs[lightboxIdx];
-  updateLightboxNav();
+  const img = document.getElementById('lightbox-img');
+  img.style.opacity = '0';
+  img.style.transform = 'scale(.96)';
+  setTimeout(() => {
+    img.src = lightboxImgs[lightboxIdx];
+    img.style.opacity = '1';
+    img.style.transform = 'scale(1)';
+    updateLightboxNav();
+  }, 150);
 }
+
 function updateLightboxNav() {
   const show = lightboxImgs.length > 1;
   document.getElementById('lb-prev').style.display = show ? 'flex' : 'none';
   document.getElementById('lb-next').style.display = show ? 'flex' : 'none';
-  document.getElementById('lb-counter').textContent = show ? `${lightboxIdx+1} / ${lightboxImgs.length}` : '';
+  document.getElementById('lb-counter').textContent = show ? `${lightboxIdx + 1} / ${lightboxImgs.length}` : '';
 }
-function closeLightbox()    { document.getElementById('lightbox').classList.remove('open'); }
-function escHtml(str) {
-  return String(str||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+
+function closeLightbox() {
+  document.getElementById('lightbox').classList.remove('open');
 }
+
+// ─── Lightbox touch swipe (موبايل) ───
+document.addEventListener('DOMContentLoaded', () => {
+  const lb = document.getElementById('lightbox');
+  const lbImg = document.getElementById('lightbox-img');
+
+  // transition على الصورة
+  lbImg.style.transition = 'opacity .15s ease, transform .15s ease';
+
+  lb.addEventListener('touchstart', e => {
+    lbTouchStartX = e.touches[0].clientX;
+    lbTouchStartY = e.touches[0].clientY;
+  }, { passive: true });
+
+  lb.addEventListener('touchend', e => {
+    const dx = e.changedTouches[0].clientX - lbTouchStartX;
+    const dy = e.changedTouches[0].clientY - lbTouchStartY;
+    // لو الحركة أفقية أكتر من عمودية وأكبر من 50px
+    if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 50) {
+      // swipe يمين = صورة قبل، swipe شمال = صورة بعد
+      lightboxNav(dx > 0 ? -1 : 1, null);
+    } else if (Math.abs(dx) < 10 && Math.abs(dy) < 10) {
+      // tap من غير حركة = اقفل
+      closeLightbox();
+    }
+  }, { passive: true });
+
+  // keyboard arrows (كمبيوتر)
+  document.addEventListener('keydown', e => {
+    if (!document.getElementById('lightbox').classList.contains('open')) return;
+    if (e.key === 'ArrowRight') lightboxNav(-1, null);
+    if (e.key === 'ArrowLeft')  lightboxNav(1, null);
+  });
+});
 
 // ─── Keyboard shortcuts ────────────────────────────────────────
 document.addEventListener('keydown', e => {
