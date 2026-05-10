@@ -352,42 +352,66 @@ body {
   cursor: pointer;
   padding: .2rem;
 }
-/* ─── Facebook-style image grid ─── */
-.post-imgs { width: 100%; overflow: hidden; background: #0d0a05; }
+   /* ─── Post Gallery ─── */
+.post-gallery { width: 100%; background: #0a0805; }
 
-/* 1 صورة */
-.post-imgs.count-1 .img-item { height: 480px; }
-
-/* 2 صور */
-.post-imgs.count-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 2px; }
-.post-imgs.count-2 .img-item { height: 320px; }
-
-/* 3 صور */
-.post-imgs.count-3 { display: grid; grid-template-columns: 2fr 1fr; grid-template-rows: 1fr 1fr; gap: 2px; height: 380px; }
-.post-imgs.count-3 .img-item:first-child { grid-row: 1 / 3; }
-
-/* 4 صور */
-.post-imgs.count-4 { display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr; gap: 2px; height: 440px; }
-
-/* 5+ صور */
-.post-imgs.count-5plus { display: grid; grid-template-columns: 1fr 1fr 1fr; grid-template-rows: 1fr 1fr; gap: 2px; height: 400px; }
-.post-imgs.count-5plus .img-item:first-child { grid-column: 1 / 3; }
-
-.img-item { overflow: hidden; position: relative; cursor: pointer; }
-.img-item img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform .3s; }
-.img-item:hover img { transform: scale(1.03); }
-
-/* +N overlay */
-.img-item.has-more::after {
-  content: attr(data-more);
-  position: absolute; inset: 0;
-  background: rgba(0,0,0,.65);
-  display: flex; align-items: center; justify-content: center;
-  font-size: 2rem; font-weight: 900; color: #fff;
-  font-family: 'Cairo', sans-serif;
-  pointer-events: none;
-
+.post-gallery-main {
+  width: 100%;
+  height: 420px;
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
 }
+.post-gallery-main img {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform .3s, opacity .12s ease;
+}
+   
+.post-gallery-main:hover img { transform: scale(1.02); }
+
+.post-gallery-main .pg-count {
+  position: absolute;
+  bottom: .7rem; left: .7rem;
+  background: rgba(0,0,0,.65);
+  color: #fff;
+  font-size: .78rem;
+  font-weight: 700;
+  padding: .25rem .7rem;
+  border-radius: 20px;
+  font-family: 'Cairo', sans-serif;
+  backdrop-filter: blur(4px);
+}
+
+.post-gallery-bar {
+  display: flex;
+  gap: 4px;
+  padding: 4px;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  background: #0a0805;
+  -webkit-overflow-scrolling: touch;
+}
+.post-gallery-bar::-webkit-scrollbar { height: 3px; }
+.post-gallery-bar::-webkit-scrollbar-track { background: transparent; }
+.post-gallery-bar::-webkit-scrollbar-thumb { background: rgba(201,168,76,.3); border-radius: 3px; }
+
+.pg-thumb {
+  flex-shrink: 0;
+  width: 64px; height: 64px;
+  border-radius: 6px;
+  object-fit: cover;
+  cursor: pointer;
+  border: 2px solid transparent;
+  transition: border-color .2s, opacity .2s;
+  opacity: .55;
+}
+.pg-thumb.active {
+  border-color: var(--gold);
+  opacity: 1;
+}
+.pg-thumb:hover { opacity: .85; }
 /* ─── APP BODY ───────────────────────────────────── */
 .app-body { display: flex; flex: 1; overflow: hidden; }
 
@@ -2057,24 +2081,61 @@ function toggleTypeFilter(chip) {
 
 function buildImgGrid(imgs, placeholder) {
   if (!imgs || !imgs.length) return `<div class="post-img-placeholder">${placeholder}</div>`;
-  const count = imgs.length;
-  const cls   = count === 1 ? 'count-1' : count === 2 ? 'count-2' : count === 3 ? 'count-3' : count === 4 ? 'count-4' : 'count-5plus';
-  const show  = count <= 5 ? count : 5;
-  const extra = count > 5 ? count - 5 : 0;
 
-  const gridId = 'grid_' + Date.now() + '_' + Math.random().toString(36).slice(2);
+  const gridId = 'g_' + Date.now() + '_' + Math.random().toString(36).slice(2);
   window._imgGrids = window._imgGrids || {};
   window._imgGrids[gridId] = imgs.map(x => x.url);
 
-  let html = `<div class="post-imgs ${cls}" data-grid-id="${gridId}">`;
-  for (let i = 0; i < show; i++) {
-    const isLast = i === show - 1 && extra > 0;
-    html += `<div class="img-item${isLast ? ' has-more' : ''}" ${isLast ? `data-more="+${extra}"` : ''} data-index="${i}" onclick="openLightbox(window._imgGrids['${gridId}'],${i})">
-      <img src="${imgs[i].url}" alt="img" loading="lazy" draggable="false">
+  const firstUrl = imgs[0].url;
+  const total    = imgs.length;
+
+  const thumbs = imgs.map((img, i) => `
+    <img class="pg-thumb${i === 0 ? ' active' : ''}"
+         src="${img.url}"
+         loading="lazy"
+         onclick="pgSelect('${gridId}', ${i})">`
+  ).join('');
+
+  const bar = total > 1
+    ? `<div class="post-gallery-bar" id="pgbar-${gridId}">${thumbs}</div>`
+    : '';
+
+  return `
+    <div class="post-gallery" id="pg-${gridId}">
+      <div class="post-gallery-main" onclick="openLightbox(window._imgGrids['${gridId}'], pgCurrentIdx['${gridId}'] || 0)">
+        <img id="pgmain-${gridId}" src="${firstUrl}" alt="img" loading="lazy" draggable="false">
+        ${total > 1 ? `<div class="pg-count" id="pgcount-${gridId}">1 / ${total}</div>` : ''}
+      </div>
+      ${bar}
     </div>`;
+}
+
+const pgCurrentIdx = {};
+
+function pgSelect(gridId, idx) {
+  const urls  = window._imgGrids[gridId];
+  if (!urls) return;
+  pgCurrentIdx[gridId] = idx;
+
+  const mainImg = document.getElementById('pgmain-' + gridId);
+  const counter = document.getElementById('pgcount-' + gridId);
+  const bar     = document.getElementById('pgbar-' + gridId);
+
+  if (mainImg) {
+    mainImg.style.opacity = '0';
+    setTimeout(() => {
+      mainImg.src = urls[idx];
+      mainImg.style.opacity = '1';
+    }, 120);
   }
-  html += `</div>`;
-  return html;
+  if (counter) counter.textContent = `${idx + 1} / ${urls.length}`;
+
+  if (bar) {
+    const thumbs = bar.querySelectorAll('.pg-thumb');
+    thumbs.forEach((t, i) => t.classList.toggle('active', i === idx));
+    // scroll thumb into view
+    if (thumbs[idx]) thumbs[idx].scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+  }
 }
 
 function renderPosts() {
