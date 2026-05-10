@@ -1405,14 +1405,50 @@ body {
   <div class="sidebar-item active" onclick="switchSection('works',this)"><span class="s-icon">🖼️</span><span>الأعمال</span></div>
   <div class="sidebar-item" onclick="switchSection('clients',this)"><span class="s-icon">👥</span><span>العملاء</span></div>
   <div class="sidebar-item" onclick="switchSection('prospects',this)"><span class="s-icon">🎯</span><span>العملاء المحتملين</span></div>
-      <div class="sidebar-item" onclick="switchSection('accessories',this)">
-  <span class="s-icon">💎</span><span>الاكسسوارات</span>
-</div>
+ <div class="sidebar-item" onclick="switchSection('accessories',this)">
+        <span class="s-icon">💎</span><span>الاكسسوارات</span>
+      </div>
   <div class="sidebar-divider"></div>
   <div class="sidebar-section-title">أخرى</div>
   <div class="sidebar-item" onclick="switchSection('custom',this)"><span class="s-icon">⚙️</span><span>التخصيص</span></div>
 
- <div id="sidebar-filters-works">
+  <div id="sidebar-filters-works">
+    <div class="sidebar-divider"></div>
+    <div class="sidebar-section-title">حسب المادة</div>
+    <div style="padding:0 .8rem .5rem;display:flex;flex-direction:column;gap:.4rem;" id="filter-chips">
+      <div class="sidebar-item chip on" id="chip-all-mat" data-mat="all" onclick="toggleFilter(this)">الكل</div>
+      <div class="sidebar-item chip" data-mat="pvc" onclick="toggleFilter(this)">PVC</div>
+      <div class="sidebar-item chip" data-mat="hpl" onclick="toggleFilter(this)">HPL</div>
+      <div class="sidebar-item chip" data-mat="uvlac" onclick="toggleFilter(this)">UV Lac</div>
+      <div class="sidebar-item chip" data-mat="glossmax" onclick="toggleFilter(this)">GlossMax</div>
+      <div class="sidebar-item chip" data-mat="mattplus" onclick="toggleFilter(this)">Matt Plus</div>
+      <div class="sidebar-item chip" data-mat="polylac" onclick="toggleFilter(this)">Polylac (Gizir)</div>
+      <div class="sidebar-item chip" data-mat="polyback" onclick="toggleFilter(this)">Polyback</div>
+      <div class="sidebar-item chip" data-mat="alvic" onclick="toggleFilter(this)">German Alvic</div>
+    </div>
+    <div class="sidebar-divider"></div>
+    <div class="sidebar-section-title">حسب النوع</div>
+    <div style="padding:0 .8rem .5rem;display:flex;flex-direction:column;gap:.4rem;" id="filter-types">
+      <div class="sidebar-item chip on" id="chip-all-type" data-type="all" onclick="toggleTypeFilter(this)">الكل</div>
+      <div class="sidebar-item chip" data-type="مطابخ" onclick="toggleTypeFilter(this)">مطابخ</div>
+      <div class="sidebar-item chip" data-type="غرف نوم" onclick="toggleTypeFilter(this)">غرف نوم</div>
+      <div class="sidebar-item chip" data-type="دريسينج" onclick="toggleTypeFilter(this)">دريسينج</div>
+      <div class="sidebar-item chip" data-type="وحدات TV" onclick="toggleTypeFilter(this)">وحدات TV</div>
+      <div class="sidebar-item chip" data-type="وحدات حمام" onclick="toggleTypeFilter(this)">وحدات حمام</div>
+      <div class="sidebar-item chip" data-type="ديكور" onclick="toggleTypeFilter(this)">ديكور</div>
+      <div class="sidebar-item chip" data-type="ريسبشن" onclick="toggleTypeFilter(this)">ريسبشن</div>
+      <div class="sidebar-item chip" data-type="ركن قهوه" onclick="toggleTypeFilter(this)">ركن قهوه</div>
+    </div>
+  </div>
+
+  <div id="sidebar-filters-accessories" style="display:none">
+    <div class="sidebar-divider"></div>
+    <div class="sidebar-section-title">حسب النوع</div>
+    <div style="padding:0 .8rem .5rem;display:flex;flex-direction:column;gap:.4rem;" id="acc-type-filters">
+      <div class="sidebar-item chip on" id="chip-all-acc-type" data-acctype="all" onclick="toggleAccType(this)">الكل</div>
+    </div>
+  </div>
+
   <div class="sidebar-divider"></div>
   <div class="sidebar-section-title">حسب المادة</div>
   <div style="padding:0 .8rem .5rem;display:flex;flex-direction:column;gap:.4rem;" id="filter-chips">
@@ -1426,6 +1462,7 @@ body {
     <div class="sidebar-item chip" data-mat="polyback" onclick="toggleFilter(this)">Polyback</div>
     <div class="sidebar-item chip" data-mat="alvic" onclick="toggleFilter(this)">German Alvic</div>
   </div>
+
   <div class="sidebar-divider"></div>
   <div class="sidebar-section-title">حسب النوع</div>
   <div style="padding:0 .8rem .5rem;display:flex;flex-direction:column;gap:.4rem;" id="filter-types">
@@ -1439,26 +1476,17 @@ body {
     <div class="sidebar-item chip" data-type="ريسبشن" onclick="toggleTypeFilter(this)">ريسبشن</div>
     <div class="sidebar-item chip" data-type="ركن قهوه" onclick="toggleTypeFilter(this)">ركن قهوه</div>
   </div>
-</div>
-</div>
-
-      <div id="sidebar-filters-accessories" style="display:none">
-  <div class="sidebar-divider"></div>
-  <div class="sidebar-section-title">حسب النوع</div>
-  <div style="padding:0 .8rem .5rem;display:flex;flex-direction:column;gap:.4rem;" id="acc-type-filters">
-    <div class="sidebar-item chip on" id="chip-all-acc-type" data-acctype="all" onclick="toggleAccType(this)">الكل</div>
+</div>  
+    <div class="main-content">
+<!-- ACCESSORIES -->
+<div class="section-panel" id="section-accessories">
+  <div class="feed-wrap">
+    <div id="admin-acc-upload-wrap" style="display:none">
+      <button class="admin-upload-btn" onclick="openModal('acc-upload-modal')">➕ رفع اكسسوار جديد</button>
+    </div>
+    <div id="acc-feed"></div>
   </div>
 </div>
-        <div class="sidebar-divider"></div>
-        <div class="sidebar-section-title">حسب النوع</div>
-        <div style="padding:0 .8rem .5rem;display:flex;flex-direction:column;gap:.4rem;" id="acc-type-filters">
-          <div class="sidebar-item chip on" id="chip-all-acc-type" data-acctype="all" onclick="toggleAccType(this)">الكل</div>
-        </div>
-      </div>
-
-    </div>
-
-    <div class="main-content">
       <!-- WORKS -->
       <div class="section-panel active" id="section-works">
   <div id="admin-upload-wrap" style="display:none">
@@ -1484,16 +1512,6 @@ body {
         </div>
         <div class="prospects-list" id="prospects-list"></div>
       </div>
-
-<!-- accessories -->
-       <div class="section-panel" id="section-accessories">
-  <div class="feed-wrap">
-    <div id="admin-acc-upload-wrap" style="display:none">
-      <button class="admin-upload-btn" onclick="openModal('acc-upload-modal')">➕ رفع اكسسوار جديد</button>
-    </div>
-    <div id="acc-feed"></div>
-  </div>
-</div>
 
       <!-- CUSTOM -->
       <div class="section-panel" id="section-custom">
@@ -1657,7 +1675,7 @@ body {
   </div>
 </div>
 <!-- Accessories Modal -->
-   <div class="modal-overlay" id="acc-upload-modal">
+<div class="modal-overlay" id="acc-upload-modal">
   <div class="modal-box">
     <button class="modal-close" onclick="closeModal('acc-upload-modal')">✕</button>
     <div class="modal-title">💎 رفع اكسسوار جديد</div>
@@ -1724,10 +1742,6 @@ let verifyData        = { userId: null };
 let forgotEmail       = '';
 let postImageFile     = null;
 let contractFilesArr  = []; // [{file, type, name}]
-let accessories = [];
-let accActiveFilters = new Set(['all']);
-let accActiveTypes   = new Set(['all']);
-let accImageFile     = null;
 
 const MATS_AR = {
   pvc:'PVC', hpl:'HPL', uvlac:'UV Lac', glossmax:'GlossMax',
@@ -1970,7 +1984,6 @@ function closeSidebar() {
   document.getElementById('sidebar-overlay').classList.remove('show');
 }
 
-   
 // ═══════════════════════════════════════════════════════════════
 // POSTS
 // ═══════════════════════════════════════════════════════════════
@@ -2659,6 +2672,10 @@ async function deleteProspect(id) {
 
 
    // ═══ ACCESSORIES ═══
+let accessories = [];
+let accActiveTypes = new Set(['all']);
+let accImageFile = null;
+
 async function loadAccessories() {
   loadingHtml('acc-feed');
   try {
@@ -2694,43 +2711,16 @@ function toggleAccType(chip) {
     if (allChip) allChip.classList.remove('on');
     if (accActiveTypes.has(type)) { accActiveTypes.delete(type); chip.classList.remove('on'); }
     else { accActiveTypes.add(type); chip.classList.add('on'); }
-    if (accActiveTypes.size === 0) {
-      accActiveTypes.add('all');
-      if (allChip) allChip.classList.add('on');
-    }
-  }
-  renderAcc();
-}
-
-function toggleAccMat(chip) {
-  const mat = chip.dataset.accmat;
-  if (mat === 'all') {
-    accActiveFilters = new Set(['all']);
-    document.querySelectorAll('#acc-mat-filters .chip').forEach(c => c.classList.remove('on'));
-    chip.classList.add('on');
-  } else {
-    accActiveFilters.delete('all');
-    const allChip = document.getElementById('chip-all-acc-mat');
-    if (allChip) allChip.classList.remove('on');
-    if (accActiveFilters.has(mat)) { accActiveFilters.delete(mat); chip.classList.remove('on'); }
-    else { accActiveFilters.add(mat); chip.classList.add('on'); }
-    if (accActiveFilters.size === 0) {
-      accActiveFilters.add('all');
-      if (allChip) allChip.classList.add('on');
-    }
+    if (accActiveTypes.size === 0) { accActiveTypes.add('all'); if (allChip) allChip.classList.add('on'); }
   }
   renderAcc();
 }
 
 function renderAcc() {
   const feed = document.getElementById('acc-feed');
-  const filtered = accessories.filter(a => {
-    const matOk  = accActiveFilters.has('all') || (a.mats||[]).some(m => accActiveFilters.has(m));
-    const typeOk = accActiveTypes.has('all')   || accActiveTypes.has(a.type);
-    return matOk && typeOk;
-  });
+  const filtered = accessories.filter(a => accActiveTypes.has('all') || accActiveTypes.has(a.type));
   if (!filtered.length) {
-    feed.innerHTML = '<div class="empty-state"><span>🔍</span>مفيش اكسسوارات بالفلتر ده</div>';
+    feed.innerHTML = '<div class="empty-state"><span>🔍</span>مفيش اكسسوارات</div>';
     return;
   }
   feed.innerHTML = filtered.map(a => `
@@ -2755,16 +2745,12 @@ function previewAccImage(input) {
   const file = input.files[0]; if (!file) return;
   accImageFile = file;
   const reader = new FileReader();
-  reader.onload = e => {
-    const img = document.getElementById('acc-img-preview');
-    img.src = e.target.result; img.style.display = 'block';
-  };
+  reader.onload = e => { const img = document.getElementById('acc-img-preview'); img.src = e.target.result; img.style.display = 'block'; };
   reader.readAsDataURL(file);
 }
 
 async function submitAcc() {
-  const mats = [...document.querySelectorAll('#acc-upload-mats .mat-cb.checked')]
-    .map(l => l.querySelector('input').value);
+  const mats = [...document.querySelectorAll('#acc-upload-mats .mat-cb.checked')].map(l => l.querySelector('input').value);
   if (!mats.length) return showToast('اختار مادة واحدة على الأقل', 'error');
   const type = document.getElementById('acc-type-input').value.trim();
   const fd = new FormData();
@@ -2777,23 +2763,17 @@ async function submitAcc() {
     const data = await apiForm('POST', '/accessories', fd);
     accessories.unshift(data.accessory);
     closeModal('acc-upload-modal');
-    resetAccModal();
+    document.getElementById('acc-img-preview').style.display = 'none';
+    document.getElementById('acc-file-input').value = '';
+    document.getElementById('acc-upload-desc').value = '';
+    document.getElementById('acc-type-input').value = '';
+    accImageFile = null;
+    document.querySelectorAll('#acc-upload-mats .mat-cb').forEach(l => { l.classList.remove('checked'); l.querySelector('input').checked = false; });
     renderAccSidebarTypes();
     renderAcc();
     showToast('تم نشر الاكسسوار ✓', 'success');
   } catch (err) { showToast(err.message, 'error'); }
   finally { setLoading('acc-submit-btn', false, 'نشر'); }
-}
-
-function resetAccModal() {
-  document.getElementById('acc-img-preview').style.display = 'none';
-  document.getElementById('acc-file-input').value = '';
-  document.getElementById('acc-upload-desc').value = '';
-  document.getElementById('acc-type-input').value = '';
-  accImageFile = null;
-  document.querySelectorAll('#acc-upload-mats .mat-cb').forEach(l => {
-    l.classList.remove('checked'); l.querySelector('input').checked = false;
-  });
 }
 
 async function deleteAcc(id) {
@@ -2806,7 +2786,6 @@ async function deleteAcc(id) {
     showToast('تم حذف الاكسسوار', 'success');
   } catch (err) { showToast(err.message, 'error'); }
 }
-
 // ═══════════════════════════════════════════════════════════════
 // HELPERS
 // ═══════════════════════════════════════════════════════════════
