@@ -2811,6 +2811,15 @@ async function deleteAcc(id) {
 // ═══════════════════════════════════════════════════════════════
 // HELPERS
 // ═══════════════════════════════════════════════════════════════
+   function escHtml(str) {
+  return String(str||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function toggleMatCb(label) {
+  label.classList.toggle('checked');
+  label.querySelector('input').checked = label.classList.contains('checked');
+}
+let lightboxImgs = [];
 function toggleMatCb(label) {
   label.classList.toggle('checked');
   label.querySelector('input').checked = label.classList.contains('checked');
