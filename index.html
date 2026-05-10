@@ -2043,11 +2043,16 @@ function buildImgGrid(imgs, placeholder) {
   const cls   = count === 1 ? 'count-1' : count === 2 ? 'count-2' : count === 3 ? 'count-3' : count === 4 ? 'count-4' : 'count-5plus';
   const show  = count <= 5 ? count : 5;
   const extra = count > 5 ? count - 5 : 0;
+  
+  // خزّن الـ URLs في متغير global عشان الـ onclick يوصلها
+  const gridId = 'grid_' + Date.now() + '_' + Math.random().toString(36).slice(2);
+  window._imgGrids = window._imgGrids || {};
+  window._imgGrids[gridId] = imgs.map(x => x.url);
+  
   let html = `<div class="post-imgs ${cls}">`;
   for (let i = 0; i < show; i++) {
     const isLast = i === show - 1 && extra > 0;
-    const allUrls = JSON.stringify(imgs.map(x => x.url));
-html += `<div class="img-item${isLast ? ' has-more' : ''}" ${isLast ? `data-more="+${extra}"` : ''} onclick="openLightbox(${allUrls}, ${i})">
+    html += `<div class="img-item${isLast ? ' has-more' : ''}" ${isLast ? `data-more="+${extra}"` : ''} onclick="openLightbox(window._imgGrids['${gridId}'],${i})">
       <img src="${imgs[i].url}" alt="img" loading="lazy">
     </div>`;
   }
