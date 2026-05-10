@@ -1948,14 +1948,32 @@ function enterApp(name) {
 
 // ─── auto-login if token saved ────────────────────────────────
 window.addEventListener('DOMContentLoaded', () => {
-  // ─── mat-cb checkboxes ───
   document.querySelectorAll('.mat-cb').forEach(label => {
-  label.addEventListener('click', () => {
-    const cb = label.querySelector('input');
-    cb.checked = !cb.checked;
-    label.classList.toggle('checked', cb.checked);
+    label.addEventListener('click', () => {
+      const cb = label.querySelector('input');
+      cb.checked = !cb.checked;
+      label.classList.toggle('checked', cb.checked);
+    });
   });
-});
+
+  const lb = document.getElementById('lightbox');
+  const lbImg = document.getElementById('lightbox-img');
+  lbImg.style.transition = 'opacity .15s ease, transform .15s ease';
+
+  lb.addEventListener('touchstart', e => {
+    lbTouchStartX = e.touches[0].clientX;
+    lbTouchStartY = e.touches[0].clientY;
+  }, { passive: true });
+
+  lb.addEventListener('touchend', e => {
+    const dx = e.changedTouches[0].clientX - lbTouchStartX;
+    const dy = e.changedTouches[0].clientY - lbTouchStartY;
+    if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 50) {
+      lightboxNav(dx > 0 ? -1 : 1, null);
+    } else if (Math.abs(dx) < 10 && Math.abs(dy) < 10) {
+      closeLightbox();
+    }
+  }, { passive: true });
 
   if (authToken && currentUser) {
     enterApp(currentUser.name || 'المستخدم');
@@ -2815,15 +2833,6 @@ async function deleteAcc(id) {
   return String(str||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 }
 
-function toggleMatCb(label) {
-  label.classList.toggle('checked');
-  label.querySelector('input').checked = label.classList.contains('checked');
-}
-let lightboxImgs = [];
-function toggleMatCb(label) {
-  label.classList.toggle('checked');
-  label.querySelector('input').checked = label.classList.contains('checked');
-}
 let lightboxImgs = [];
 let lightboxIdx  = 0;
 let lbTouchStartX = 0;
