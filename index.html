@@ -1679,17 +1679,7 @@ body {
   <div class="modal-box">
     <button class="modal-close" onclick="closeModal('acc-upload-modal')">✕</button>
     <div class="modal-title">💎 رفع اكسسوار جديد</div>
-    <label class="form-label">المواد المستخدمة</label>
-    <div class="mat-checkboxes" id="acc-upload-mats">
-      <label class="mat-cb"><input type="checkbox" value="pvc"/><span class="dot"></span>PVC</label>
-      <label class="mat-cb"><input type="checkbox" value="hpl"/><span class="dot"></span>HPL</label>
-      <label class="mat-cb"><input type="checkbox" value="uvlac"/><span class="dot"></span>UV Lac</label>
-      <label class="mat-cb"><input type="checkbox" value="glossmax"/><span class="dot"></span>GlossMax</label>
-      <label class="mat-cb"><input type="checkbox" value="mattplus"/><span class="dot"></span>Matt Plus</label>
-      <label class="mat-cb"><input type="checkbox" value="polylac"/><span class="dot"></span>Polylac (Gizir)</label>
-      <label class="mat-cb"><input type="checkbox" value="polyback"/><span class="dot"></span>Polyback</label>
-      <label class="mat-cb"><input type="checkbox" value="alvic"/><span class="dot"></span>German Alvic</label>
-    </div>
+
     <label class="form-label" style="margin-top:.8rem">نوع الاكسسوار</label>
     <input type="text" id="acc-type-input" placeholder="مثال: مقبض، رجل كنبة..." class="modal-input" style="margin-bottom:1.2rem"/>
     <label class="form-label">الصورة</label>
@@ -2750,8 +2740,7 @@ function previewAccImage(input) {
 }
 
 async function submitAcc() {
-  const mats = [...document.querySelectorAll('#acc-upload-mats .mat-cb.checked')].map(l => l.querySelector('input').value);
-  if (!mats.length) return showToast('اختار مادة واحدة على الأقل', 'error');
+   const mats = [];
   const type = document.getElementById('acc-type-input').value.trim();
   const fd = new FormData();
   fd.append('mats', JSON.stringify(mats));
@@ -2768,7 +2757,7 @@ async function submitAcc() {
     document.getElementById('acc-upload-desc').value = '';
     document.getElementById('acc-type-input').value = '';
     accImageFile = null;
-    document.querySelectorAll('#acc-upload-mats .mat-cb').forEach(l => { l.classList.remove('checked'); l.querySelector('input').checked = false; });
+    
     renderAccSidebarTypes();
     renderAcc();
     showToast('تم نشر الاكسسوار ✓', 'success');
