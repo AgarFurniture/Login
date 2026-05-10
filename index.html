@@ -2044,7 +2044,8 @@ function buildImgGrid(imgs, placeholder) {
   let html = `<div class="post-imgs ${cls}">`;
   for (let i = 0; i < show; i++) {
     const isLast = i === show - 1 && extra > 0;
-    html += `<div class="img-item${isLast ? ' has-more' : ''}" ${isLast ? `data-more="+${extra}"` : ''} onclick="openLightbox(${JSON.stringify(imgs.map(x=>x.url))},${i})">
+    const allUrls = JSON.stringify(imgs.map(x => x.url));
+html += `<div class="img-item${isLast ? ' has-more' : ''}" ${isLast ? `data-more="+${extra}"` : ''} onclick="openLightbox(${allUrls}, ${i})">
       <img src="${imgs[i].url}" alt="img" loading="lazy">
     </div>`;
   }
