@@ -2276,11 +2276,20 @@ function renderDrawerStages(c) {
   const container = document.getElementById('drawer-stages-list');
   container.innerHTML = STAGES.map(stage => {
     const s         = (c.stages||{})[stage.id] || { done:false, files:[] };
-    const filesHtml = (s.files||[]).map(f =>
-      f.url && (f.type||'').startsWith('image/')
-        ? `<img class="mini-file" src="${f.url}" onclick="openLightbox(['${f.url}'], 0)">`
-        : `<div class="mini-file-placeholder">${(f.name||'').toLowerCase().endsWith('.scn')?'🏗️':'📎'}</div>`
-    ).join('');
+    const filesHtml = (s.files||[]).map(f => {
+      const isImg = f.url && (f.type||'').startsWith('image/');
+      const isScn = (f.name||'').toLowerCase().endsWith('.scn');
+      const isPdf = (f.name||'').toLowerCase().endsWith('.pdf');
+      const icon  = isScn ? '🏗️' : isPdf ? '📄' : '📎';
+      return isImg
+        ? `<img class="mini-file" src="${f.url}" onclick="openLightbox(['${f.url}'],0)">`
+        : `<div class="mini-file-placeholder" style="cursor:pointer;position:relative" onclick="openFile('${f.url}','${escHtml(f.name||'file')}')">
+            ${icon}
+            <a href="${f.url}" download="${escHtml(f.name||'file')}" target="_blank"
+               onclick="event.stopPropagation()"
+               style="position:absolute;bottom:2px;right:2px;font-size:.6rem;color:var(--gold);text-decoration:none">⬇</a>
+           </div>`;
+    }).join('');
     const addFileBtn = isAdmin
       ? `<button class="add-stage-file" onclick="openFileUploadModal('stage','${stage.id}')">+ إضافة ملف</button>`
       : '';
@@ -2353,12 +2362,19 @@ function renderDrawerFiles(c) {
   grid.innerHTML = c.contractFiles.map(f => {
     const isImg = f.url && (f.type||'').startsWith('image/');
     const isPdf = (f.name||'').toLowerCase().endsWith('.pdf');
+    const isScn = (f.name||'').toLowerCase().endsWith('.scn');
+    const icon  = isPdf ? '📄' : isScn ? '🏗️' : '📎';
     return `<div class="file-item">
       ${isAdmin ? `<button class="file-del" onclick="deleteContractFile('${c._id}','${f._id}')">✕</button>` : ''}
       ${isImg
-        ? `<img class="file-thumb" src="${f.url}" onclick="openLightbox(['${f.url}'], 0)">`
-        : `<div class="file-thumb-placeholder">${isPdf?'📄':'📎'}</div>`}
-      <div class="file-name">${escHtml(f.name||'ملف')}</div>
+        ? `<img class="file-thumb" src="${f.url}" onclick="openLightbox(['${f.url}'],0)">`
+        : `<div class="file-thumb-placeholder" style="cursor:pointer" onclick="openFile('${f.url}','${escHtml(f.name||'file')}')">${icon}</div>`}
+      <div class="file-name" style="display:flex;align-items:center;justify-content:space-between;gap:.3rem">
+        <span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${escHtml(f.name||'ملف')}</span>
+        <a href="${f.url}" download="${escHtml(f.name||'file')}" target="_blank"
+           style="flex-shrink:0;color:var(--gold);font-size:.85rem;text-decoration:none"
+           onclick="event.stopPropagation()" title="تنزيل">⬇</a>
+      </div>
     </div>`;
   }).join('');
 }
@@ -2870,7 +2886,15 @@ function updateLightboxNav() {
 function closeLightbox() {
   document.getElementById('lightbox').classList.remove('open');
 }
-
+function openFile(url, name) {
+  if (!url) return;
+  const ext = (name||'').split('.').pop().toLowerCase();
+  if (['jpg','jpeg','png','webp','gif'].includes(ext)) {
+    openLightbox([url], 0);
+  } else {
+    window.open(url, '_blank');
+  }
+}
 // ─── Lightbox touch swipe (موبايل) ───
 document.addEventListener('keydown', e => {
   if (e.key === 'Escape') {
