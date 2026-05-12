@@ -1954,22 +1954,24 @@ function handleLogout() {
 }
 
    async function downloadCurrentImage() {
-  const url = lightboxImgs[lightboxIdx];
+  const url  = lightboxImgs[lightboxIdx];
+  const name = lightboxNames[lightboxIdx] || 'file';
   if (!url) return;
   try {
-    const res = await fetch(url);
+    const res  = await fetch(url);
     const blob = await res.blob();
-    const a = document.createElement('a');
-    a.href = URL.createObjectURL(blob);
-    // استخرج اسم الملف من الـ URL
-    const name = url.split('/').pop().split('?')[0] || 'image.jpg';
-    a.download = name;
+    const a    = document.createElement('a');
+    a.href     = URL.createObjectURL(blob);
+    // لو الاسم مفيش امتداد، خده من الـ blob type
+    const finalName = name.includes('.')
+      ? name
+      : name + '.' + (blob.type.split('/')[1] || 'bin');
+    a.download = finalName;
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
     URL.revokeObjectURL(a.href);
   } catch (err) {
-    // لو fetch فشل بسبب CORS، افتح في تاب جديد
     window.open(url, '_blank');
   }
 }
@@ -2373,7 +2375,7 @@ function renderDrawerStages(c) {
   return isImg
     ? `<div style="position:relative;display:inline-block">
         ${delBtn}
-        <img class="mini-file" src="${f.url}" onclick="openLightbox(['${f.url}'],0)">
+        <img class="mini-file" src="${f.url}" onclick="openLightbox(['${f.url}'],0,['${escHtml(f.name||'file')}'])">
        </div>`
     : `<div class="mini-file-placeholder" style="position:relative;cursor:pointer" onclick="openFile('${f.url}','${escHtml(f.name||'file')}')">
         ${delBtn}
@@ -2461,17 +2463,17 @@ function renderDrawerFiles(c) {
       ${isAdmin ? `<button class="file-del" onclick="deleteContractFile('${c._id}','${f._id}')">✕</button>` : ''}
       ${isImg
         ? `<div style="position:relative">
-    <img class="file-thumb" src="${f.url}" onclick="openLightbox(['${f.url}'],0)" style="cursor:zoom-in">
-    <a href="${f.url}" download="${escHtml(f.name||'file')}" target="_blank"
-       style="position:absolute;bottom:4px;left:4px;background:rgba(0,0,0,.7);color:#fff;width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.8rem;text-decoration:none;z-index:2"
-       onclick="event.stopPropagation()" title="تنزيل">⬇</a>
+    <img class="file-thumb" src="${f.url}" onclick="openLightbox(['${f.url}'],0,['${escHtml(f.name||'file')}'])" style="cursor:zoom-in">
+   <button onclick="downloadFile('${f.url}','${escHtml(f.name||'file')}')"
+   style="position:absolute;bottom:4px;left:4px;background:rgba(0,0,0,.7);color:#fff;width:24px;height:24px;border-radius:50%;border:none;display:flex;align-items:center;justify-content:center;font-size:.8rem;cursor:pointer;z-index:2"
+   title="تنزيل">⬇</button>
    </div>`
         : `<div class="file-thumb-placeholder" style="cursor:pointer" onclick="openFile('${f.url}','${escHtml(f.name||'file')}')">${icon}</div>`}
       <div class="file-name" style="display:flex;align-items:center;justify-content:space-between;gap:.3rem">
         <span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${escHtml(f.name||'ملف')}</span>
-        <a href="${f.url}" download="${escHtml(f.name||'file')}" target="_blank"
-           style="flex-shrink:0;color:var(--gold);font-size:.85rem;text-decoration:none"
-           onclick="event.stopPropagation()" title="تنزيل">⬇</a>
+        <button onclick="downloadFile('${f.url}','${escHtml(f.name||'file')}')"
+   style="flex-shrink:0;color:var(--gold);font-size:.85rem;background:none;border:none;cursor:pointer"
+   title="تنزيل">⬇</button>
       </div>
     </div>`;
   }).join('');
@@ -2508,7 +2510,25 @@ function openEditClientModal() {
   });
   openModal('client-modal');
 }
-
+async function downloadFile(url, name) {
+  if (!url) return;
+  try {
+    const res  = await fetch(url);
+    const blob = await res.blob();
+    const a    = document.createElement('a');
+    a.href     = URL.createObjectURL(blob);
+    const finalName = name.includes('.')
+      ? name
+      : name + '.' + (blob.type.split('/')[1] || 'bin');
+    a.download = finalName;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(a.href);
+  } catch (err) {
+    window.open(url, '_blank');
+  }
+}
 async function submitClient() {
   const name = document.getElementById('c-name').value.trim();
   if (!name) return showToast('الاسم مطلوب', 'error');
@@ -2964,16 +2984,18 @@ async function deleteAcc(id) {
 }
 
 let lightboxImgs = [];
+let lightboxNames = [];
 let lightboxIdx  = 0;
 let lbTouchStartX = 0;
 let lbTouchStartY = 0;
 
-function openLightbox(imgs, idx = 0) {
-  lightboxImgs = typeof imgs === 'string' ? [imgs] : [...imgs];
-  lightboxIdx  = idx;
-  const img = lightboxImgs[lightboxIdx];
-  document.getElementById('lightbox-img').src = img;
-  document.getElementById('lightbox-download').href = img;
+function openLightbox(imgs, idx = 0, names = []) {
+  lightboxImgs  = typeof imgs === 'string' ? [imgs] : [...imgs];
+  lightboxNames = names.length ? names : lightboxImgs.map(u =>
+    decodeURIComponent(u.split('/').pop().split('?')[0]) || 'file'
+  );
+  lightboxIdx = idx;
+  document.getElementById('lightbox-img').src = lightboxImgs[lightboxIdx];
   updateLightboxNav();
   document.getElementById('lightbox').classList.add('open');
 }
@@ -2988,7 +3010,6 @@ function lightboxNav(dir, e) {
     img.src = lightboxImgs[lightboxIdx];
     img.style.opacity = '1';
     img.style.transform = 'scale(1)';
-      document.getElementById('lightbox-download').href = lightboxImgs[lightboxIdx];
     updateLightboxNav();
   }, 150);
 }
