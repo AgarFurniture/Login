@@ -2361,20 +2361,28 @@ function renderDrawerStages(c) {
   const container = document.getElementById('drawer-stages-list');
   container.innerHTML = STAGES.map(stage => {
     const s         = (c.stages||{})[stage.id] || { done:false, files:[] };
-    const filesHtml = (s.files||[]).map(f => {
-      const isImg = f.url && (f.type||'').startsWith('image/');
-      const isScn = (f.name||'').toLowerCase().endsWith('.scn');
-      const isPdf = (f.name||'').toLowerCase().endsWith('.pdf');
-      const icon  = isScn ? '🏗️' : isPdf ? '📄' : '📎';
-      return isImg
-        ? `<img class="mini-file" src="${f.url}" onclick="openLightbox(['${f.url}'],0)">`
-        : `<div class="mini-file-placeholder" style="cursor:pointer;position:relative" onclick="openFile('${f.url}','${escHtml(f.name||'file')}')">
-            ${icon}
-            <a href="${f.url}" download="${escHtml(f.name||'file')}" target="_blank"
-               onclick="event.stopPropagation()"
-               style="position:absolute;bottom:2px;right:2px;font-size:.6rem;color:var(--gold);text-decoration:none">⬇</a>
-           </div>`;
-    }).join('');
+   const filesHtml = (s.files||[]).map(f => {
+  const isImg = f.url && (f.type||'').startsWith('image/');
+  const isScn = (f.name||'').toLowerCase().endsWith('.scn');
+  const isPdf = (f.name||'').toLowerCase().endsWith('.pdf');
+  const icon  = isScn ? '🏗️' : isPdf ? '📄' : '📎';
+  const delBtn = isAdmin
+    ? `<button onclick="deleteStageFile('${c._id}','${stage.id}','${f._id}')"
+         style="position:absolute;top:2px;left:2px;background:rgba(231,76,60,.9);border:none;color:#fff;width:18px;height:18px;border-radius:50%;cursor:pointer;font-size:.65rem;display:flex;align-items:center;justify-content:center;z-index:2">✕</button>`
+    : '';
+  return isImg
+    ? `<div style="position:relative;display:inline-block">
+        ${delBtn}
+        <img class="mini-file" src="${f.url}" onclick="openLightbox(['${f.url}'],0)">
+       </div>`
+    : `<div class="mini-file-placeholder" style="position:relative;cursor:pointer" onclick="openFile('${f.url}','${escHtml(f.name||'file')}')">
+        ${delBtn}
+        ${icon}
+        <a href="${f.url}" download="${escHtml(f.name||'file')}" target="_blank"
+           onclick="event.stopPropagation()"
+           style="position:absolute;bottom:2px;right:2px;font-size:.6rem;color:var(--gold);text-decoration:none">⬇</a>
+       </div>`;
+}).join('');
     const addFileBtn = isAdmin
       ? `<button class="add-stage-file" onclick="openFileUploadModal('stage','${stage.id}')">+ إضافة ملف</button>`
       : '';
@@ -2926,7 +2934,18 @@ async function submitAcc() {
   } catch (err) { showToast(err.message, 'error'); }
   finally { setLoading('acc-submit-btn', false, 'نشر'); }
 }
-
+async function deleteStageFile(clientId, stageId, fileId) {
+  if (!confirm('هتحذف الملف ده؟')) return;
+  try {
+    await apiDelete('/clients/' + clientId + '/stages/' + stageId + '/files/' + fileId);
+    const c = clients.find(x => x._id === clientId);
+    if (c?.stages?.[stageId]) {
+      c.stages[stageId].files = c.stages[stageId].files.filter(f => f._id !== fileId);
+      renderDrawerStages(c);
+    }
+    showToast('تم حذف الملف ✓', 'success');
+  } catch (err) { showToast(err.message, 'error'); }
+}
 async function deleteAcc(id) {
   if (!confirm('هتحذف الاكسسوار ده؟')) return;
   try {
