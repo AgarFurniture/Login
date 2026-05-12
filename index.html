@@ -1952,8 +1952,7 @@ function handleLogout() {
   posts = []; clients = []; prospects = [];
   goTo('page-login');
 }
-
-   async function downloadCurrentImage() {
+async function downloadCurrentImage() {
   const url  = lightboxImgs[lightboxIdx];
   const name = lightboxNames[lightboxIdx] || 'file';
   if (!url) return;
@@ -1962,10 +1961,16 @@ function handleLogout() {
     const blob = await res.blob();
     const a    = document.createElement('a');
     a.href     = URL.createObjectURL(blob);
-    // لو الاسم مفيش امتداد، خده من الـ blob type
-    const finalName = name.includes('.')
-      ? name
-      : name + '.' + (blob.type.split('/')[1] || 'bin');
+    // الامتداد من اسم الملف الأصلي دايماً
+    const finalName = name.includes('.') ? name : (() => {
+      const mime = blob.type || '';
+      const mimeExt = mime.split('/')[1];
+      // خلي octet-stream ميبقاش امتداد غلط
+      const ext = (!mimeExt || mimeExt === 'octet-stream')
+        ? (url.split('.').pop().split('?')[0] || 'bin')
+        : mimeExt;
+      return name + '.' + ext;
+    })();
     a.download = finalName;
     document.body.appendChild(a);
     a.click();
@@ -2380,9 +2385,8 @@ function renderDrawerStages(c) {
     : `<div class="mini-file-placeholder" style="position:relative;cursor:pointer" onclick="openFile('${f.url}','${escHtml(f.name||'file')}')">
         ${delBtn}
         ${icon}
-        <a href="${f.url}" download="${escHtml(f.name||'file')}" target="_blank"
-           onclick="event.stopPropagation()"
-           style="position:absolute;bottom:2px;right:2px;font-size:.6rem;color:var(--gold);text-decoration:none">⬇</a>
+        <button onclick="event.stopPropagation();downloadFile('${f.url}','${escHtml(f.name||'file')}')"
+   style="position:absolute;bottom:2px;right:2px;background:rgba(0,0,0,.7);color:#fff;width:20px;height:20px;border-radius:50%;border:none;display:flex;align-items:center;justify-content:center;font-size:.6rem;cursor:pointer;z-index:3">⬇</button>
        </div>`;
 }).join('');
     const addFileBtn = isAdmin
@@ -2512,14 +2516,17 @@ function openEditClientModal() {
 }
 async function downloadFile(url, name) {
   if (!url) return;
+  // خد الامتداد من اسم الملف الأصلي مش من الـ blob
+  const ext = name.includes('.') ? '' : (() => {
+    const fromUrl = url.split('/').pop().split('?')[0];
+    return fromUrl.includes('.') ? '.' + fromUrl.split('.').pop() : '.bin';
+  })();
+  const finalName = name.includes('.') ? name : name + ext;
   try {
     const res  = await fetch(url);
     const blob = await res.blob();
     const a    = document.createElement('a');
     a.href     = URL.createObjectURL(blob);
-    const finalName = name.includes('.')
-      ? name
-      : name + '.' + (blob.type.split('/')[1] || 'bin');
     a.download = finalName;
     document.body.appendChild(a);
     a.click();
