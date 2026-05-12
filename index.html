@@ -1678,7 +1678,7 @@ body {
     <button class="modal-close" onclick="closeModal('file-upload-modal')">✕</button>
     <div class="modal-title" id="file-modal-title">📁 رفع ملف</div>
     <div class="upload-area" onclick="document.getElementById('contract-file-input').click()">
-      <input type="file" id="contract-file-input" accept="image/*,application/pdf,.scn,.SCN" multiple onchange="previewContractFiles(this)"/>
+      <input type="file" id="contract-file-input" accept="*/*" multiple onchange="previewContractFiles(this)"/>
       <div class="u-icon">📎</div><p>اضغط لاختيار الملفات</p><div class="u-hint">صور، PDF، ملفات .scn</div>
     </div>
     <div id="contract-files-preview" style="display:flex;flex-wrap:wrap;gap:.5rem;margin-bottom:1rem"></div>
@@ -2428,7 +2428,12 @@ function renderDrawerFiles(c) {
     return `<div class="file-item">
       ${isAdmin ? `<button class="file-del" onclick="deleteContractFile('${c._id}','${f._id}')">✕</button>` : ''}
       ${isImg
-        ? `<img class="file-thumb" src="${f.url}" onclick="openLightbox(['${f.url}'],0)">`
+        ? `<div style="position:relative">
+    <img class="file-thumb" src="${f.url}" onclick="openLightbox(['${f.url}'],0)" style="cursor:zoom-in">
+    <a href="${f.url}" download="${escHtml(f.name||'file')}" target="_blank"
+       style="position:absolute;bottom:4px;left:4px;background:rgba(0,0,0,.7);color:#fff;width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.8rem;text-decoration:none;z-index:2"
+       onclick="event.stopPropagation()" title="تنزيل">⬇</a>
+   </div>`
         : `<div class="file-thumb-placeholder" style="cursor:pointer" onclick="openFile('${f.url}','${escHtml(f.name||'file')}')">${icon}</div>`}
       <div class="file-name" style="display:flex;align-items:center;justify-content:space-between;gap:.3rem">
         <span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${escHtml(f.name||'ملف')}</span>
@@ -2605,7 +2610,10 @@ function previewContractFiles(input) {
       else if (file.name.toLowerCase().endsWith('.scn'))
         prev.innerHTML += `<span style="font-size:1.8rem">🏗️</span>`;
       else
-        prev.innerHTML += `<span style="font-size:1.8rem">📄</span>`;
+       prev.innerHTML += `<div style="display:flex;flex-direction:column;align-items:center;gap:2px">
+  <span style="font-size:1.8rem">📄</span>
+  <span style="font-size:.65rem;color:rgba(255,255,255,.5);max-width:60px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${escHtml(file.name)}</span>
+</div>`;
     };
     reader.readAsDataURL(file);
   });
@@ -2674,7 +2682,7 @@ function renderProspects() {
       <div class="prospect-info">
         <div class="prospect-name">${escHtml(p.name)}</div>
         <div class="prospect-phone">📞 ${escHtml(p.phone||'—')}</div>
-${p.note ? `<div style="color:rgba(255,255,255,.4);font-size:.78rem;margin-top:.3rem">📝 ${escHtml(p.note)}</div>` : ''}
+${p.notes ? `<div style="color:rgba(255,255,255,.4);font-size:.78rem;margin-top:.3rem">📝 ${escHtml(p.notes)}</div>` : ''}
       </div>
       <div class="status-dropdown">
         <span class="status-badge ${STATUS_CLS[p.status]||''}"
@@ -2740,7 +2748,7 @@ function openEditProspectModal(id) {
     c.classList.toggle('on', c.dataset.status === p.status));
   document.getElementById('p-name').value  = p.name;
   document.getElementById('p-phone').value = p.phone || '';
-   document.getElementById('p-note').value = p.note || '';
+   document.getElementById('p-note').value = p.notes || '';
   document.getElementById('prospect-modal-title').textContent = '✏️ تعديل العميل المحتمل';
   document.getElementById('prospect-submit-btn').textContent  = 'حفظ التعديل';
   openModal('prospect-modal');
@@ -2761,12 +2769,14 @@ async function submitProspect() {
   setLoading('prospect-submit-btn', true, lbl);
   try {
     if (editingProspectId) {
-      const data = await apiPut('/prospects/' + editingProspectId, { name, phone, status: selectedStatus, note });
+      const data = await apiPut('/prospects/' + editingProspectId, { name, phone, status: selectedStatus, notes: note });
+
       const idx  = prospects.findIndex(x => x._id === editingProspectId);
       if (idx > -1) prospects[idx] = data.prospect;
       showToast('تم التعديل ✓', 'success');
     } else {
-      const data = await apiPost('/prospects', { name, phone, status: selectedStatus, note });
+      const data = await apiPost('/prospects', { name, phone, status: selectedStatus, notes: note });
+
       prospects.unshift(data.prospect);
       showToast('تم الإضافة ✓', 'success');
     }
