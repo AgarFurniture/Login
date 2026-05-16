@@ -447,15 +447,25 @@ select.form-input option{background:#111;color:#fff;}
 // ══════════════════════════════════════════════════
 // STATE — persisted in localStorage
 // ══════════════════════════════════════════════════
-const KEYS = { contracts:'ag_contracts', payments:'ag_payments', expenses:'ag_expenses', salaries:'ag_salaries' };
+const API = 'https://agar-backend.vercel.app/api/accounting';
+const TOKEN = localStorage.getItem('agar_token');
 
-function load(key){ try{ return JSON.parse(localStorage.getItem(key)||'[]'); }catch{ return []; } }
-function save(key,data){ localStorage.setItem(key, JSON.stringify(data)); }
+const h = () => ({ 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + TOKEN });
 
-let contracts = load(KEYS.contracts);
-let payments  = load(KEYS.payments);
-let expenses  = load(KEYS.expenses);
-let salaries  = load(KEYS.salaries);
+let contracts = [], payments = [], expenses = [], salaries = [];
+
+async function loadAll() {
+  const [c, p, e, s] = await Promise.all([
+    fetch(API + '/contracts', { headers: h() }).then(r => r.json()),
+    fetch(API + '/payments',  { headers: h() }).then(r => r.json()),
+    fetch(API + '/expenses',  { headers: h() }).then(r => r.json()),
+    fetch(API + '/salaries',  { headers: h() }).then(r => r.json()),
+  ]);
+  contracts = c.contracts || [];
+  payments  = p.payments  || [];
+  expenses  = e.expenses  || [];
+  salaries  = s.salaries  || [];
+}
 
 // ══════════════════════════════════════════════════
 // UTILS
@@ -648,7 +658,9 @@ function saveContract(){
   const date  =document.getElementById('c-date').value;
   if(!client||!value||!date) return toast('ادخل جميع البيانات','error');
   const c={id:uid(),client,type:document.getElementById('c-type').value,value:Number(value),date,status:document.getElementById('c-status').value,notes:document.getElementById('c-notes').value.trim()};
-  contracts.unshift(c); save(KEYS.contracts,contracts);
+ const res = await fetch(API+'/contracts', {method:'POST', headers:h(), body:JSON.stringify(c)});
+const data = await res.json();
+contracts.unshift(data.contract);
   closeModal('contract-modal'); clearContractForm(); renderContracts(); toast('تم حفظ العقد ✓','success');
 }
 function clearContractForm(){ ['c-client','c-value','c-date','c-notes'].forEach(id=>document.getElementById(id).value=''); }
@@ -672,7 +684,8 @@ function renderContracts(){
   }).join('');
 }
 
-function delContract(id){ if(!confirm('حذف العقد؟'))return; contracts=contracts.filter(c=>c.id!==id); save(KEYS.contracts,contracts); renderContracts(); toast('تم الحذف'); }
+function delContract(id){ if(!confirm('حذف العقد؟'))return; await fetch(API+'/contracts/'+id, {method:'DELETE', headers:h()});
+contracts=contracts.filter(c=>c.id!==id); renderContracts(); toast('تم الحذف'); }
 
 // ══════════════════════════════════════════════════
 // PAYMENTS
@@ -850,13 +863,14 @@ function renderReport(){
 // ══════════════════════════════════════════════════
 // INIT
 // ══════════════════════════════════════════════════
-document.addEventListener('DOMContentLoaded', ()=>{
+document.addEventListener('DOMContentLoaded', async () => {
   // set default dates
   document.getElementById('c-date').value  = today();
   document.getElementById('p-date').value  = today();
   document.getElementById('e-date').value  = today();
   document.getElementById('s-date').value  = today();
-  renderDashboard();
+ await loadAll();
+renderDashboard();
 });
 </script>
 </body>
