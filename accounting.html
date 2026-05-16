@@ -657,7 +657,7 @@ async function saveContract(){
   const value =document.getElementById('c-value').value;
   const date  =document.getElementById('c-date').value;
   if(!client||!value||!date) return toast('ادخل جميع البيانات','error');
-  const c={id:uid(),client,type:document.getElementById('c-type').value,value:Number(value),date,status:document.getElementById('c-status').value,notes:document.getElementById('c-notes').value.trim()};
+  const c={client,type:document.getElementById('c-type').value,value:Number(value),date,status:document.getElementById('c-status').value,notes:document.getElementById('c-notes').value.trim()};
  const res = await fetch(API+'/contracts', {method:'POST', headers:h(), body:JSON.stringify(c)});
 const data = await res.json();
 contracts.unshift(data.contract);
@@ -679,7 +679,7 @@ function renderContracts(){
       <td><span class="badge ${c.status==='مكتمل'?'badge-green':c.status==='ملغي'?'badge-red':'badge-gold'}">${esc(c.status)}</span></td>
       <td style="color:var(--green);">${fmt(paid)}</td>
       <td style="color:${remaining>0?'var(--red)':'var(--green)'};">${fmt(remaining)}</td>
-      <td><button class="btn-danger" onclick="delContract('${c.id}')">حذف</button></td>
+      <td><button class="btn-danger" onclick="delContract('${c._id}')">حذف</button></td>
     </tr>`;
   }).join('');
 }
@@ -712,7 +712,7 @@ function renderPayments(){
     <td style="color:rgba(255,255,255,.5);">${esc(p.date)}</td>
     <td><span class="badge badge-blue">${esc(p.method)}</span></td>
     <td style="color:rgba(255,255,255,.4);">${esc(p.note)}</td>
-    <td><button class="btn-danger" onclick="delPayment('${p.id}')">حذف</button></td>
+    <td><button class="btn-danger" onclick="delPayment('${p._id}')">حذف</button></td>
   </tr>`).join('');
 }
 
@@ -763,7 +763,7 @@ function renderExpenses(){
     <td style="color:rgba(255,255,255,.5);">${esc(e.date)}</td>
     <td style="color:rgba(255,255,255,.5);">${esc(e.desc)}</td>
     <td>${e.recurring?'<span class="badge badge-blue">متكرر</span>':''}</td>
-    <td><button class="btn-danger" onclick="delExpense('${e.id}')">حذف</button></td>
+    <td><button class="btn-danger" onclick="delExpense('${e._id}')">حذف</button></td>
   </tr>`).join('');
 }
 
@@ -792,7 +792,7 @@ function renderSalaries(){
     <td style="color:var(--red);font-weight:700;">−${fmt(s.amount)}</td>
     <td style="color:rgba(255,255,255,.5);">${esc(s.date)}</td>
     <td style="color:rgba(255,255,255,.4);">${esc(s.notes)}</td>
-    <td><button class="btn-danger" onclick="delSalary('${s.id}')">حذف</button></td>
+    <td><button class="btn-danger" onclick="delSalary('${s._id}')">حذف</button></td>
   </tr>`).join('');
 }
 
