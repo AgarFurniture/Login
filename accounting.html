@@ -652,7 +652,7 @@ function renderDashboard(){
 // ══════════════════════════════════════════════════
 // CONTRACTS
 // ══════════════════════════════════════════════════
-function saveContract(){
+async function saveContract(){
   const client=document.getElementById('c-client').value.trim();
   const value =document.getElementById('c-value').value;
   const date  =document.getElementById('c-date').value;
@@ -684,20 +684,21 @@ function renderContracts(){
   }).join('');
 }
 
-function delContract(id){ if(!confirm('حذف العقد؟'))return; await fetch(API+'/contracts/'+id, {method:'DELETE', headers:h()});
-contracts=contracts.filter(c=>c.id!==id); renderContracts(); toast('تم الحذف'); }
+async function delContract(id){ if(!confirm('حذف العقد؟'))return; await fetch(API+'/contracts/'+id, {method:'DELETE', headers:h()}); contracts=contracts.filter(c=>c._id!==id); renderContracts(); toast('تم الحذف'); }
 
 // ══════════════════════════════════════════════════
 // PAYMENTS
 // ══════════════════════════════════════════════════
-function savePayment(){
+async function savePayment(){
   const client=document.getElementById('p-client').value.trim();
   const amount=document.getElementById('p-amount').value;
   const date  =document.getElementById('p-date').value;
   if(!client||!amount||!date) return toast('ادخل جميع البيانات','error');
-  const p={id:uid(),client,contract:document.getElementById('p-contract').value.trim(),amount:Number(amount),date,method:document.getElementById('p-method').value,note:document.getElementById('p-note').value.trim()};
-  payments.unshift(p); save(KEYS.payments,payments);
-  closeModal('payment-modal'); clearPaymentForm(); renderPayments(); toast('تم حفظ الدفعة ✓','success');
+ const p={client,contract:document.getElementById('p-contract').value.trim(),amount:Number(amount),date,method:document.getElementById('p-method').value,note:document.getElementById('p-note').value.trim()};
+const res=await fetch(API+'/payments',{method:'POST',headers:h(),body:JSON.stringify(p)});
+const data=await res.json();
+payments.unshift(data.payment);
+closeModal('payment-modal'); clearPaymentForm(); renderPayments(); toast('تم حفظ الدفعة ✓','success');
 }
 function clearPaymentForm(){ ['p-client','p-contract','p-amount','p-date','p-note'].forEach(id=>document.getElementById(id).value=''); }
 
@@ -715,8 +716,7 @@ function renderPayments(){
   </tr>`).join('');
 }
 
-function delPayment(id){ if(!confirm('حذف الدفعة؟'))return; payments=payments.filter(p=>p.id!==id); save(KEYS.payments,payments); renderPayments(); toast('تم الحذف'); }
-
+async function delPayment(id){ if(!confirm('حذف الدفعة؟'))return; await fetch(API+'/payments/'+id,{method:'DELETE',headers:h()}); payments=payments.filter(p=>p._id!==id); renderPayments(); toast('تم الحذف'); }
 // ══════════════════════════════════════════════════
 // EXPENSES
 // ══════════════════════════════════════════════════
@@ -726,14 +726,16 @@ function selCat(el){
   el.classList.add('sel'); selCatVal=el.dataset.cat;
 }
 
-function saveExpense(){
+async function saveExpense(){
   if(!selCatVal) return toast('اختر التصنيف','error');
   const amount=document.getElementById('e-amount').value;
   const date  =document.getElementById('e-date').value;
   if(!amount||!date) return toast('ادخل المبلغ والتاريخ','error');
-  const e={id:uid(),cat:selCatVal,amount:Number(amount),date,desc:document.getElementById('e-desc').value.trim(),recurring:document.getElementById('e-recurring').checked};
-  expenses.unshift(e); save(KEYS.expenses,expenses);
-  closeModal('expense-modal'); clearExpenseForm(); renderExpenses(); toast('تم حفظ المصروف ✓','success');
+  const e={cat:selCatVal,amount:Number(amount),date,desc:document.getElementById('e-desc').value.trim(),recurring:document.getElementById('e-recurring').checked};
+const res=await fetch(API+'/expenses',{method:'POST',headers:h(),body:JSON.stringify(e)});
+const data=await res.json();
+expenses.unshift(data.expense);
+closeModal('expense-modal'); clearExpenseForm(); renderExpenses(); toast('تم حفظ المصروف ✓','success');
 }
 function clearExpenseForm(){
   ['e-amount','e-date','e-desc'].forEach(id=>document.getElementById(id).value='');
@@ -765,19 +767,20 @@ function renderExpenses(){
   </tr>`).join('');
 }
 
-function delExpense(id){ if(!confirm('حذف المصروف؟'))return; expenses=expenses.filter(e=>e.id!==id); save(KEYS.expenses,expenses); renderExpenses(); toast('تم الحذف'); }
-
+async function delExpense(id){ if(!confirm('حذف المصروف؟'))return; await fetch(API+'/expenses/'+id,{method:'DELETE',headers:h()}); expenses=expenses.filter(e=>e._id!==id); renderExpenses(); toast('تم الحذف'); }
 // ══════════════════════════════════════════════════
 // SALARIES
 // ══════════════════════════════════════════════════
-function saveSalary(){
+async function saveSalary(){
   const name=document.getElementById('s-name').value.trim();
   const amount=document.getElementById('s-amount').value;
   const date=document.getElementById('s-date').value;
   if(!name||!amount||!date) return toast('ادخل جميع البيانات','error');
-  const s={id:uid(),name,amount:Number(amount),date,notes:document.getElementById('s-notes').value.trim()};
-  salaries.unshift(s); save(KEYS.salaries,salaries);
-  closeModal('salary-modal'); clearSalaryForm(); renderSalaries(); toast('تم حفظ المرتب ✓','success');
+  const s={name,amount:Number(amount),date,notes:document.getElementById('s-notes').value.trim()};
+const res=await fetch(API+'/salaries',{method:'POST',headers:h(),body:JSON.stringify(s)});
+const data=await res.json();
+salaries.unshift(data.salary);
+closeModal('salary-modal'); clearSalaryForm(); renderSalaries(); toast('تم حفظ المرتب ✓','success');
 }
 function clearSalaryForm(){ ['s-name','s-amount','s-date','s-notes'].forEach(id=>document.getElementById(id).value=''); }
 
@@ -793,8 +796,7 @@ function renderSalaries(){
   </tr>`).join('');
 }
 
-function delSalary(id){ if(!confirm('حذف المرتب؟'))return; salaries=salaries.filter(s=>s.id!==id); save(KEYS.salaries,salaries); renderSalaries(); toast('تم الحذف'); }
-
+async function delSalary(id){ if(!confirm('حذف المرتب؟'))return; await fetch(API+'/salaries/'+id,{method:'DELETE',headers:h()}); salaries=salaries.filter(s=>s._id!==id); renderSalaries(); toast('تم الحذف'); }
 // ══════════════════════════════════════════════════
 // REPORTS
 // ══════════════════════════════════════════════════
