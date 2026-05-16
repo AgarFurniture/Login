@@ -1471,8 +1471,8 @@ body {
   <div class="sidebar-section-title">أخرى</div>
   <div class="sidebar-item" onclick="switchSection('custom',this)"><span class="s-icon">⚙️</span><span>التخصيص</span></div>
 <div class="sidebar-divider"></div>
-<div class="sidebar-item" onclick="window.open('accounting.html','_blank')">
-  <span class="s-icon">📊</span><span>الحسابات ↗</span>
+<div class="sidebar-item" onclick="switchSection('accounting',this)">
+  <span class="s-icon">📊</span><span>الحسابات</span>
 </div>
   <div id="sidebar-filters-works">
     <div class="sidebar-divider"></div>
@@ -1551,6 +1551,12 @@ body {
       <div class="section-panel" id="section-custom">
         <div class="empty-state"><span>⚙️</span><div style="color:rgba(201,168,76,.5)">قريباً...</div></div>
       </div>
+       <div class="section-panel" id="section-accounting">
+  <iframe 
+    src="accounting.html" 
+    style="width:100%;height:calc(100vh - 60px);border:none;display:block;">
+  </iframe>
+</div>
     </div>
   </div>
 </div>
