@@ -1820,7 +1820,8 @@ function closeModal(id) { document.getElementById(id).classList.remove('open'); 
 // API
 // ═══════════════════════════════════════════════════════════════
 async function apiFetch(method, path, body = null, isForm = false) {
-  const opts = { method, headers: { Authorization: 'Bearer ' + authToken } };
+ const opts = { method, headers: {} };
+if (authToken) opts.headers['Authorization'] = 'Bearer ' + authToken;
   if (body && !isForm) {
     opts.headers['Content-Type'] = 'application/json';
     opts.body = JSON.stringify(body);
@@ -2052,8 +2053,10 @@ function handleLogout() {
   authToken = null; currentUser = null; isAdmin = false;
   localStorage.removeItem('agar_token');
   localStorage.removeItem('agar_user');
-  posts = []; clients = []; prospects = [];
- document.getElementById('page-home').style.display = 'none';
+  posts = []; clients = []; prospects = []; accessories = [];
+  activeClientId = null; editingClientId = null;
+  document.querySelectorAll('.sidebar-item').forEach(i => i.style.display = '');
+  document.getElementById('page-home').style.display = 'none';
   goTo('page-login');
 }
 async function downloadCurrentImage() {
