@@ -1991,6 +1991,7 @@ function handleLogout() {
   localStorage.removeItem('agar_token');
   localStorage.removeItem('agar_user');
   posts = []; clients = []; prospects = [];
+ document.getElementById('page-home').style.display = 'none';
   goTo('page-login');
 }
 async function downloadCurrentImage() {
