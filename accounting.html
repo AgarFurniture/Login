@@ -457,25 +457,25 @@ const TOKEN = localStorage.getItem('agar_token');
 
 const h = () => ({ 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + TOKEN });
 
+  
 let contracts = [], payments = [], expenses = [], salaries = [];
-
+  
 async function loadAll() {
-  const [c, p, e, s] = await Promise.all([
-    fetch(API + '/contracts', { headers: h() }).then(r => r.json()),
-    fetch(API + '/payments',  { headers: h() }).then(r => r.json()),
-    fetch(API + '/expenses',  { headers: h() }).then(r => r.json()),
-    fetch(API + '/salaries',  { headers: h() }).then(r => r.json()),
-  ]);
-  contracts = c.contracts || [];
-  payments  = p.payments  || [];
-  expenses  = e.expenses  || [];
-  salaries  = s.salaries  || [];
-}catch(err) {
+  try {
+    const [c, p, e, s] = await Promise.all([
+      fetch(API + '/contracts', { headers: h() }).then(r => r.json()),
+      fetch(API + '/payments',  { headers: h() }).then(r => r.json()),
+      fetch(API + '/expenses',  { headers: h() }).then(r => r.json()),
+      fetch(API + '/salaries',  { headers: h() }).then(r => r.json()),
+    ]);
+    contracts = c.contracts || [];
+    payments  = p.payments  || [];
+    expenses  = e.expenses  || [];
+    salaries  = s.salaries  || [];
+  } catch(err) {
     toast('خطأ في تحميل البيانات، تحقق من الاتصال', 'error');
   }
-}
-
-// ══════════════════════════════════════════════════
+}════════════════════════════════════════
 // UTILS
 // ══════════════════════════════════════════════════
 let uid = ()=> Date.now().toString(36)+Math.random().toString(36).slice(2,6);
