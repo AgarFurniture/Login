@@ -1385,6 +1385,7 @@ body {
       <div class="form-group"><label>الإيميل</label><input type="email" id="login-email" placeholder="example@gmail.com"/></div>
       <div class="form-group"><label>كلمة المرور</label><input type="password" id="login-password" placeholder="••••••••"/></div>
       <button class="btn-primary" id="login-btn" onclick="handleLogin()">دخول</button>
+       <button class="btn-primary" onclick="enterGuest()" style="background:rgba(201,168,76,.15);color:var(--gold-light);border:1.5px solid rgba(201,168,76,.3);box-shadow:none;margin-top:.5rem">دخول كزائر 👁</button>
       <div class="auth-links">
         <a onclick="goTo('page-forgot')">نسيت كلمة المرور؟</a>
         <span>|</span>
@@ -1870,6 +1871,36 @@ function loadingHtml(container) {
     '<div class="loading-state"><div class="spin"></div><div>جاري التحميل...</div></div>';
 }
 
+// ═══════════════════════════════════════════════════════════════
+// Guest
+// ═══════════════════════════════════════════════════════════════
+
+   function enterGuest() {
+  currentUser = { name: 'زائر', role: 'guest' };
+  isAdmin = false;
+  goTo('page-home');
+  document.getElementById('home-username').textContent = 'زائر';
+
+  // إخفاء كل حاجة مش للزائر
+  document.getElementById('admin-upload-wrap').style.display    = 'none';
+  document.getElementById('btn-add-client').style.display       = 'none';
+  document.getElementById('btn-add-prospect').style.display     = 'none';
+  document.getElementById('btn-add-payment').style.display      = 'none';
+  document.getElementById('btn-add-file').style.display         = 'none';
+  document.getElementById('drawer-edit-btn').style.display      = 'none';
+  document.getElementById('admin-acc-upload-wrap').style.display = 'none';
+
+  // إخفاء العملاء والمحتملين والحسابات من الـ sidebar
+  document.querySelectorAll('.sidebar-item').forEach(item => {
+    const text = item.querySelector('span:last-child')?.textContent || '';
+    if (['العملاء','العملاء المحتملين','الحسابات','التخصيص'].includes(text)) {
+      item.style.display = 'none';
+    }
+  });
+
+  loadPosts();
+  loadAccessories();
+}
 // ═══════════════════════════════════════════════════════════════
 // AUTH
 // ═══════════════════════════════════════════════════════════════
