@@ -378,7 +378,12 @@ select.form-input option{background:#111;color:#fff;}
     <button class="modal-close" onclick="closeModal('payment-modal')">✕</button>
     <div class="modal-title">💰 دفعة جديدة</div>
     <div class="form-group"><label class="form-label">العميل</label><input class="form-input" id="p-client" placeholder="اسم العميل"/></div>
-    <div class="form-group"><label class="form-label">العقد / السبب</label><input class="form-input" id="p-contract" placeholder="مثال: مطبخ، دفعة أولى..."/></div>
+    <div class="form-group"><label class="form-label">العقد</label>
+  <select class="form-input" id="p-contract-id">
+    <option value="">-- اختر عقد --</option>
+  </select>
+</div>
+<div class="form-group"><label class="form-label">ملاحظة</label><input class="form-input" id="p-contract" placeholder="مثال: مقدم، قسط أول..."/></div>
     <div class="form-row">
       <div class="form-group"><label class="form-label">المبلغ (ج)</label><input type="number" class="form-input" id="p-amount" placeholder="0" style="direction:ltr;text-align:right"/></div>
       <div class="form-group"><label class="form-label">التاريخ</label><input type="date" class="form-input" id="p-date" style="direction:ltr"/></div>
@@ -465,6 +470,9 @@ async function loadAll() {
   payments  = p.payments  || [];
   expenses  = e.expenses  || [];
   salaries  = s.salaries  || [];
+}catch(err) {
+    toast('خطأ في تحميل البيانات، تحقق من الاتصال', 'error');
+  }
 }
 
 // ══════════════════════════════════════════════════
@@ -482,7 +490,14 @@ function toast(msg,type=''){
   clearTimeout(toastT); toastT=setTimeout(()=>t.classList.remove('show'),3000);
 }
 
-function openModal(id){ document.getElementById(id).classList.add('open'); }
+function openModal(id){
+  document.getElementById(id).classList.add('open');
+  if(id==='payment-modal'){
+    const sel=document.getElementById('p-contract-id');
+    sel.innerHTML='<option value="">-- اختر عقد --</option>'+
+      contracts.map(c=>`<option value="${c._id}">${esc(c.client)} — ${esc(c.type)} (${esc(c.date)})</option>`).join('');
+  }
+}
 function closeModal(id){ document.getElementById(id).classList.remove('open'); }
 document.addEventListener('keydown',e=>{ if(e.key==='Escape') document.querySelectorAll('.modal-overlay.open').forEach(m=>m.classList.remove('open')); });
 
@@ -669,7 +684,7 @@ function renderContracts(){
   const tb=document.getElementById('contracts-tbody');
   if(!contracts.length){ tb.innerHTML=`<tr><td colspan="8"><div class="empty"><span>📄</span>لا توجد عقود</div></td></tr>`; return; }
   tb.innerHTML=contracts.map(c=>{
-    const paid=payments.filter(p=>p.client===c.client).reduce((s,p)=>s+Number(p.amount),0);
+const paid=payments.filter(p=>p.contractId===c._id).reduce((s,p)=>s+Number(p.amount),0);
     const remaining=Math.max(0,Number(c.value)-paid);
     return `<tr>
       <td><strong>${esc(c.client)}</strong></td>
@@ -694,14 +709,20 @@ async function savePayment(){
   const amount=document.getElementById('p-amount').value;
   const date  =document.getElementById('p-date').value;
   if(!client||!amount||!date) return toast('ادخل جميع البيانات','error');
- const p={client,contract:document.getElementById('p-contract').value.trim(),amount:Number(amount),date,method:document.getElementById('p-method').value,note:document.getElementById('p-note').value.trim()};
+ const p={
+  client: document.getElementById('p-client').value.trim(),
+  contractId: document.getElementById('p-contract-id').value,
+  contract: document.getElementById('p-contract').value.trim(),
+  amount: Number(amount), date,
+  method: document.getElementById('p-method').value,
+  note: document.getElementById('p-note').value.trim()
+};
 const res=await fetch(API+'/payments',{method:'POST',headers:h(),body:JSON.stringify(p)});
 const data=await res.json();
 payments.unshift(data.payment);
 closeModal('payment-modal'); clearPaymentForm(); renderPayments(); toast('تم حفظ الدفعة ✓','success');
 }
-function clearPaymentForm(){ ['p-client','p-contract','p-amount','p-date','p-note'].forEach(id=>document.getElementById(id).value=''); }
-
+function clearPaymentForm(){ ['p-client','p-contract','p-amount','p-date','p-note'].forEach(id=>document.getElementById(id).value=''); document.getElementById('p-contract-id').value=''; }
 function renderPayments(){
   const tb=document.getElementById('payments-tbody');
   if(!payments.length){ tb.innerHTML=`<tr><td colspan="7"><div class="empty"><span>💰</span>لا توجد دفعات</div></td></tr>`; return; }
@@ -866,13 +887,16 @@ function renderReport(){
 // INIT
 // ══════════════════════════════════════════════════
 document.addEventListener('DOMContentLoaded', async () => {
-  // set default dates
+  if (!TOKEN) {
+    toast('مش مسجل دخول، ارجع للموقع الرئيسي', 'error');
+    return;
+  }
   document.getElementById('c-date').value  = today();
   document.getElementById('p-date').value  = today();
   document.getElementById('e-date').value  = today();
   document.getElementById('s-date').value  = today();
- await loadAll();
-renderDashboard();
+  await loadAll();
+  renderDashboard();
 });
 </script>
 </body>
