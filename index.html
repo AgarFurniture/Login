@@ -2081,6 +2081,7 @@ window.addEventListener('DOMContentLoaded', () => {
 // SIDEBAR
 // ═══════════════════════════════════════════════════════════════
 function switchSection(name, el) {
+    if (currentUser?.role === 'guest' && !['works', 'accessories'].includes(name)) return; 
   document.querySelectorAll('.sidebar-item').forEach(i => i.classList.remove('active'));
   el.classList.add('active');
   document.querySelectorAll('.section-panel').forEach(p => p.classList.remove('active'));
@@ -2090,6 +2091,7 @@ function switchSection(name, el) {
   if (name === 'accessories') { loadAccessories(); renderAccSidebarTypes(); }
   closeSidebar();
 }
+   
 function toggleSidebar() {
   document.getElementById('sidebar').classList.toggle('open');
   document.getElementById('sidebar-overlay').classList.toggle('show');
