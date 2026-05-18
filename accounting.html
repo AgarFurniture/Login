@@ -506,13 +506,8 @@ document.addEventListener('keydown',e=>{ if(e.key==='Escape') document.querySele
 // ══════════════════════════════════════════════════
 // TABS
 // ══════════════════════════════════════════════════
-function switchSection(name, el) {
-  if (name === 'accounting') {
-    const iframe = document.getElementById('accounting-iframe');
-    if (iframe.src === 'about:blank' || !iframe.src.includes('accounting')) {
-      iframe.src = 'accounting.html';
-    }
-  }
+// NEW — في accounting.html (رجّع الاسم الصح)
+function switchTab(name, el) {
   document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
   el.classList.add('active');
   document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
