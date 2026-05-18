@@ -2190,8 +2190,15 @@ window.addEventListener('DOMContentLoaded', () => {
 // ═══════════════════════════════════════════════════════════════
 // SIDEBAR
 // ═══════════════════════════════════════════════════════════════
+// NEW — في index.html
 function switchSection(name, el) {
-    if (currentUser?.role === 'guest' && !['works', 'accessories'].includes(name)) return; 
+    if (currentUser?.role === 'guest' && !['works', 'accessories'].includes(name)) return;
+    if (name === 'accounting') {
+      const iframe = document.getElementById('accounting-iframe');
+      if (!iframe.src || iframe.src === 'about:blank' || !iframe.src.includes('accounting')) {
+        iframe.src = 'accounting.html';
+      }
+    }
      const p = currentUser?.permissions;
   const blocked = {
     clients:    !isAdmin && !p?.clients?.view,
