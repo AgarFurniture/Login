@@ -475,7 +475,7 @@ async function loadAll() {
     salaries  = s.salaries  || [];
   } catch(err) {
     toast('خطأ في تحميل البيانات، تحقق من الاتصال', 'error');
-    throw err;
+    
   }
 }
 // UTILS
@@ -731,7 +731,9 @@ function renderPayments(){
   if(!payments.length){ tb.innerHTML=`<tr><td colspan="7"><div class="empty"><span>💰</span>لا توجد دفعات</div></td></tr>`; return; }
   tb.innerHTML=payments.map(p=>`<tr>
     <td><strong>${esc(p.client)}</strong></td>
-    <td style="color:rgba(255,255,255,.5);">${esc(p.contract)}</td>
+   <td style="color:rgba(255,255,255,.5);">
+  ${esc(contracts.find(c=>c._id===p.contractId)?.client || p.contract || '—')}
+</td>
     <td style="color:var(--green);font-weight:700;">+${fmt(p.amount)}</td>
     <td style="color:rgba(255,255,255,.5);">${esc(p.date)}</td>
     <td><span class="badge badge-blue">${esc(p.method)}</span></td>
