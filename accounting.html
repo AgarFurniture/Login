@@ -383,7 +383,7 @@ select.form-input option{background:#111;color:#fff;}
     <option value="">-- اختر عقد --</option>
   </select>
 </div>
-<div class="form-group"><label class="form-label">ملاحظة</label><input class="form-input" id="p-contract" placeholder="مثال: مقدم، قسط أول..."/></div>
+<div class="form-group"><label class="form-label">نوع العقد</label><input class="form-input" id="p-contract" placeholder="مثال: مطبخ، دريسينج..."/></div>
     <div class="form-row">
       <div class="form-group"><label class="form-label">المبلغ (ج)</label><input type="number" class="form-input" id="p-amount" placeholder="0" style="direction:ltr;text-align:right"/></div>
       <div class="form-group"><label class="form-label">التاريخ</label><input type="date" class="form-input" id="p-date" style="direction:ltr"/></div>
@@ -461,6 +461,8 @@ const h = () => ({ 'Content-Type': 'application/json', 'Authorization': 'Bearer 
 let contracts = [], payments = [], expenses = [], salaries = [];
   
 async function loadAll() {
+  document.getElementById('panel-dashboard').innerHTML = 
+    '<div style="text-align:center;padding:3rem;color:rgba(201,168,76,.4)">جاري التحميل...</div>';
   try {
     const [c, p, e, s] = await Promise.all([
       fetch(API + '/contracts', { headers: h() }).then(r => r.json()),
@@ -480,7 +482,7 @@ async function loadAll() {
 // ══════════════════════════════════════════════════
 let uid = ()=> Date.now().toString(36)+Math.random().toString(36).slice(2,6);
 let esc = s=> String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-let fmt = n=> Number(n||0).toLocaleString('ar-EG')+'  ج';
+let fmt = n=> Number(n||0).toLocaleString('ar-EG')+'ج';
 let today = ()=> new Date().toISOString().split('T')[0];
 
 let toastT;
