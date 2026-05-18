@@ -1860,13 +1860,26 @@ async function apiPublic(path, body) {
 }
 
 function renderPermissionsPanel(users) {
-  const sections = ['works','clients','prospects','accessories','accounting'];
-  const actions  = { works:['view','add','delete'], clients:['view','add','delete'], 
-                     prospects:['view','add','delete'], accessories:['view','add','delete'], 
-                     accounting:['view'] };
-  const labels   = { works:'الأعمال', clients:'العملاء', prospects:'المحتملين', 
-                     accessories:'الاكسسوارات', accounting:'الحسابات',
-                     view:'عرض', add:'إضافة', delete:'حذف' };
+ const sections = ['works','clients','prospects','accessories','accounting',
+                  'client_info','client_stages','client_payments','client_files'];
+const actions  = {
+  works:           ['view','add','delete'],
+  clients:         ['view','add','delete'],
+  prospects:       ['view','add','delete'],
+  accessories:     ['view','add','delete'],
+  accounting:      ['view'],
+  client_info:     ['view'],
+  client_stages:   ['view','edit'],
+  client_payments: ['view','add','delete'],
+  client_files:    ['view','add','delete'],
+};
+const labels = {
+  works:'الأعمال', clients:'العملاء', prospects:'المحتملين',
+  accessories:'الاكسسوارات', accounting:'الحسابات',
+  client_info:'بيانات العميل', client_stages:'المراحل',
+  client_payments:'الدفعات', client_files:'الملفات',
+  view:'عرض', add:'إضافة', delete:'حذف', edit:'تعديل'
+};
 
   document.getElementById('permissions-grid').innerHTML = users.map(u => `
     <div style="background:var(--black3);border:1px solid rgba(201,168,76,.12);border-radius:16px;padding:1.2rem;margin-bottom:1rem;">
@@ -2132,13 +2145,13 @@ applyPermissions();
   });
 
   // أزرار الإضافة والحذف
-  if (!p?.works?.add)       document.getElementById('admin-upload-wrap').style.display     = 'none';
-  if (!p?.accessories?.add) document.getElementById('admin-acc-upload-wrap').style.display = 'none';
-  if (!p?.clients?.add)     document.getElementById('btn-add-client').style.display        = 'none';
-  if (!p?.prospects?.add)   document.getElementById('btn-add-prospect').style.display      = 'none';
-  if (!p?.payments?.add)    document.getElementById('btn-add-payment').style.display        = 'none';
-  if (!p?.clients?.add)     document.getElementById('btn-add-file').style.display           = 'none';
-  if (!p?.clients?.add)     document.getElementById('drawer-edit-btn').style.display        = 'none';
+if (!p?.works?.add)           document.getElementById('admin-upload-wrap').style.display     = 'none';
+if (!p?.accessories?.add)     document.getElementById('admin-acc-upload-wrap').style.display = 'none';
+if (!p?.clients?.add)         document.getElementById('btn-add-client').style.display        = 'none';
+if (!p?.prospects?.add)       document.getElementById('btn-add-prospect').style.display      = 'none';
+if (!p?.client_payments?.add) document.getElementById('btn-add-payment').style.display       = 'none';
+if (!p?.client_files?.add)    document.getElementById('btn-add-file').style.display          = 'none';
+if (!p?.client_info?.view)    document.getElementById('drawer-edit-btn').style.display       = 'none';
 }
 
 // ─── auto-login if token saved ────────────────────────────────
@@ -2463,6 +2476,19 @@ function openClientDrawer(id) {
   renderDrawerStages(c);
   renderDrawerPayments(c);
   renderDrawerFiles(c);
+   document.querySelectorAll('.drawer-tab').forEach(tab => {
+  const onclick = tab.getAttribute('onclick') || '';
+  const tabMap = {
+    'stages':   isAdmin || currentUser?.permissions?.client_stages?.view,
+    'payments': isAdmin || currentUser?.permissions?.client_payments?.view,
+    'files':    isAdmin || currentUser?.permissions?.client_files?.view,
+  };
+  Object.entries(tabMap).forEach(([key, allowed]) => {
+    if (onclick.includes("'" + key + "'")) {
+      tab.style.display = allowed ? '' : 'none';
+    }
+  });
+});
   document.getElementById('client-drawer').classList.add('open');
   document.getElementById('drawer-overlay').classList.add('show');
 }
@@ -2523,8 +2549,8 @@ function renderDrawerStages(c) {
   const isScn = (f.name||'').toLowerCase().endsWith('.scn');
   const isPdf = (f.name||'').toLowerCase().endsWith('.pdf');
   const icon  = isScn ? '🏗️' : isPdf ? '📄' : '📎';
-  const delBtn = isAdmin
-    ? `<button onclick="deleteStageFile('${c._id}','${stage.id}','${f._id}')"
+const canEditStages = isAdmin || currentUser?.permissions?.client_stages?.edit;
+const delBtn = canEditStages    ? `<button onclick="deleteStageFile('${c._id}','${stage.id}','${f._id}')"
          style="position:absolute;top:2px;left:2px;background:rgba(231,76,60,.9);border:none;color:#fff;width:18px;height:18px;border-radius:50%;cursor:pointer;font-size:.65rem;display:flex;align-items:center;justify-content:center;z-index:2">✕</button>`
     : '';
   const descHtml = f.desc
@@ -2551,7 +2577,7 @@ function renderDrawerStages(c) {
         ${descHtml}
        </div>`;
 }).join('');
-    const addFileBtn = isAdmin
+const addFileBtn = canEditStages
       ? `<button class="add-stage-file" onclick="openFileUploadModal('stage','${stage.id}')">+ إضافة ملف</button>`
       : '';
     return `
@@ -2605,7 +2631,7 @@ function renderDrawerPayments(c) {
         <div class="payment-date">${p.date||''}</div>
       </div>
       ${p.note ? `<div class="payment-note">${escHtml(p.note)}</div>` : ''}
-      ${isAdmin ? `
+      ${(isAdmin || currentUser?.permissions?.client_payments?.delete) ? `
       <div class="payment-actions">
         <button class="payment-del" onclick="deletePayment('${c._id}','${p._id}')">حذف</button>
         <button class="payment-edit" onclick="openEditPaymentModal('${c._id}','${p._id}')">تعديل</button>
@@ -2626,8 +2652,7 @@ function renderDrawerFiles(c) {
     const isScn = (f.name||'').toLowerCase().endsWith('.scn');
     const icon  = isPdf ? '📄' : isScn ? '🏗️' : '📎';
     return `<div class="file-item">
-      ${isAdmin ? `<button class="file-del" onclick="deleteContractFile('${c._id}','${f._id}')">✕</button>` : ''}
-      ${isImg
+${(isAdmin || currentUser?.permissions?.client_files?.delete) ? `<button class="file-del" onclick="deleteContractFile('${c._id}','${f._id}')">✕</button>` : ''}      ${isImg
         ? `<div style="position:relative">
     <img class="file-thumb" src="${f.url}" onclick="openLightbox(['${f.url}'],0,['${escHtml(f.name||'file')}'])" style="cursor:zoom-in">
    <button onclick="downloadFile('${f.url}','${escHtml(f.name||'file')}')"
