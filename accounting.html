@@ -460,9 +460,8 @@ const h = () => ({ 'Content-Type': 'application/json', 'Authorization': 'Bearer 
   
 let contracts = [], payments = [], expenses = [], salaries = [];
   
+// NEW
 async function loadAll() {
-  document.getElementById('panel-dashboard').innerHTML = 
-    '<div style="text-align:center;padding:3rem;color:rgba(201,168,76,.4)">جاري التحميل...</div>';
   try {
     const [c, p, e, s] = await Promise.all([
       fetch(API + '/contracts', { headers: h() }).then(r => r.json()),
@@ -476,6 +475,7 @@ async function loadAll() {
     salaries  = s.salaries  || [];
   } catch(err) {
     toast('خطأ في تحميل البيانات، تحقق من الاتصال', 'error');
+    throw err;
   }
 }
 // UTILS
@@ -506,7 +506,13 @@ document.addEventListener('keydown',e=>{ if(e.key==='Escape') document.querySele
 // ══════════════════════════════════════════════════
 // TABS
 // ══════════════════════════════════════════════════
-function switchTab(name, el){
+function switchSection(name, el) {
+  if (name === 'accounting') {
+    const iframe = document.getElementById('accounting-iframe');
+    if (iframe.src === 'about:blank' || !iframe.src.includes('accounting')) {
+      iframe.src = 'accounting.html';
+    }
+  }
   document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
   el.classList.add('active');
   document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
@@ -888,6 +894,7 @@ function renderReport(){
 // ══════════════════════════════════════════════════
 // INIT
 // ══════════════════════════════════════════════════
+// NEW
 document.addEventListener('DOMContentLoaded', async () => {
   if (!TOKEN) {
     toast('مش مسجل دخول، ارجع للموقع الرئيسي', 'error');
@@ -899,6 +906,10 @@ document.addEventListener('DOMContentLoaded', async () => {
   document.getElementById('s-date').value  = today();
   await loadAll();
   renderDashboard();
+  renderContracts();
+  renderPayments();
+  renderExpenses();
+  renderSalaries();
 });
 </script>
 </body>
