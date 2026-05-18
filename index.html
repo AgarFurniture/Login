@@ -1557,8 +1557,7 @@ body {
   <div id="permissions-grid"></div>
 </div>
      <div class="section-panel" id="section-accounting" style="padding:0;">
-  <iframe 
-    src="accounting.html" 
+ <iframe src="about:blank" id="accounting-iframe" 
        style="width:calc(100% + 17px);height:calc(100vh - 60px);border:none;display:block;">
   </iframe>
 </div>
@@ -2118,8 +2117,8 @@ applyPermissions();
    document.getElementById('admin-acc-upload-wrap').style.display = 'block';
   }
   loadPosts();
-  loadClients();
-  loadProspects();
+if (isAdmin || currentUser?.permissions?.clients?.view) loadClients();
+if (isAdmin || currentUser?.permissions?.prospects?.view) loadProspects();
 }
 
    // ═══════════════════════════════════════════════════════════════
@@ -2208,7 +2207,7 @@ function switchSection(name, el) {
   document.getElementById('section-' + name).classList.add('active');
   document.getElementById('sidebar-filters-works').style.display      = name === 'works'       ? 'block' : 'none';
   document.getElementById('sidebar-filters-accessories').style.display = name === 'accessories' ? 'block' : 'none';
-  if (name === 'accessories') { loadAccessories(); renderAccSidebarTypes(); }
+  if (name === 'accessories') { loadAccessories(); }
   closeSidebar();
 }
    
@@ -2544,12 +2543,13 @@ function renderDrawerStages(c) {
   const container = document.getElementById('drawer-stages-list');
   container.innerHTML = STAGES.map(stage => {
     const s         = (c.stages||{})[stage.id] || { done:false, files:[] };
+     const canEditStages = isAdmin || currentUser?.permissions?.client_stages?.edit;
   const filesHtml = (s.files||[]).map(f => {
   const isImg = f.url && (f.type||'').startsWith('image/');
   const isScn = (f.name||'').toLowerCase().endsWith('.scn');
   const isPdf = (f.name||'').toLowerCase().endsWith('.pdf');
   const icon  = isScn ? '🏗️' : isPdf ? '📄' : '📎';
-const canEditStages = isAdmin || currentUser?.permissions?.client_stages?.edit;
+
 const delBtn = canEditStages    ? `<button onclick="deleteStageFile('${c._id}','${stage.id}','${f._id}')"
          style="position:absolute;top:2px;left:2px;background:rgba(231,76,60,.9);border:none;color:#fff;width:18px;height:18px;border-radius:50%;cursor:pointer;font-size:.65rem;display:flex;align-items:center;justify-content:center;z-index:2">✕</button>`
     : '';
