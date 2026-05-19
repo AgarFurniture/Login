@@ -1904,18 +1904,16 @@ stage_delivery:      ['view','toggle','edit'],
     client_payments: ['view','add','delete'],
     client_files:    ['view','add','delete'],
   };
-  const labels = {
+ const labels = {
     works:'الرئيسية', clients:'العملاء', prospects:'المحتملين',
     accessories:'الاكسسوارات', accounting:'الحسابات',
-    client_info:'بيانات العميل', client_stages:'المراحل',
+    client_info:'بيانات العميل',
+    stage_contract:'مرحلة العقد', stage_inspection:'مرحلة المعاينة',
+    stage_design:'مرحلة التصميم', stage_manufacturing:'مرحلة التصنيع',
+    stage_delivery:'مرحلة التسليم',
     client_payments:'الدفعات', client_files:'الملفات',
-    view:'عرض', add:'إضافة', delete:'حذف', edit:'ملفات المراحل', toggle:'تغيير الحالة'
-     stage_contract:      'مرحلة العقد',
-stage_inspection:    'مرحلة المعاينة',
-stage_design:        'مرحلة التصميم',
-stage_manufacturing: 'مرحلة التصنيع',
-stage_delivery:      'مرحلة التسليم',
-  };
+    view:'عرض', add:'إضافة', delete:'حذف', edit:'ملفات المراحل', toggle:'تغيير الحالة',
+};
 
   document.getElementById('permissions-grid').innerHTML = `
     <div style="background:var(--black3);border:1px solid rgba(201,168,76,.12);border-radius:16px;padding:1.2rem;">
@@ -2229,29 +2227,29 @@ window.addEventListener('DOMContentLoaded', () => {
 // ═══════════════════════════════════════════════════════════════
 // NEW — في index.html
 function switchSection(name, el) {
-    if (currentUser?.role === 'guest' && !['works', 'accessories'].includes(name)) return;
-    if (name === 'accounting') {
-      const iframe = document.getElementById('accounting-iframe');
-      if (!iframe.src || iframe.src === 'about:blank' || !iframe.src.includes('accounting')) {
-        iframe.src = 'accounting.html';
-      }
+  if (currentUser?.role === 'guest' && !['works', 'accessories'].includes(name)) return;
+  if (name === 'accounting') {
+    const iframe = document.getElementById('accounting-iframe');
+    if (!iframe.src || iframe.src === 'about:blank' || !iframe.src.includes('accounting')) {
+      iframe.src = 'accounting.html';
     }
-     const p = currentUser?.permissions;
+  }
+  const perms = currentUser?.permissions;
   const blocked = {
-    clients:    !isAdmin && !p?.clients?.view,
-    prospects:  !isAdmin && !p?.prospects?.view,
-    accounting: !isAdmin && !p?.accounting?.view,
+    clients:    !isAdmin && !perms?.clients?.view,
+    prospects:  !isAdmin && !perms?.prospects?.view,
+    accounting: !isAdmin && !perms?.accounting?.view,
     custom:     !isAdmin,
   };
   if (blocked[name]) return;
   if (name === 'custom') loadUsersPermissions();
   document.querySelectorAll('.sidebar-item').forEach(i => i.classList.remove('active'));
   el.classList.add('active');
-  document.querySelectorAll('.section-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.section-panel').forEach(panel => panel.classList.remove('active'));
   document.getElementById('section-' + name).classList.add('active');
-  document.getElementById('sidebar-filters-works').style.display      = name === 'works'       ? 'block' : 'none';
-  document.getElementById('sidebar-filters-accessories').style.display = name === 'accessories' ? 'block' : 'none';
-  if (name === 'accessories') { loadAccessories(); }
+  document.getElementById('sidebar-filters-works').style.display       = name === 'works'       ? 'block' : 'none';
+  document.getElementById('sidebar-filters-accessories').style.display  = name === 'accessories' ? 'block' : 'none';
+  if (name === 'accessories') loadAccessories();
   closeSidebar();
 }
    
