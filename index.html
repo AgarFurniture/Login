@@ -1864,28 +1864,36 @@ async function apiPublic(path, body) {
     renderPermissionsPanel(data.users);
   } catch(err) { showToast(err.message, 'error'); }
 }
-
 function renderPermissionsPanel(users) {
-  // ملء الـ dropdown
   const sel = document.getElementById('user-selector');
   const currentVal = sel.value;
-  sel.innerHTML = '<option value="">-- اختر مستخدم --</option>' +
-    users.map(u => `<option value="${u._id}">${escHtml(u.name)} (${escHtml(u.email)})</option>`).join('');
-  if (currentVal) sel.value = currentVal;
 
-  // حفظ الـ users في متغير عام
+  sel.innerHTML = '<option value="">-- اختر مستخدم --</option>' +
+    users.map(u =>
+      `<option value="${u._id}">${escHtml(u.name)} — ${escHtml(u.email)}</option>`
+    ).join('');
+
   window._allUsers = users;
 
-  // لو فيه user محدد اعرضه
-  if (sel.value) showUserPermissions(sel.value);
-  else document.getElementById('permissions-grid').innerHTML = '';
+  if (currentVal && users.find(u => u._id === currentVal)) {
+    sel.value = currentVal;
+    showUserPermissions(currentVal);
+  } else {
+    document.getElementById('permissions-grid').innerHTML = '';
+  }
 }
-
 function showUserPermissions(userId) {
-  if (!userId) { document.getElementById('permissions-grid').innerHTML = ''; return; }
+  if (!userId) {
+    document.getElementById('permissions-grid').innerHTML = '';
+    return;
+  }
   const users = window._allUsers || [];
   const u = users.find(x => x._id === userId);
-  if (!u) return;
+  if (!u) {
+    document.getElementById('permissions-grid').innerHTML =
+      '<div style="color:rgba(231,76,60,.6);padding:1rem;">المستخدم مش موجود، اعمل refresh</div>';
+    return;
+  }
 
  const sections = ['works','clients','prospects','accessories','accounting',
                   'client_info','client_payments','client_files',
@@ -1951,7 +1959,7 @@ stage_delivery:      ['view','toggle','edit'],
         </div>
       `).join('')}
     </div>
-  `;
+ `;
 }
 
    // ═══════════════════════════════════════════════════════════════
@@ -1960,15 +1968,24 @@ stage_delivery:      ['view','toggle','edit'],
 
 async function updatePermission(userId, section, action, value) {
   try {
-    const data = await apiGet('/auth/users');
-    const user = data.users.find(u => u._id === userId);
+    // حدّث الـ local state مباشرة بدل ما تعمل API call تاني
+    const user = (window._allUsers || []).find(u => u._id === userId);
     if (!user) return;
-    const perms = user.permissions || {};
-    if (!perms[section]) perms[section] = {};
-    perms[section][action] = value;
-    await apiPatch('/auth/users/' + userId + '/permissions', { permissions: perms });
+    if (!user.permissions) user.permissions = {};
+    if (!user.permissions[section]) user.permissions[section] = {};
+    user.permissions[section][action] = value;
+
+    await apiPatch('/auth/users/' + userId + '/permissions', { permissions: user.permissions });
     showToast('تم تحديث الصلاحية ✓', 'success');
-  } catch(err) { showToast(err.message, 'error'); }
+  } catch(err) {
+    showToast(err.message, 'error');
+    // ارجع الـ checkbox للحالة القديمة لو فيه error
+    const user = (window._allUsers || []).find(u => u._id === userId);
+    if (user?.permissions?.[section]) {
+      user.permissions[section][action] = !value;
+      showUserPermissions(userId);
+    }
+  }
 }
 
 // ═══════════════════════════════════════════════════════════════
