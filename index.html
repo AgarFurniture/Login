@@ -1887,8 +1887,9 @@ function showUserPermissions(userId) {
   const u = users.find(x => x._id === userId);
   if (!u) return;
 
-  const sections = ['works','clients','prospects','accessories','accounting',
-                    'client_info','stage_contract','stage_inspection','stage_design','stage_manufacturing','stage_delivery','client_payments','client_files'];
+ const sections = ['works','clients','prospects','accessories','accounting',
+                  'client_info','client_payments','client_files',
+                  'stage_contract','stage_inspection','stage_design','stage_manufacturing','stage_delivery'];
   const actions = {
     works:           ['view','add','delete'],
     clients:         ['view','add','delete'],
@@ -1915,25 +1916,38 @@ stage_delivery:      ['view','toggle','edit'],
     view:'عرض', add:'إضافة', delete:'حذف', edit:'ملفات المراحل', toggle:'تغيير الحالة',
 };
 
+ const groupedSections = [
+    { groupLabel: '📋 الأقسام الرئيسية', keys: ['works','clients','prospects','accessories','accounting'] },
+    { groupLabel: '👤 بيانات العميل',     keys: ['client_info','client_payments','client_files'] },
+    { groupLabel: '🔄 مراحل التنفيذ',     keys: ['stage_contract','stage_inspection','stage_design','stage_manufacturing','stage_delivery'] },
+  ];
+
   document.getElementById('permissions-grid').innerHTML = `
     <div style="background:var(--black3);border:1px solid rgba(201,168,76,.12);border-radius:16px;padding:1.2rem;">
-      <div style="font-weight:700;font-size:1rem;margin-bottom:1rem;color:var(--white)">
+      <div style="font-weight:700;font-size:1rem;margin-bottom:1.2rem;color:var(--white)">
         👤 ${escHtml(u.name)} <span style="color:rgba(201,168,76,.4);font-size:.8rem">${escHtml(u.email)}</span>
       </div>
-      ${sections.map(sec => `
-        <div style="margin-bottom:.8rem;padding:.6rem;background:rgba(0,0,0,.2);border-radius:10px;">
-          <div style="font-size:.75rem;color:rgba(201,168,76,.6);margin-bottom:.5rem;font-weight:700;">${labels[sec]}</div>
-          <div style="display:flex;gap:.8rem;flex-wrap:wrap;">
-            ${actions[sec].map(act => {
-              const checked = u.permissions?.[sec]?.[act];
-              return `<label style="display:flex;align-items:center;gap:.35rem;cursor:pointer;font-size:.85rem;color:rgba(255,255,255,.65);padding:.3rem .6rem;background:rgba(201,168,76,.05);border-radius:8px;border:1px solid rgba(201,168,76,.1);">
-                <input type="checkbox" ${checked?'checked':''}
-                  onchange="updatePermission('${u._id}','${sec}','${act}',this.checked)"
-                  style="accent-color:var(--gold);width:15px;height:15px;">
-                ${labels[act]}
-              </label>`;
-            }).join('')}
+      ${groupedSections.map(group => `
+        <div style="margin-bottom:1.2rem;">
+          <div style="font-size:.7rem;color:rgba(201,168,76,.35);letter-spacing:2px;text-transform:uppercase;font-weight:700;margin-bottom:.6rem;padding-bottom:.4rem;border-bottom:1px solid rgba(201,168,76,.08);">
+            ${group.groupLabel}
           </div>
+          ${group.keys.map(sec => `
+            <div style="margin-bottom:.6rem;padding:.6rem;background:rgba(0,0,0,.2);border-radius:10px;">
+              <div style="font-size:.78rem;color:rgba(255,255,255,.5);margin-bottom:.5rem;font-weight:600;">${labels[sec]}</div>
+              <div style="display:flex;gap:.6rem;flex-wrap:wrap;">
+                ${actions[sec].map(act => {
+                  const checked = u.permissions?.[sec]?.[act];
+                  return `<label style="display:flex;align-items:center;gap:.35rem;cursor:pointer;font-size:.82rem;color:rgba(255,255,255,.65);padding:.3rem .7rem;background:rgba(201,168,76,.05);border-radius:8px;border:1px solid rgba(201,168,76,.1);transition:all .2s;">
+                    <input type="checkbox" ${checked ? 'checked' : ''}
+                      onchange="updatePermission('${u._id}','${sec}','${act}',this.checked)"
+                      style="accent-color:var(--gold);width:15px;height:15px;">
+                    ${labels[act]}
+                  </label>`;
+                }).join('')}
+              </div>
+            </div>
+          `).join('')}
         </div>
       `).join('')}
     </div>
