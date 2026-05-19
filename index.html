@@ -1752,6 +1752,7 @@ body {
   <button id="lb-prev" onclick="lightboxNav(-1,event)" style="position:absolute;right:1.5rem;top:50%;transform:translateY(-50%);background:rgba(201,168,76,.15);border:1px solid rgba(201,168,76,.3);color:var(--gold-light);width:44px;height:44px;border-radius:50%;font-size:1.3rem;cursor:pointer;display:flex;align-items:center;justify-content:center">›</button>
   <button id="lb-next" onclick="lightboxNav(1,event)" style="position:absolute;left:1.5rem;top:50%;transform:translateY(-50%);background:rgba(201,168,76,.15);border:1px solid rgba(201,168,76,.3);color:var(--gold-light);width:44px;height:44px;border-radius:50%;font-size:1.3rem;cursor:pointer;display:flex;align-items:center;justify-content:center">‹</button>
   <div id="lb-counter" style="position:absolute;bottom:1.5rem;left:50%;transform:translateX(-50%);color:rgba(255,255,255,.6);font-size:.9rem;font-family:'Cairo',sans-serif"></div>
+<div id="lb-caption" style="display:none;position:absolute;bottom:3.5rem;left:50%;transform:translateX(-50%);background:rgba(0,0,0,.7);color:var(--gold-light);padding:.5rem 1.2rem;border-radius:10px;font-size:.88rem;font-family:'Cairo',sans-serif;max-width:80vw;text-align:center;backdrop-filter:blur(4px);border:1px solid rgba(201,168,76,.2)"></div>
   <img id="lightbox-img" src="" alt=""/>
 </div>
 
@@ -1887,7 +1888,7 @@ function showUserPermissions(userId) {
   if (!u) return;
 
   const sections = ['works','clients','prospects','accessories','accounting',
-                    'client_info','client_stages','client_payments','client_files'];
+                    'client_info','stage_contract','stage_inspection','stage_design','stage_manufacturing','stage_delivery','client_payments','client_files'];
   const actions = {
     works:           ['view','add','delete'],
     clients:         ['view','add','delete'],
@@ -1895,7 +1896,11 @@ function showUserPermissions(userId) {
     accessories:     ['view','add','delete'],
     accounting:      ['view'],
     client_info:     ['view'],
-    client_stages:   ['view','toggle','edit'],
+    stage_contract:      ['view','toggle','edit'],
+stage_inspection:    ['view','toggle','edit'],
+stage_design:        ['view','toggle','edit'],
+stage_manufacturing: ['view','toggle','edit'],
+stage_delivery:      ['view','toggle','edit'],
     client_payments: ['view','add','delete'],
     client_files:    ['view','add','delete'],
   };
@@ -1905,6 +1910,11 @@ function showUserPermissions(userId) {
     client_info:'بيانات العميل', client_stages:'المراحل',
     client_payments:'الدفعات', client_files:'الملفات',
     view:'عرض', add:'إضافة', delete:'حذف', edit:'ملفات المراحل', toggle:'تغيير الحالة'
+     stage_contract:      'مرحلة العقد',
+stage_inspection:    'مرحلة المعاينة',
+stage_design:        'مرحلة التصميم',
+stage_manufacturing: 'مرحلة التصنيع',
+stage_delivery:      'مرحلة التسليم',
   };
 
   document.getElementById('permissions-grid').innerHTML = `
@@ -2512,7 +2522,8 @@ function openClientDrawer(id) {
    document.querySelectorAll('.drawer-tab').forEach(tab => {
   const onclick = tab.getAttribute('onclick') || '';
   const tabMap = {
-    'stages':   isAdmin || currentUser?.permissions?.client_stages?.view,
+   'stages': isAdmin || ['contract','inspection','design','manufacturing','delivery']
+  .some(s => currentUser?.permissions?.['stage_' + s]?.view),
     'payments': isAdmin || currentUser?.permissions?.client_payments?.view,
     'files':    isAdmin || currentUser?.permissions?.client_files?.view,
   };
@@ -2577,9 +2588,10 @@ function renderDrawerStages(c) {
   const container = document.getElementById('drawer-stages-list');
   container.innerHTML = STAGES.map(stage => {
     const s         = (c.stages||{})[stage.id] || { done:false, files:[] };
-const canViewStages  = isAdmin || currentUser?.permissions?.client_stages?.view;
-const canToggle      = isAdmin || currentUser?.permissions?.client_stages?.toggle;
-const canEditStages  = isAdmin || currentUser?.permissions?.client_stages?.edit;
+const stageKey      = 'stage_' + stage.id;
+const canViewStages = isAdmin || currentUser?.permissions?.[stageKey]?.view;
+const canToggle     = isAdmin || currentUser?.permissions?.[stageKey]?.toggle;
+const canEditStages = isAdmin || currentUser?.permissions?.[stageKey]?.edit;
      const filesHtml = (s.files||[]).map(f => {
   const isImg = f.url && (f.type||'').startsWith('image/');
   const isScn = (f.name||'').toLowerCase().endsWith('.scn');
@@ -2596,8 +2608,8 @@ const delBtn = canEditStages    ? `<button onclick="deleteStageFile('${c._id}','
     ? `<div style="display:inline-flex;flex-direction:column;align-items:center;gap:2px;vertical-align:top">
         <div style="position:relative;display:inline-block">
           ${delBtn}
-          <img class="mini-file" src="${f.url}"
-               onclick="openLightbox(['${f.url}'],0,['${escHtml(f.name||'file')}'])">
+        <img class="mini-file" src="${f.url}"
+     onclick="openLightbox(['${f.url}'],0,['${escHtml(f.name||'file')}'],['${escHtml(f.desc||'')}'])">
         </div>
         ${descHtml}
        </div>`
@@ -3213,14 +3225,15 @@ async function deleteAcc(id) {
    function escHtml(str) {
   return String(str||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 }
-
+let lightboxCaptions = [];
 let lightboxImgs = [];
 let lightboxNames = [];
 let lightboxIdx  = 0;
 let lbTouchStartX = 0;
 let lbTouchStartY = 0;
 
-function openLightbox(imgs, idx = 0, names = []) {
+function openLightbox(imgs, idx = 0, names = [], captions = []) {
+  lightboxCaptions = captions;
   lightboxImgs  = typeof imgs === 'string' ? [imgs] : [...imgs];
   lightboxNames = names.length ? names : lightboxImgs.map(u =>
     decodeURIComponent(u.split('/').pop().split('?')[0]) || 'file'
@@ -3250,6 +3263,9 @@ function updateLightboxNav() {
   document.getElementById('lb-prev').style.display = show ? 'flex' : 'none';
   document.getElementById('lb-next').style.display = show ? 'flex' : 'none';
   document.getElementById('lb-counter').textContent = show ? `${lightboxIdx + 1} / ${lightboxImgs.length}` : '';
+  const cap = lightboxCaptions[lightboxIdx] || '';
+  const capEl = document.getElementById('lb-caption');
+  if (capEl) { capEl.textContent = cap; capEl.style.display = cap ? 'block' : 'none'; }
 }
 
 function closeLightbox() {
