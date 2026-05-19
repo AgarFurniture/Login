@@ -3382,99 +3382,257 @@ document.addEventListener('keydown', e => {
   const canvas  = document.getElementById('eid-canvas');
   const ctx     = canvas.getContext('2d');
   const topbar  = document.querySelector('.app-topbar');
-  const SHOW_MS = 4000;   // مدة الـ animation
-  const HIDE_MS = 8000;   // مدة الـ topbar العادي
+  const SHOW_MS = 5000;
+  const HIDE_MS = 9000;
   let particles = [];
   let animId;
-  let running   = false;
+  let frameCount = 0;
 
-  const EMOJIS = ['🐑','🌙','✨','🌟','🎉','🌸','🕌','🪔','🎊','💫'];
+  const SMALL_EMOJIS = ['🌙','✨','🌟','🎉','🌸','💫','🪔','🎊'];
 
   function resize() {
     canvas.width  = topbar.offsetWidth;
     canvas.height = topbar.offsetHeight;
   }
 
+  // ─── الخروف الكبير ───
+  const sheep = {
+    x: -80,
+    y: 0,
+    size: 52,
+    vx: 1.4,
+    eating: false,
+    eatTimer: 0,
+    mouthOpen: false,
+    mouthTimer: 0,
+  };
+
+  function resetSheep() {
+    sheep.x = -80;
+    sheep.y = canvas.height / 2 - sheep.size / 2;
+  }
+
+  function updateSheep() {
+    sheep.x += sheep.vx;
+    // تأرجح خفيف فوق وتحت
+    sheep.y = canvas.height / 2 - sheep.size / 2 + Math.sin(frameCount * 0.08) * 4;
+
+    // كل فترة يفتح بقه (يأكل)
+    sheep.mouthTimer++;
+    if (sheep.mouthTimer % 30 === 0) {
+      sheep.mouthOpen = !sheep.mouthOpen;
+    }
+
+    // لو وصل لمنتصف الشاشة يوقف شوية ويأكل
+    if (sheep.x > canvas.width * 0.35 && sheep.x < canvas.width * 0.36) {
+      sheep.eating = true;
+    }
+    if (sheep.eating) {
+      sheep.eatTimer++;
+      sheep.vx = sheep.eatTimer < 60 ? 0 : 1.4;
+      if (sheep.eatTimer > 90) { sheep.eating = false; sheep.eatTimer = 0; }
+    }
+
+    if (sheep.x > canvas.width + 100) resetSheep();
+  }
+
+  function drawSheep() {
+    const x = sheep.x;
+    const y = sheep.y;
+    const s = sheep.size;
+    ctx.save();
+
+    // جسم
+    ctx.fillStyle = '#f5f0e8';
+    ctx.beginPath();
+    ctx.ellipse(x, y, s * 0.7, s * 0.5, 0, 0, Math.PI * 2);
+    ctx.fill();
+
+    // صوف نقط
+    ctx.fillStyle = '#e8e0d0';
+    for (let i = 0; i < 8; i++) {
+      const wx = x + (Math.random() * s - s/2) * 0.9;
+      const wy = y + (Math.random() * s * 0.5 - s * 0.25) * 0.9;
+      ctx.beginPath();
+      ctx.arc(wx, wy, s * 0.12, 0, Math.PI * 2);
+      ctx.fill();
+    }
+
+    // رأس
+    ctx.fillStyle = '#f5f0e8';
+    ctx.beginPath();
+    ctx.ellipse(x + s * 0.72, y - s * 0.12, s * 0.28, s * 0.25, 0.3, 0, Math.PI * 2);
+    ctx.fill();
+
+    // عين
+    ctx.fillStyle = '#333';
+    ctx.beginPath();
+    ctx.arc(x + s * 0.88, y - s * 0.2, s * 0.05, 0, Math.PI * 2);
+    ctx.fill();
+
+    // بق (مفتوح أو مقفول)
+    ctx.strokeStyle = '#c9a84c';
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    if (sheep.mouthOpen) {
+      ctx.arc(x + s * 0.96, y - s * 0.06, s * 0.08, 0, Math.PI);
+    } else {
+      ctx.moveTo(x + s * 0.90, y - s * 0.04);
+      ctx.lineTo(x + s * 1.02, y - s * 0.04);
+    }
+    ctx.stroke();
+
+    // أكل — نقط صغيرة بتطلع من البق
+    if (sheep.mouthOpen && sheep.eating) {
+      ctx.fillStyle = '#8bc34a';
+      for (let i = 0; i < 3; i++) {
+        ctx.beginPath();
+        ctx.arc(
+          x + s * 1.05 + i * 6,
+          y - s * 0.06 + Math.sin(frameCount * 0.3 + i) * 4,
+          2.5, 0, Math.PI * 2
+        );
+        ctx.fill();
+      }
+    }
+
+    // أرجل
+    ctx.strokeStyle = '#c8b89a';
+    ctx.lineWidth = s * 0.1;
+    ctx.lineCap = 'round';
+    const legSwing = Math.sin(frameCount * 0.25) * 6;
+    // أمامية
+    ctx.beginPath();
+    ctx.moveTo(x + s * 0.35, y + s * 0.35);
+    ctx.lineTo(x + s * 0.35 + legSwing, y + s * 0.8);
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.moveTo(x + s * 0.55, y + s * 0.38);
+    ctx.lineTo(x + s * 0.55 - legSwing, y + s * 0.82);
+    ctx.stroke();
+    // خلفية
+    ctx.beginPath();
+    ctx.moveTo(x - s * 0.35, y + s * 0.35);
+    ctx.lineTo(x - s * 0.35 - legSwing, y + s * 0.8);
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.moveTo(x - s * 0.15, y + s * 0.38);
+    ctx.lineTo(x - s * 0.15 + legSwing, y + s * 0.82);
+    ctx.stroke();
+
+    // ذيل
+    ctx.fillStyle = '#f5f0e8';
+    ctx.beginPath();
+    ctx.arc(x - s * 0.72, y - s * 0.05, s * 0.12, 0, Math.PI * 2);
+    ctx.fill();
+
+    ctx.restore();
+  }
+
+  // ─── جسيمات صغيرة ───
   class Particle {
-    constructor() { this.reset(true); }
+    constructor(initial = false) { this.reset(initial); }
     reset(initial = false) {
-      this.x    = Math.random() * canvas.width;
-      this.y    = initial ? Math.random() * canvas.height : canvas.height + 30;
-      this.vy   = -(0.4 + Math.random() * 1.2);
-      this.vx   = (Math.random() - 0.5) * 0.8;
-      this.size = 14 + Math.random() * 14;
-      this.emoji= EMOJIS[Math.floor(Math.random() * EMOJIS.length)];
-      this.alpha= 0.7 + Math.random() * 0.3;
-      this.rot  = (Math.random() - 0.5) * 0.06;
-      this.angle= Math.random() * Math.PI * 2;
-      this.swing= (Math.random() - 0.5) * 0.015;
+      this.x     = Math.random() * canvas.width;
+      this.y     = initial ? Math.random() * canvas.height : canvas.height + 20;
+      this.vy    = -(0.3 + Math.random() * 0.9);
+      this.vx    = (Math.random() - 0.5) * 0.5;
+      this.size  = 13 + Math.random() * 10;
+      this.emoji = SMALL_EMOJIS[Math.floor(Math.random() * SMALL_EMOJIS.length)];
+      this.alpha = 0.5 + Math.random() * 0.5;
+      this.angle = Math.random() * Math.PI * 2;
+      this.swing = (Math.random() - 0.5) * 0.02;
     }
     update() {
-      this.y     += this.vy;
-      this.x     += this.vx + Math.sin(this.angle) * 0.3;
+      this.y += this.vy;
+      this.x += this.vx + Math.sin(this.angle) * 0.3;
       this.angle += this.swing;
-      if (this.y < -30) this.reset();
+      if (this.y < -20) this.reset();
     }
     draw() {
       ctx.save();
       ctx.globalAlpha = this.alpha;
-      ctx.font        = `${this.size}px serif`;
-      ctx.textAlign   = 'center';
-      ctx.textBaseline= 'middle';
+      ctx.font = `${this.size}px serif`;
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
       ctx.fillText(this.emoji, this.x, this.y);
       ctx.restore();
     }
   }
 
-  // نص التهنئة
-  const MESSAGES = [
-    'عيد أضحى مبارك 🌙',
-    'كل عام وأنتم بخير 🐑',
-    'أيامكم سعيدة ✨',
-  ];
+  // ─── رسالة التهنئة ───
+  const MESSAGES = ['عيد أضحى مبارك 🌙', 'كل عام وأنتم بخير 🐑', 'أيامكم سعيدة ✨'];
   let msgIdx = 0;
+  let msgAlpha = 0;
+  let msgFading = false;
+  let msgTimer = 0;
 
   function drawMessage() {
-    const msg = MESSAGES[msgIdx % MESSAGES.length];
-    msgIdx++;
-    const cx = canvas.width / 2;
-    const cy = canvas.height / 2;
+    msgTimer++;
+    if (!msgFading && msgAlpha < 1) msgAlpha = Math.min(1, msgAlpha + 0.03);
+    if (msgTimer > 90) { msgFading = true; }
+    if (msgFading) {
+      msgAlpha = Math.max(0, msgAlpha - 0.025);
+      if (msgAlpha === 0) {
+        msgFading = false;
+        msgTimer = 0;
+        msgIdx = (msgIdx + 1) % MESSAGES.length;
+      }
+    }
+
+    const msg = MESSAGES[msgIdx];
+    const cx  = canvas.width / 2;
+    const cy  = canvas.height / 2;
+
     ctx.save();
-    ctx.font      = 'bold 18px Cairo, sans-serif';
-    ctx.textAlign = 'center';
-    ctx.textBaseline = 'middle';
-    // glow
-    ctx.shadowColor  = '#c9a84c';
-    ctx.shadowBlur   = 12;
-    ctx.fillStyle    = '#f0d060';
+    ctx.globalAlpha   = msgAlpha;
+    ctx.font          = 'bold 17px Cairo, sans-serif';
+    ctx.textAlign     = 'center';
+    ctx.textBaseline  = 'middle';
+    ctx.shadowColor   = '#c9a84c';
+    ctx.shadowBlur    = 14;
+
+    // خلفية للنص
+    const tw = ctx.measureText(msg).width;
+    ctx.fillStyle = 'rgba(0,0,0,.55)';
+    ctx.beginPath();
+    ctx.roundRect(cx - tw/2 - 14, cy - 14, tw + 28, 28, 8);
+    ctx.fill();
+
+    ctx.fillStyle = '#f0d060';
     ctx.fillText(msg, cx, cy);
     ctx.restore();
   }
 
-  function initParticles(count = 22) {
+  function initParticles() {
     particles = [];
-    for (let i = 0; i < count; i++) particles.push(new Particle());
+    for (let i = 0; i < 18; i++) particles.push(new Particle(true));
   }
 
   function animate() {
+    frameCount++;
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    // خلفية شفافة مع gradient خفيف
+
+    // خلفية
     const grad = ctx.createLinearGradient(0, 0, canvas.width, 0);
-    grad.addColorStop(0,   'rgba(10,8,5,.92)');
-    grad.addColorStop(0.5, 'rgba(30,20,5,.88)');
-    grad.addColorStop(1,   'rgba(10,8,5,.92)');
+    grad.addColorStop(0,   'rgba(8,6,3,.94)');
+    grad.addColorStop(0.5, 'rgba(25,16,3,.9)');
+    grad.addColorStop(1,   'rgba(8,6,3,.94)');
     ctx.fillStyle = grad;
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
     particles.forEach(p => { p.update(); p.draw(); });
+    updateSheep();
+    drawSheep();
     drawMessage();
     animId = requestAnimationFrame(animate);
   }
 
   function showEid() {
-    running = true;
     resize();
+    resetSheep();
     initParticles();
+    msgAlpha = 0; msgFading = false; msgTimer = 0;
     canvas.classList.add('show');
     topbar.classList.add('topbar-content-hidden');
     animate();
@@ -3486,14 +3644,11 @@ document.addEventListener('keydown', e => {
     topbar.classList.remove('topbar-content-hidden');
     cancelAnimationFrame(animId);
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    running = false;
     setTimeout(showEid, HIDE_MS);
   }
 
   window.addEventListener('resize', resize);
   resize();
-
-  // ابدأ بعد ثانيتين من تحميل الصفحة
   setTimeout(showEid, 2000);
 })();
 </script>
