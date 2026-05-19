@@ -687,7 +687,8 @@ function renderContracts(){
   const tb=document.getElementById('contracts-tbody');
   if(!contracts.length){ tb.innerHTML=`<tr><td colspan="8"><div class="empty"><span>📄</span>لا توجد عقود</div></td></tr>`; return; }
   tb.innerHTML=contracts.map(c=>{
-const paid=payments.filter(p=>p.contractId===c._id).reduce((s,p)=>s+Number(p.amount),0);
+const paid = payments.filter(p => p.contractId === c._id || p.client === c.client)
+  .reduce((s, p) => s + Number(p.amount), 0);
     const remaining=Math.max(0,Number(c.value)-paid);
     return `<tr>
       <td><strong>${esc(c.client)}</strong></td>
@@ -702,7 +703,15 @@ const paid=payments.filter(p=>p.contractId===c._id).reduce((s,p)=>s+Number(p.amo
   }).join('');
 }
 
-async function delContract(id){ if(!confirm('حذف العقد؟'))return; await fetch(API+'/contracts/'+id, {method:'DELETE', headers:h()}); contracts=contracts.filter(c=>c._id!==id); renderContracts(); toast('تم الحذف'); }
+async function delContract(id) {
+  if (!confirm('حذف العقد؟ سيتم حذف الدفعات المرتبطة به أيضاً')) return;
+  await fetch(API + '/contracts/' + id, { method: 'DELETE', headers: h() });
+  payments = payments.filter(p => p.contractId !== id);
+  contracts = contracts.filter(c => c._id !== id);
+  renderContracts();
+  renderPayments();
+  toast('تم الحذف');
+}
 
 // ══════════════════════════════════════════════════
 // PAYMENTS
@@ -894,7 +903,8 @@ function renderReport(){
 // NEW
 document.addEventListener('DOMContentLoaded', async () => {
   if (!TOKEN) {
-    toast('مش مسجل دخول، ارجع للموقع الرئيسي', 'error');
+    toast('مش مسجل دخول، بيتم التحويل...', 'error');
+    setTimeout(() => { window.parent.location.reload(); }, 1500);
     return;
   }
   document.getElementById('c-date').value  = today();
