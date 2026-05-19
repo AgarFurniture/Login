@@ -1060,6 +1060,19 @@ body {
 }
 .add-stage-file:hover { border-color: var(--gold); color: var(--gold-light); }
 
+   
+/* ───selector  ─────────────────────────────────────── */
+
+   #user-selector {
+  background: var(--black3) !important;
+  color: var(--white) !important;
+  border: 1.5px solid rgba(201,168,76,.2) !important;
+}
+#user-selector option {
+  background: var(--black3);
+  color: var(--white);
+}
+
 /* ─── MODALS ─────────────────────────────────────── */
 .modal-overlay {
   position: fixed;
@@ -1875,9 +1888,14 @@ function renderPermissionsPanel(users) {
 
   window._allUsers = users;
 
-  if (currentVal && users.find(u => u._id === currentVal)) {
-    sel.value = currentVal;
-    showUserPermissions(currentVal);
+// لو مفيش اختيار قبلي، اختار أول user تلقائياً
+  const targetVal = (currentVal && users.find(u => u._id === currentVal))
+    ? currentVal
+    : (users[0]?._id || '');
+
+  if (targetVal) {
+    sel.value = targetVal;
+    showUserPermissions(targetVal);
   } else {
     document.getElementById('permissions-grid').innerHTML = '';
   }
